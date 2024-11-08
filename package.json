@@ -1,26 +1,42 @@
 {
-  "name": "smart-file-manager",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.4"
-  },
-  "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.4"
-  }
+    "name": "match-my-files",
+    "version": "0.1.0",
+    "private": false,
+    "scripts": {
+        "dev": "node server.mjs",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint",
+        "migrate:dev": "npx dotenv -e .env.local -- prisma migrate dev",
+        "generate:sql": "npx dotenv -e .env.local -- prisma generate --sql"
+    },
+    "dependencies": {
+        "@nextui-org/react": "2.4.1",
+        "@prisma/client": "^5.22.0",
+        "classnames": "^2.5.1",
+        "exif-reader": "^2.0.1",
+        "formik": "^2.4.6",
+        "next": "14.2.4",
+        "prisma": "^5.22.0",
+        "react": "^18",
+        "react-complex-tree": "^2.4.4",
+        "react-dom": "^18",
+        "react-toastify": "^10.0.5",
+        "sharp": "^0.33.4",
+        "socket.io": "^4.7.5",
+        "socket.io-client": "^4.7.5",
+        "yup": "^1.4.0"
+    },
+    "devDependencies": {
+        "@types/node": "^20",
+        "@types/react": "^18",
+        "@types/react-dom": "^18",
+        "dotenv-cli": "^7.4.2",
+        "eslint": "^8",
+        "eslint-config-next": "14.2.4",
+        "eslint-plugin-simple-import-sort": "^12.1.0",
+        "postcss": "^8",
+        "tailwindcss": "^3.4.1",
+        "typescript": "^5"
+    }
 }

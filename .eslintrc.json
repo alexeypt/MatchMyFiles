@@ -1,3 +1,48 @@
 {
-  "extends": "next/core-web-vitals"
+    "extends": "next/core-web-vitals",
+    "plugins": [
+        "simple-import-sort"
+    ],
+    "rules": {
+        "simple-import-sort/imports": [
+            "error",
+            {
+                "groups": [
+                    [
+                        "^\\u0000" // side effect imports
+                    ],
+                    [
+                        "^react",
+                        "^[^.]" // npm imports
+                    ],
+                    [
+                        "^@/common/",
+                        "^@/"
+                    ],
+                    [
+                        "^\\." // some edge cases
+                    ],
+                    [
+                        "^styles/images/.*\\.(png|gif|jpg|jpeg)$",
+                        "^styles/icons/.*\\.svg$",
+                        "\\.s?css$",
+                        "^\\u0000.*\\.s?css$"
+                    ]
+                ]
+            }
+        ],
+        "react/jsx-max-props-per-line": [
+            "error",
+            {
+                "maximum": {
+                    "single": 1,
+                    "multi": 1
+                }
+            }
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
+    }
 }

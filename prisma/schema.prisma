@@ -1,0 +1,105 @@
+generator client {
+    provider      = "prisma-client-js"
+    previewFeatures = ["typedSql"]
+    binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model File {
+    id           Int    @id @default(autoincrement())
+    name         String
+    absolutePath String
+    relativePath String
+    extension    String
+    fullName     String
+    hash         String
+    longitude    Float?
+    latitude     Float?
+    size         BigInt
+
+    folderId Int
+    folder   Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+
+    rootFolderId Int
+    rootFolder   RootFolder @relation(fields: [rootFolderId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([hash])
+}
+
+model Folder {
+    id           Int    @id @default(autoincrement())
+    name         String
+    absolutePath String
+    relativePath String
+
+    rootFolderId Int
+    rootFolder   RootFolder @relation(fields: [rootFolderId], references: [id], onDelete: Cascade)
+
+    parentFolderId Int?
+    parentFolder   Folder?  @relation("ChildFolders", fields: [parentFolderId], references: [id])
+    childFolders   Folder[] @relation("ChildFolders")
+
+    files File[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model RootFolder {
+    id          Int                        @id @default(autoincrement())
+    name        String
+    description String?
+    path        String
+    status      RootFolderProcessingStatus @default(Created)
+
+    folders               Folder[]
+    files                 File[]
+    comparisonRootFolders ComparisonRootFolder[]
+
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+    comparisonId Int?
+}
+
+model ComparisonRootFolder {
+    comparisonId Int
+    rootFolderId Int
+    isPrimary    Boolean
+
+    comparison Comparison @relation(fields: [comparisonId], references: [id])
+    rootFolder RootFolder @relation(fields: [rootFolderId], references: [id])
+
+    @@id([comparisonId, rootFolderId])
+}
+
+model Comparison {
+    id          Int                        @id @default(autoincrement())
+    name        String
+    description String?
+    status      ComparisonProcessingStatus @default(Created)
+    data        Json?
+
+    comparisonRootFolders ComparisonRootFolder[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+enum RootFolderProcessingStatus {
+    Created
+    Processing
+    Completed
+}
+
+enum ComparisonProcessingStatus {
+    Created
+    Processing
+    Completed
+}
