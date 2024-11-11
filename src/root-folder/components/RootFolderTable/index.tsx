@@ -6,6 +6,8 @@ import { Link, TableCell } from '@nextui-org/react';
 import FormattedDateTime from '@/common/components/FormattedDateTime';
 import TextTable, { TextTableColumnConfiguration, TextTableRowConfiguration } from '@/common/components/TextTable';
 import { ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';
+import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
+import { pluralize } from '@/common/helpers/pluralizationHelper';
 import { generateUrl } from '@/common/helpers/urlHelper';
 import { RootFolderListItemModel } from '@/root-folder/data-access/queries/getRootFoldersQuery';
 
@@ -18,9 +20,10 @@ interface RootFolderTableItem {
     index: number;
     name: string;
     path: string;
+    size: number;
+    itemsCountText: string;
     filesCount: number;
     foldersCount: number;
-    createdAt: Date;
     actions: null;
 }
 
@@ -38,16 +41,12 @@ const COLUMNS: TextTableColumnConfiguration<RootFolderTableItem>[] = [
         label: "Path",
     },
     {
-        key: "filesCount",
-        label: "Files Count",
+        key: "size",
+        label: "Total Size",
     },
     {
-        key: "foldersCount",
-        label: "Folders Count",
-    },
-    {
-        key: "createdAt",
-        label: "Create Date",
+        key: "itemsCountText",
+        label: "Items Count",
     },
     {
         key: "actions",
@@ -62,7 +61,8 @@ export default function RootFolderTable({ data }: RootFolderTableProps) {
             index: index + 1,
             name: item.name,
             path: item.path,
-            createdAt: item.createdAt,
+            size: item.size,
+            itemsCountText: '',
             filesCount: item.filesCount,
             foldersCount: item.foldersCount,
             actions: null
@@ -71,10 +71,17 @@ export default function RootFolderTable({ data }: RootFolderTableProps) {
 
     const renderCellContent = useCallback((rootFolder: TextTableRowConfiguration<RootFolderTableItem>, columnKey: keyof RootFolderTableItem) => {
         switch (columnKey) {
-            case 'createdAt':
+            case 'size':
                 return (
                     <div className="text-base">
-                        <FormattedDateTime dateTime={rootFolder.createdAt} />
+                        {getFormattedSize(rootFolder.size)}
+                    </div>
+                );
+            case 'itemsCountText':
+                return (
+                    <div className="text-base flex flex-col">
+                        {rootFolder.foldersCount > 0 && <p>{pluralize(rootFolder.foldersCount, 'folder')}</p>}
+                        {rootFolder.filesCount > 0 && <p>{pluralize(rootFolder.filesCount, 'file')}</p>}
                     </div>
                 );
             case "actions":

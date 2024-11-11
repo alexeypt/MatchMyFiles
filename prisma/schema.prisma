@@ -1,7 +1,7 @@
 generator client {
-    provider      = "prisma-client-js"
+    provider        = "prisma-client-js"
     previewFeatures = ["typedSql"]
-    binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+    binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -10,16 +10,19 @@ datasource db {
 }
 
 model File {
-    id           Int    @id @default(autoincrement())
-    name         String
-    absolutePath String
-    relativePath String
-    extension    String
-    fullName     String
-    hash         String
-    longitude    Float?
-    latitude     Float?
-    size         BigInt
+    id                      Int      @id @default(autoincrement())
+    name                    String
+    absolutePath            String
+    relativePath            String
+    extension               String
+    fullName                String
+    hash                    String
+    longitude               Float?
+    latitude                Float?
+    size                    BigInt
+    fileCreatedDate         DateTime
+    fileModifiedDate        DateTime
+    fileContentModifiedDate DateTime
 
     folderId Int
     folder   Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
@@ -34,10 +37,14 @@ model File {
 }
 
 model Folder {
-    id           Int    @id @default(autoincrement())
-    name         String
-    absolutePath String
-    relativePath String
+    id                        Int      @id @default(autoincrement())
+    name                      String
+    absolutePath              String
+    relativePath              String
+    size                      BigInt
+    folderCreatedDate         DateTime
+    folderModifiedDate        DateTime
+    folderContentModifiedDate DateTime
 
     rootFolderId Int
     rootFolder   RootFolder @relation(fields: [rootFolderId], references: [id], onDelete: Cascade)
@@ -57,6 +64,7 @@ model RootFolder {
     name        String
     description String?
     path        String
+    size        BigInt
     status      RootFolderProcessingStatus @default(Created)
 
     folders               Folder[]

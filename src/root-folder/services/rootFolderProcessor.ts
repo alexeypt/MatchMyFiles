@@ -19,12 +19,19 @@ export interface FileInfoModel {
     extension: string;
     latitude: number | null;
     longitude: number | null;
+    createdDate: Date;
+    modifiedDate: Date;
+    contentModifiedDate: Date;
 }
 
 export interface FolderInfoModel {
     name: string
     relativePath: string;
     absolutePath: string;
+    size: number;
+    createdDate: Date;
+    modifiedDate: Date;
+    contentModifiedDate: Date;
     files: FileInfoModel[];
     childFolders: FolderInfoModel[];
 }
@@ -52,7 +59,8 @@ export class RootFolderProcessor {
 
         this.itemsLeftToProcess = this.totalItemsCount;
 
-        const result = await this.processDirectory(this.rootFolderPath);
+        const stats = await fs.stat(this.rootFolderPath);
+        const result = await this.processDirectory(this.rootFolderPath, stats);
 
         var endTime = performance.now();
         console.log(`Processing of ${this.rootFolderId} takes ${endTime - startTime} milliseconds`);
@@ -73,11 +81,15 @@ export class RootFolderProcessor {
         }
     }
 
-    private async processDirectory(folderPath: string) {
+    private async processDirectory(folderPath: string, stats: fs2.Stats) {
         const folderInfo: FolderInfoModel = {
             name: path.basename(folderPath),
             absolutePath: folderPath,
             relativePath: path.relative(this.rootFolderPath, folderPath),
+            createdDate: stats.birthtime,
+            modifiedDate: stats.ctime,
+            contentModifiedDate: stats.mtime,
+            size: 0,
             files: [],
             childFolders: []
         };
@@ -87,7 +99,7 @@ export class RootFolderProcessor {
             const itemPath = path.join(folderPath, item);
             const stats = await fs.stat(itemPath);
             if (stats.isDirectory()) {
-                const childFolderInfo = await this.processDirectory(itemPath);
+                const childFolderInfo = await this.processDirectory(itemPath, stats);
                 folderInfo.childFolders.push(childFolderInfo);
             } else {
                 if (this.queue.size > this.maxConcurrencyLimit) {
@@ -114,6 +126,10 @@ export class RootFolderProcessor {
         }
 
         await Promise.all(Array.from(this.queue.values()));
+
+        folderInfo.size = folderInfo.childFolders.map(folder => Number(folder.size))
+            .concat(folderInfo.files.map(file => Number(file.size)))
+            .reduce((acc, size) => acc + size, 0);
 
         return folderInfo;
     }
@@ -166,9 +182,11 @@ export class RootFolderProcessor {
             extension: ext,
             hash,
             size: stats.size,
+            createdDate: stats.birthtime,
+            modifiedDate: stats.ctime,
+            contentModifiedDate: stats.mtime,
             latitude,
             longitude
         };
     }
 }
-

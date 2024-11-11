@@ -1,9 +1,13 @@
 "use client";
 
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { StaticTreeDataProvider, Tree, TreeItem, TreeItemIndex, UncontrolledTreeEnvironment } from 'react-complex-tree';
 
 import PageSection from '@/common/components/PageSection';
+import { getTreeKey } from '@/common/helpers/treeHelper';
+import useModalControl from '@/common/hooks/useModalControl';
+import RootFolderItemDetailsModal from '@/root-folder/components/RootFolderItemDetailsModal';
+import RootFolderTreeItemRow from '@/root-folder/components/RootFolderTreeItemRow';
 import { RootFolderDetailsModel, RootFolderFileItemModel, RootFolderFolderItemModel } from '@/root-folder/data-access/queries/getRootFolderQuery';
 
 
@@ -11,12 +15,30 @@ interface RootFolderTreeSectionProps {
     rootFolder: RootFolderDetailsModel;
 }
 
+export enum RootFolderTreeItemType {
+    Folder,
+    File
+}
+
+export interface RootFolderTreeItem {
+    type: RootFolderTreeItemType;
+    title: string;
+    data: RootFolderFolderItemModel | RootFolderFileItemModel;
+}
+
 export default function RootFolderTreeSection({ rootFolder }: RootFolderTreeSectionProps) {
+    const [isDetailsModalOpened, showDetailsModal, hideDetailsModal] = useModalControl();
+    const [selectedItem, setSelectedItem] = useState<RootFolderTreeItem>();
+
     const dataProvider = useMemo(() => {
         let items = rootFolder.files.reduce((result, file) => {
-            result[`file-${file.id}`] = {
-                index: `file-${file.id}`,
-                data: file,
+            result[getTreeKey(file.id, 'file')] = {
+                index: getTreeKey(file.id, 'file'),
+                data: {
+                    type: RootFolderTreeItemType.File,
+                    title: file.fullName,
+                    data: file
+                },
                 canMove: false,
                 canRename: false,
                 isFolder: false,
@@ -24,16 +46,21 @@ export default function RootFolderTreeSection({ rootFolder }: RootFolderTreeSect
             };
 
             return result;
-        }, {} as Record<TreeItemIndex, TreeItem<RootFolderFolderItemModel | RootFolderFileItemModel>>);
+        }, {} as Record<TreeItemIndex, TreeItem<RootFolderTreeItem>>);
 
         items = rootFolder.folders.reduce((result, folder) => {
-            result[`folder-${folder.id}`] = {
-                index: `folder-${folder.id}`,
-                data: folder,
+            result[getTreeKey(folder.id, 'folder')] = {
+                index: getTreeKey(folder.id, 'folder'),
+                data: {
+                    type: RootFolderTreeItemType.Folder,
+                    title: folder.name,
+                    data: folder
+                },
                 canMove: false,
                 canRename: false,
                 isFolder: true,
-                children: folder.childFileIds.map(childFileId => `file-${childFileId}`).concat(folder.childFolderIds.map(childFolderId => `folder-${childFolderId}`))
+                children: folder.childFileIds.map(childFileId => getTreeKey(childFileId, 'file'))
+                    .concat(folder.childFolderIds.map(childFolderId => getTreeKey(childFolderId, 'folder')))
             };
 
             return result;
@@ -44,6 +71,11 @@ export default function RootFolderTreeSection({ rootFolder }: RootFolderTreeSect
 
     const rootItem = rootFolder.folders.find(folder => !folder.parentFolderId)!;
 
+    const onSelectItem = useCallback((item: RootFolderTreeItem) => {
+        setSelectedItem(item);
+        showDetailsModal();
+    }, [showDetailsModal]);
+
     return (
         <PageSection
             title="Files Tree"
@@ -52,32 +84,33 @@ export default function RootFolderTreeSection({ rootFolder }: RootFolderTreeSect
             <div className="flex flex-col gap-9">
                 <UncontrolledTreeEnvironment
                     dataProvider={dataProvider}
-                    getItemTitle={item => item.data.name ?? item.data.fullName}
+                    getItemTitle={item => item.data.title}
                     canSearch
                     renderDepthOffset={40}
                     renderItemTitle={({ item, title }) => {
-                        // TODO: move to a separate component
                         return (
-                            <div className="flex justify-between w-full pt-1 pb-1 pl-2">
-                                <div>
-                                    {title}
-                                </div>
-                                <div>
-                                    {item.data?.size}
-                                </div>
-                            </div>
+                            <RootFolderTreeItemRow
+                                item={item.data}
+                                title={title}
+                                onSelectItem={onSelectItem}
+                            />
                         );
                     }}
-                            canSearchByStartingTyping
-                            viewState={{}}
+                    canSearchByStartingTyping
+                    viewState={{}}
                 >
-                            <Tree
-                                treeId="tree-2" // TODO: update tree id
-                                rootItem={`folder-${rootItem.id}`}
-                                treeLabel="Files and Folders Tree"
-                            />
-                        </UncontrolledTreeEnvironment>
+                    <Tree
+                        treeId="root-folder-tree"
+                        rootItem={getTreeKey(rootItem.id, 'folder')}
+                        treeLabel="Files and Folders Tree"
+                    />
+                </UncontrolledTreeEnvironment>
             </div>
+            <RootFolderItemDetailsModal
+                item={selectedItem!}
+                isOpen={isDetailsModalOpened}
+                onClose={hideDetailsModal}
+            />
         </PageSection>
     );
 }

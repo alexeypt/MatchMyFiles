@@ -15,6 +15,7 @@ export interface RootFolderFileItemModel {
 export interface RootFolderFolderItemModel {
     id: number;
     name: string;
+    size: number;
     childFolderIds: number[];
     childFileIds: number[];
     parentFolderId: number | null;
@@ -24,6 +25,7 @@ export interface RootFolderDetailsModel {
     id: number;
     name: string;
     description: string | null;
+    size: number;
     path: string;
     status: RootFolderProcessingStatus;
     createdAt: Date;
@@ -42,6 +44,7 @@ export default async function getRootFolder(id: number): Promise<RootFolderDetai
             id: true,
             name: true,
             description: true,
+            size: true,
             path: true,
             status: true,
             createdAt: true,
@@ -62,6 +65,7 @@ export default async function getRootFolder(id: number): Promise<RootFolderDetai
                 select: {
                     id: true,
                     name: true,
+                    size: true,
                     parentFolderId: true,
                     childFolders: {
                         select: {
@@ -86,6 +90,7 @@ export default async function getRootFolder(id: number): Promise<RootFolderDetai
         id: rootFolder.id,
         name: rootFolder.name,
         description: rootFolder.description,
+        size: Number(rootFolder.size),
         path: rootFolder.path,
         status: rootFolder.status,
         createdAt: rootFolder.createdAt,
@@ -99,6 +104,7 @@ export default async function getRootFolder(id: number): Promise<RootFolderDetai
         folders: rootFolder.folders.map(folder => ({
             id: folder.id,
             name: folder.name,
+            size: Number(folder.size),
             parentFolderId: folder.parentFolderId,
             childFileIds: folder.files.map(file => file.id),
             childFolderIds: folder.childFolders.map(childFolder => childFolder.id)

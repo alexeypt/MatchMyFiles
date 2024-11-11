@@ -13,13 +13,16 @@ export interface CreateRootFolderModel {
     description: string;
 }
 
-// TODO: consider creating folders in one query
 async function createFolder(folderInfo: FolderInfoModel, rootFolderId: number, parentFolderId: number | null) {
     const folder = await prismaClient.folder.create({
         data: {
             name: folderInfo.name,
             absolutePath: folderInfo.absolutePath,
             relativePath: folderInfo.relativePath,
+            size: folderInfo.size,
+            folderCreatedDate: folderInfo.createdDate,
+            folderModifiedDate: folderInfo.modifiedDate,
+            folderContentModifiedDate: folderInfo.contentModifiedDate,
             rootFolderId: rootFolderId,
             parentFolderId: parentFolderId,
             files: {
@@ -34,7 +37,10 @@ async function createFolder(folderInfo: FolderInfoModel, rootFolderId: number, p
                         rootFolderId: rootFolderId,
                         size: file.size,
                         latitude: file.latitude,
-                        longitude: file.longitude
+                        longitude: file.longitude,
+                        fileCreatedDate: file.createdDate,
+                        fileModifiedDate: file.modifiedDate,
+                        fileContentModifiedDate: file.contentModifiedDate
                     }))
                 }
             }
@@ -57,7 +63,8 @@ async function processRootFolder(rootFolder: RootFolder) {
             id: rootFolder.id
         },
         data: {
-            status: 'Completed'
+            status: 'Completed',
+            size: rootFolderInfo.size
         }
     });
 
@@ -70,6 +77,7 @@ export default async function createRootFolder(values: CreateRootFolderModel) {
             name: values.name,
             description: values.description,
             path: values.folderPath,
+            size: 0,
             status: 'Processing'
         }
     });

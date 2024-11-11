@@ -95,7 +95,7 @@ export default function ComparisonTreeSection({ comparison }: ComparisonTreeSect
 
                         return (
                             <div className={`flex justify-between w-full pt-1 pb-1 pl-2 ${isDuplicated ? 'bg-yellow-200' : ''}`}>
-                                <div>
+                                <div className="flex-grow">
                                     {title}
                                 </div>
                                 <div>

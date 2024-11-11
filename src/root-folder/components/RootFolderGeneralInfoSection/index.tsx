@@ -7,6 +7,7 @@ import FormattedDateTime from '@/common/components/FormattedDateTime';
 import KeyValueList from '@/common/components/KeyValueList';
 import PageSection from '@/common/components/PageSection';
 import { action } from '@/common/helpers/actionHelper';
+import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 import RootFolderForm from '@/root-folder/components/RootFolderForm';
 import updateRootFolder from '@/root-folder/data-access/commands/updateRootFolderCommand';
 import { RootFolderDetailsModel } from '@/root-folder/data-access/queries/getRootFolderQuery';
@@ -33,16 +34,18 @@ export default function RootFolderGeneralInfoSection({ rootFolder }: RootFolderG
 
     const sourceGroupDetailsMap = useMemo(() => {
         return new Map<string, ReactNode>([
-            ['Created Date', (
+            ['Init Date', (
                 <FormattedDateTime
                     key={+rootFolder.createdAt}
                     dateTime={rootFolder.createdAt}
                 />
             )],
+            ['Folder Path', rootFolder.path],
+            ['Total Size', getFormattedSize(rootFolder.size)],
             ['Files Count', rootFolder.filesCount],
-            ['Folders Count', rootFolder.foldersCount],
+            ['Folders Count', rootFolder.foldersCount]
         ]);
-    }, [rootFolder.createdAt, rootFolder.filesCount, rootFolder.foldersCount]);
+    }, [rootFolder]);
 
     const initialFormValues = useMemo(() => {
         return RootFolderFormModel.mapFromRootFolderModel(rootFolder);
