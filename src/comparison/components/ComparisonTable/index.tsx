@@ -3,11 +3,12 @@
 import React, { useCallback, useMemo } from 'react';
 import { Link, TableCell } from '@nextui-org/react';
 
-import FormattedDateTime from '@/common/components/FormattedDateTime';
 import TextTable, { TextTableColumnConfiguration, TextTableRowConfiguration } from '@/common/components/TextTable';
 import { COMPARISON_EDIT_ROUTE, ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';
 import { generateUrl } from '@/common/helpers/urlHelper';
-import { ComparisonListItemModel } from '@/comparison/data-access/queries/getComparisonsQuery';
+import { ComparisonListItemModel, ComparisonListItemRootFolderModel } from '@/comparison/data-access/queries/getComparisonsQuery';
+import { pluralize } from '@/common/helpers/pluralizationHelper';
+import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 
 
 interface ComparisonTableProps {
@@ -17,8 +18,10 @@ interface ComparisonTableProps {
 interface ComparisonTableItem {
     index: number;
     name: string;
-    rootFoldersCount: number;
-    createdAt: Date;
+    primaryRootFolder: ComparisonListItemRootFolderModel;
+    secondaryRootFolders: ComparisonListItemRootFolderModel[];
+    duplicatedFilesCount: number;
+    duplicatedFilesPercent: number;
     actions: null;
 }
 
@@ -32,12 +35,16 @@ const COLUMNS: TextTableColumnConfiguration<ComparisonTableItem>[] = [
         label: "Name",
     },
     {
-        key: "rootFoldersCount",
-        label: "Root Folders Count",
+        key: "primaryRootFolder",
+        label: "Primary Root Folder",
     },
     {
-        key: "createdAt",
-        label: "Create Date",
+        key: "secondaryRootFolders",
+        label: "Secondary Root Folders",
+    },
+    {
+        key: "duplicatedFilesCount",
+        label: "Duplicated Files Count",
     },
     {
         key: "actions",
@@ -51,18 +58,51 @@ export default function ComparisonTable({ data }: ComparisonTableProps) {
             key: item.id,
             index: index + 1,
             name: item.name,
-            createdAt: item.createdAt,
-            rootFoldersCount: item.rootFoldersCount,
+            primaryRootFolder: item.primaryRootFolder,
+            secondaryRootFolders: item.secondaryRootFolders,
+            duplicatedFilesCount: item.duplicatedFilesCount,
+            duplicatedFilesPercent: item.duplicatedFilesPercent,
             actions: null
         }));
     }, [data]);
 
     const renderCellContent = useCallback((comparison: TextTableRowConfiguration<ComparisonTableItem>, columnKey: keyof ComparisonTableItem) => {
         switch (columnKey) {
-            case 'createdAt':
+            case 'duplicatedFilesCount':
                 return (
                     <div className="text-base">
-                        <FormattedDateTime dateTime={comparison.createdAt} />
+                        {pluralize(comparison.duplicatedFilesCount, 'duplicated file')}
+                        {comparison.duplicatedFilesPercent > 0 ? ` (${comparison.duplicatedFilesPercent}%)` : ''}
+                    </div>
+                );
+            case 'primaryRootFolder':
+                return (
+                    <div className="text-base">
+                        <Link
+                            href={generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: comparison.primaryRootFolder.id })}
+                            underline="hover"
+                        >
+                            <span className="font-bold">{comparison.primaryRootFolder.name}&nbsp;</span>
+                        </Link>
+                        <span>({comparison.primaryRootFolder.path}, {getFormattedSize(comparison.primaryRootFolder.size)})</span>
+                    </div>
+                );
+            case 'secondaryRootFolders':
+                return (
+                    <div className="text-base">
+                        <ul className="flex flex-col gap-2">
+                            {comparison.secondaryRootFolders.map(item => (
+                                <li>
+                                    <Link
+                                        href={generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: item.id })}
+                                        underline="hover"
+                                    >
+                                        <span className="font-bold">{item.name}&nbsp;</span>
+                                    </Link>
+                                    <span>({item.path}, {getFormattedSize(item.size)})</span>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 );
             case "actions":
