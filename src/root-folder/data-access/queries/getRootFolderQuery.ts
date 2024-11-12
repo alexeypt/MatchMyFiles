@@ -31,6 +31,7 @@ export interface RootFolderDetailsModel {
     createdAt: Date;
     foldersCount: number;
     filesCount: number;
+    comparisonsCount: number;
     files: RootFolderFileItemModel[];
     folders: RootFolderFolderItemModel[];
 }
@@ -51,7 +52,8 @@ export default async function getRootFolder(id: number): Promise<RootFolderDetai
             _count: {
                 select: {
                     files: true,
-                    folders: true
+                    folders: true,
+                    comparisonRootFolders: true
                 }
             },
             files: {
@@ -96,6 +98,7 @@ export default async function getRootFolder(id: number): Promise<RootFolderDetai
         createdAt: rootFolder.createdAt,
         filesCount: rootFolder._count.files,
         foldersCount: rootFolder._count.folders,
+        comparisonsCount: rootFolder._count.comparisonRootFolders,
         files: rootFolder.files.map(file => ({
             id: file.id,
             fullName: file.fullName,

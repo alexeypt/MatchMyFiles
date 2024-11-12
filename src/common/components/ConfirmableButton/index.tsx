@@ -9,6 +9,7 @@ interface ConfirmableButtonProps extends ButtonProps {
     confirmDescription: ReactNode;
     confirmYesButtonLabel: string;
     confirmNoButtonLabel: string;
+    hideConfirmYesButton?: boolean;
     onClick: () => void;
 }
 
@@ -17,6 +18,7 @@ export default function ConfirmableButton({
     confirmDescription,
     confirmYesButtonLabel,
     confirmNoButtonLabel,
+    hideConfirmYesButton = false,
     onClick,
     ...restProps
 }: ConfirmableButtonProps) {
@@ -52,12 +54,16 @@ export default function ConfirmableButton({
                                 >
                                     {confirmNoButtonLabel}
                                 </Button>
-                                <Button
-                                    color="danger"
-                                    onClick={onClick}
-                                >
-                                    {confirmYesButtonLabel}
-                                </Button>
+                                {
+                                    !hideConfirmYesButton && (
+                                        <Button
+                                            color="danger"
+                                            onClick={onClick}
+                                        >
+                                            {confirmYesButtonLabel}
+                                        </Button>
+                                    )
+                                }
                             </ModalFooter>
                         </>
                     )}

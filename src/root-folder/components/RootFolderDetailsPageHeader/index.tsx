@@ -10,6 +10,7 @@ import { ROOT_FOLDER_ROUTE } from '@/common/constants/routes';
 import { action } from '@/common/helpers/actionHelper';
 import removeRootFolder from '@/root-folder/data-access/commands/removeRootFolderCommand';
 import { RootFolderDetailsModel } from '@/root-folder/data-access/queries/getRootFolderQuery';
+import { pluralize } from '@/common/helpers/pluralizationHelper';
 
 
 interface RootFolderDetailsPageHeaderProps {
@@ -35,19 +36,37 @@ export default function RootFolderDetailsPageHeader({ rootFolder }: RootFolderDe
     }, [router, rootFolder.id]);
 
     const sideContent = useMemo(() => {
+        const canBeRemoved = rootFolder.comparisonsCount === 0;
+
         return (
             <ConfirmableButton
                 confirmTitle="Delete Root Folder"
                 confirmDescription={
                     (
                         <p>
-                            <span className="font-bold">{rootFolder.name}</span> Root Folder
-                            will be removed without restoring possibilities.
+                            {
+                                canBeRemoved && (
+                                    <>
+                                        <span className="font-bold">{rootFolder.name}</span> Root Folder
+                                        will be removed without restoring possibilities.
+                                    </>
+                                )
+                            }
+                            {
+                                !canBeRemoved && (
+                                    <>
+                                        You can't remove <span className="font-bold">{rootFolder.name}</span> Root Folder
+                                        because it is used in {pluralize(rootFolder.comparisonsCount, 'comparison')}.
+                                        Please, remove such comparisons in order to remove this Root Folder.
+                                    </>
+                                )
+                            }
                         </p>
                     )
                 }
                 confirmYesButtonLabel="Yes, Delete This Root Folder"
-                confirmNoButtonLabel="Cancel, Keep This Root Folder"
+                confirmNoButtonLabel={canBeRemoved ? 'Cancel, Keep This Root Folder' : 'OK'}
+                hideConfirmYesButton={!canBeRemoved}
                 type="button"
                 color="danger"
                 onClick={onDelete}

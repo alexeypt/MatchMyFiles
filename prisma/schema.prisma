@@ -81,7 +81,7 @@ model ComparisonRootFolder {
     rootFolderId Int
     isPrimary    Boolean
 
-    comparison Comparison @relation(fields: [comparisonId], references: [id])
+    comparison Comparison @relation(fields: [comparisonId], references: [id], onDelete: Cascade)
     rootFolder RootFolder @relation(fields: [rootFolderId], references: [id])
 
     @@id([comparisonId, rootFolderId])

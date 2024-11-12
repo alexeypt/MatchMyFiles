@@ -43,7 +43,8 @@ export default function RootFolderGeneralInfoSection({ rootFolder }: RootFolderG
             ['Folder Path', rootFolder.path],
             ['Total Size', getFormattedSize(rootFolder.size)],
             ['Files Count', rootFolder.filesCount],
-            ['Folders Count', rootFolder.foldersCount]
+            ['Folders Count', rootFolder.foldersCount],
+            ['Comparisons Count', rootFolder.comparisonsCount]
         ]);
     }, [rootFolder]);
 
