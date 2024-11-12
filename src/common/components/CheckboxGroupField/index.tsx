@@ -1,4 +1,5 @@
-import { Checkbox, CheckboxGroup, CheckboxGroupProps, Input, InputProps } from "@nextui-org/react";
+import { useCallback } from "react";
+import { Checkbox, CheckboxGroup, CheckboxGroupProps } from "@nextui-org/react";
 import { useField } from "formik";
 
 
@@ -11,21 +12,28 @@ interface CheckboxGroupFieldProps extends CheckboxGroupProps {
 }
 
 export default function CheckboxGroupField({ name, items, ...restProps }: CheckboxGroupFieldProps) {
-    const [fieldProps, meta] = useField(name);
+    const [fieldProps, meta, fieldHelpers] = useField(name);
+
+    const isInvalid = !!meta.error && meta.touched;
+
+    const onValueChanged = useCallback((values: string[]) => {
+        fieldHelpers.setValue(values, true);
+    }, [fieldHelpers]);
 
     return (
         <CheckboxGroup
             {...restProps}
             value={fieldProps.value}
-            isInvalid={!!meta.error && meta.touched}
+            errorMessage={meta.error}
+            isInvalid={isInvalid}
+            onChange={onValueChanged}
+            onBlur={fieldProps.onBlur}
+            name={fieldProps.name}
         >
             {
                 items.map(item => (
                     <Checkbox
                         key={item.value}
-                        name={fieldProps.name}
-                        onBlur={fieldProps.onBlur}
-                        onChange={fieldProps.onChange}
                         value={item.value}
                     >
                         {item.label}

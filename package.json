@@ -11,7 +11,7 @@
         "generate:sql": "npx dotenv -e .env.local -- prisma generate --sql"
     },
     "dependencies": {
-        "@nextui-org/react": "2.4.1",
+        "@nextui-org/react": "2.4.8",
         "@prisma/client": "^5.22.0",
         "classnames": "^2.5.1",
         "exif-reader": "^2.0.1",

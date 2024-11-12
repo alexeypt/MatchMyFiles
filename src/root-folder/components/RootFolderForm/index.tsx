@@ -48,18 +48,18 @@ export default function RootFolderForm({
                         label="Name"
                         variant="bordered"
                     />
+                    <TextAreaField
+                        isRequired={isRequired(SourceGroupValidationSchema, 'description')}
+                        name={nameof<RootFolderFormModel>('description')}
+                        label="Description"
+                        variant="bordered"
+                    />
                     <InputField
                         isRequired={isRequired(SourceGroupValidationSchema, 'folderPath')}
                         name={nameof<RootFolderFormModel>('folderPath')}
                         label="Folder Path"
                         variant="bordered"
                         isDisabled={isEditMode}
-                    />
-                    <TextAreaField
-                        isRequired={isRequired(SourceGroupValidationSchema, 'description')}
-                        name={nameof<RootFolderFormModel>('description')}
-                        label="Description"
-                        variant="bordered"
                     />
                     <FormSubmitPanel
                         isEditMode={isEditMode}
