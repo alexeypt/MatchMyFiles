@@ -1,6 +1,11 @@
+export type ComparisonResultDuplicatedItemData = {
+    rootFolderId: number;
+    fileId: number;
+}
+
 export type ComparisonResultItemData = {
     fileId: number;
-    duplicatedFileIds: number[];
+    duplicatedFiles: ComparisonResultDuplicatedItemData[];
 }
 
 export type ComparisonResultData = ComparisonResultItemData[];

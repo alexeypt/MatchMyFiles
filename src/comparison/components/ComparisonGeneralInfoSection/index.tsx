@@ -13,6 +13,8 @@ import updateComparison from '@/comparison/data-access/commands/updateComparison
 import { ComparisonDetailsModel } from '@/comparison/data-access/queries/getComparisonQuery';
 import ComparisonFormModel from '@/comparison/models/comparisonFormModel';
 import { RootFolderNameModel } from '@/root-folder/data-access/queries/getRootFolderNamesQuery';
+import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
+import { roundNumber } from '@/common/helpers/numberHelper';
 
 
 interface ComparisonGeneralInfoSectionProps {
@@ -34,15 +36,26 @@ export default function ComparisonGeneralInfoSection({ comparison, rootFolders }
         }
     }, []);
 
+    const {
+        duplicatedFilesCount,
+        duplicatedFilesSize,
+        totalFilesCount,
+        size
+    } = comparison.primaryRootFolder;
+
     const comparisonDetailsMap = useMemo(() => {
+        const duplicatedFilesCountPercent = roundNumber(duplicatedFilesCount / totalFilesCount * 100.0, 1);
+        const duplicatedFilesSizePercent = roundNumber(duplicatedFilesSize / size * 100.0, 1);
+
         return new Map<string, ReactNode>([
-            ['Created Date', (
+            ['Init Date', (
                 <FormattedDateTime
                     key={+comparison.createdAt}
                     dateTime={comparison.createdAt}
                 />
             )],
-            ['Root Folders Count', comparison.rootFolders.length],
+            ['Duplicated Files Count', `${duplicatedFilesCount} / ${totalFilesCount} (${duplicatedFilesCountPercent}%)`],
+            ['Duplicated Files Size', `${getFormattedSize(duplicatedFilesSize)} / ${getFormattedSize(size)} (${duplicatedFilesSizePercent}%)`]
         ]);
     }, [comparison.createdAt, comparison.rootFolders.length]);
 

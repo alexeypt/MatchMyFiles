@@ -3,7 +3,7 @@
 import { ComparisonProcessingStatus, Prisma } from "@prisma/client";
 
 import prismaClient from "@/common/helpers/prismaClient";
-import { ComparisonResultData } from "@/comparison/types/comparisonResultData";
+import { ComparisonResultData, ComparisonResultDuplicatedItemData } from "@/comparison/types/comparisonResultData";
 
 
 export interface CreateComparisonModel {
@@ -18,8 +18,9 @@ async function processComparison(comparison: CreateComparisonModel, comparisonId
     const duplicatedFiles = await prismaClient.$queryRaw<{
         primaryFileId: number;
         secondaryFileId: number;
+        rootFolderId: number;
     }[]>`
-        select f1.id as "primaryFileId", f2.id as "secondaryFileId"
+        select f1.id as "primaryFileId", f2.id as "secondaryFileId", f2."rootFolderId"
         from public."File" f1
         join public."File" f2 on f1.hash = f2.hash
         where f1."rootFolderId" in (${comparison.primaryFolderId}) and f2."rootFolderId" in (${Prisma.join(comparison.folderIds)})
@@ -28,13 +29,13 @@ async function processComparison(comparison: CreateComparisonModel, comparisonId
     const duplicatedFilesMap = duplicatedFiles.reduce((map, file) => {
         const item = map.get(file.primaryFileId);
         if (item) {
-            item.push(file.secondaryFileId);
+            item.push({ fileId: file.secondaryFileId, rootFolderId: file.rootFolderId });
         } else {
-            map.set(file.primaryFileId, [file.secondaryFileId]);
+            map.set(file.primaryFileId, [{ fileId: file.secondaryFileId, rootFolderId: file.rootFolderId }]);
         }
 
         return map;
-    }, new Map<number, number[]>());
+    }, new Map<number, ComparisonResultDuplicatedItemData[]>());
 
     await prismaClient.comparison.update({
         where: {
@@ -42,9 +43,9 @@ async function processComparison(comparison: CreateComparisonModel, comparisonId
         },
         data: {
             status: ComparisonProcessingStatus.Completed,
-            data: Array.from(duplicatedFilesMap.entries()).map(([primaryFileId, secondaryFileIds]) => ({
+            data: Array.from(duplicatedFilesMap.entries()).map(([primaryFileId, secondaryFiles]) => ({
                 fileId: primaryFileId,
-                duplicatedFileIds: secondaryFileIds
+                duplicatedFiles: secondaryFiles
             })) as ComparisonResultData
         }
     });

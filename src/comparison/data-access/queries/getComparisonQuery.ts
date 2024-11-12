@@ -5,7 +5,7 @@ import { ComparisonProcessingStatus } from "@prisma/client";
 import prismaClient from "@/common/helpers/prismaClient";
 import NotFoundError from "@/common/models/notFoundError";
 import FolderDuplicationMode from "@/comparison/models/folderDuplicationMode";
-import { ComparisonResultData } from "@/comparison/types/comparisonResultData";
+import { ComparisonResultData, ComparisonResultDuplicatedItemData } from "@/comparison/types/comparisonResultData";
 
 
 export interface ComparisonFileItemModel {
@@ -25,8 +25,14 @@ export interface ComparisonFolderItemModel {
 }
 
 export interface ComparisonRootFolderItemModel {
+    isPrimary: boolean;
     id: number;
     name: string;
+    path: string;
+    size: number;
+    totalFilesCount: number;
+    duplicatedFilesCount: number;
+    duplicatedFilesSize: number;
 }
 
 export interface ComparisonDetailsModel {
@@ -37,14 +43,13 @@ export interface ComparisonDetailsModel {
     createdAt: Date;
     primaryRootFolder: ComparisonRootFolderItemModel;
     rootFolders: ComparisonRootFolderItemModel[];
-
     files: ComparisonFileItemModel[];
     folders: ComparisonFolderItemModel[];
 }
 
 function setFoldersDuplicationMode(folder: ComparisonFolderItemModel, filesMap: Map<number, boolean>, foldersMap: Map<number, ComparisonFolderItemModel>) {
     const areFilesTotallyDuplicated = folder.childFileIds.every(fileId => filesMap.get(fileId));
-    const hasAnyDuplicate = folder.childFolderIds.some(fileId => filesMap.get(fileId));
+    const hasAnyDuplicate = folder.childFileIds.some(fileId => filesMap.get(fileId));
 
     let folderDuplicationMode = areFilesTotallyDuplicated
         ? FolderDuplicationMode.Full
@@ -91,7 +96,14 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
                     rootFolder: {
                         select: {
                             id: true,
-                            name: true
+                            name: true,
+                            path: true,
+                            size: true,
+                            _count: {
+                                select: {
+                                    files: true
+                                }
+                            }
                         }
                     }
                 }
@@ -99,23 +111,21 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
         }
     });
 
-    if (!comparison || !comparison.comparisonRootFolders.some(comparisonRootFolder => comparisonRootFolder.isPrimary)) {
+    const primaryComparisonRootFolder = comparison?.comparisonRootFolders.find(comparisonRootFolder => comparisonRootFolder.isPrimary);
+
+    if (!comparison || !primaryComparisonRootFolder) {
         throw new NotFoundError();
     }
 
-    const primaryRootFolder = comparison.comparisonRootFolders.find(comparisonRootFolder => comparisonRootFolder.isPrimary)!.rootFolder;
-
-    const rootFolder = await prismaClient.rootFolder.findFirst({
+    const primaryRootFolderDetails = await prismaClient.rootFolder.findFirst({
         where: {
-            id: primaryRootFolder.id
+            id: primaryComparisonRootFolder.rootFolder.id
         },
         select: {
             id: true,
             name: true,
-            description: true,
             path: true,
-            status: true,
-            createdAt: true,
+            size: true,
             files: {
                 select: {
                     id: true,
@@ -143,13 +153,15 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
         }
     });
 
-    if (!rootFolder) {
+    if (!primaryRootFolderDetails) {
         throw new NotFoundError();
     }
 
-    const comparisonResultMap = new Map<number, number[]>((comparison.data as ComparisonResultData).map(item => ([item.fileId, item.duplicatedFileIds])));
+    const comparisonResultMap = new Map<number, ComparisonResultDuplicatedItemData[]>(
+        (comparison.data as ComparisonResultData).map(item => ([item.fileId, item.duplicatedFiles]))
+    );
 
-    const foldersMap = new Map<number, ComparisonFolderItemModel>(rootFolder.folders.map(folder => [folder.id, {
+    const foldersMap = new Map<number, ComparisonFolderItemModel>(primaryRootFolderDetails.folders.map(folder => [folder.id, {
         id: folder.id,
         name: folder.name,
         parentFolderId: folder.parentFolderId,
@@ -157,11 +169,40 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
         childFolderIds: folder.childFolders.map(childFolder => childFolder.id),
         duplicationMode: FolderDuplicationMode.None
     }]));
-    const filesMap = new Map<number, boolean>(rootFolder.files.map(file => [file.id, comparisonResultMap.has(file.id)]));
+    const filesMap = new Map<number, boolean>(primaryRootFolderDetails.files.map(file => [file.id, comparisonResultMap.has(file.id)]));
 
-    const primaryFolder = rootFolder.folders.find(folder => folder.parentFolderId === null)!;
+    const primaryFolder = primaryRootFolderDetails.folders.find(folder => folder.parentFolderId === null)!;
 
     setFoldersDuplicationMode(foldersMap.get(primaryFolder.id)!, filesMap, foldersMap);
+
+    const totalDuplicatedFilesSize = primaryRootFolderDetails.files
+        .filter(file => comparisonResultMap.has(file.id))
+        .reduce((acc, file) => acc + Number(file.size), 0);
+    const totalDuplicatedFilesSizeByRootFolderId = primaryRootFolderDetails.files
+        .filter(file => comparisonResultMap.has(file.id))
+        .reduce((map, file) => {
+            // we should ignore cases when the same file is duplicated several times
+            const processedRootFolders = new Set<number>();
+
+            comparisonResultMap.get(file.id)!.forEach(duplicatedFile => {
+                if (processedRootFolders.has(duplicatedFile.rootFolderId)) {
+                    return;
+                }
+
+                if (map.has(duplicatedFile.rootFolderId)) {
+                    const currentValue = map.get(duplicatedFile.rootFolderId)!;
+                    map.set(duplicatedFile.rootFolderId, {
+                        totalSize: currentValue.totalSize + Number(file.size),
+                        totalCount: currentValue.totalCount + 1
+                    });
+                } else {
+                    map.set(duplicatedFile.rootFolderId, { totalSize: Number(file.size), totalCount: 1 });
+                }
+                processedRootFolders.add(duplicatedFile.rootFolderId);
+            });
+
+            return map;
+        }, new Map<number, { totalSize: number; totalCount: number; }>);
 
     return {
         id: comparison.id,
@@ -169,11 +210,29 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
         description: comparison.description,
         status: comparison.status,
         createdAt: comparison.createdAt,
-        primaryRootFolder,
+        primaryRootFolder: {
+            isPrimary: true,
+            id: primaryRootFolderDetails.id,
+            name: primaryRootFolderDetails.name,
+            path: primaryRootFolderDetails.path,
+            size: Number(primaryRootFolderDetails.size),
+            totalFilesCount: primaryRootFolderDetails.files.length,
+            duplicatedFilesCount: comparisonResultMap.size,
+            duplicatedFilesSize: totalDuplicatedFilesSize
+        },
         rootFolders: comparison.comparisonRootFolders
             .filter(comparisonRootFolder => !comparisonRootFolder.isPrimary)
-            .map(comparisonRootFolder => comparisonRootFolder.rootFolder),
-        files: rootFolder.files.map(file => ({
+            .map(comparisonRootFolder => ({
+                isPrimary: false,
+                id: comparisonRootFolder.rootFolder.id,
+                name: comparisonRootFolder.rootFolder.name,
+                path: comparisonRootFolder.rootFolder.path,
+                size: Number(comparisonRootFolder.rootFolder.size),
+                totalFilesCount: comparisonRootFolder.rootFolder._count.files,
+                duplicatedFilesSize: totalDuplicatedFilesSizeByRootFolderId.get(comparisonRootFolder.rootFolder.id)?.totalSize ?? 0,
+                duplicatedFilesCount: totalDuplicatedFilesSizeByRootFolderId.get(comparisonRootFolder.rootFolder.id)?.totalCount ?? 0
+            })),
+        files: primaryRootFolderDetails.files.map(file => ({
             id: file.id,
             fullName: file.fullName,
             size: Number(file.size),

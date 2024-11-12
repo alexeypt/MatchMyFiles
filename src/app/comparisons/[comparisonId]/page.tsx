@@ -5,6 +5,8 @@ import ComparisonGeneralInfoSection from "@/comparison/components/ComparisonGene
 import ComparisonTreeSection from "@/comparison/components/ComparisonTreeSection";
 import getComparison from "@/comparison/data-access/queries/getComparisonQuery";
 import getRootFolderNamesQuery from "@/root-folder/data-access/queries/getRootFolderNamesQuery";
+import PageSection from "@/common/components/PageSection";
+import ComparisonRootFolderTable from "@/comparison/components/ComparisonRootFolderTable";
 
 
 export const metadata: Metadata = {
@@ -17,6 +19,11 @@ export default async function ComparisonEditPage({ params }: { params: { compari
         getRootFolderNamesQuery()
     ]);
 
+    const comparisonRootFolders = [
+        comparison.primaryRootFolder,
+        ...comparison.rootFolders
+    ];
+
     return (
         <>
             <ComparisonDetailsPageHeader comparison={comparison} />
@@ -25,6 +32,12 @@ export default async function ComparisonEditPage({ params }: { params: { compari
                     rootFolders={rootFolders}
                     comparison={comparison}
                 />
+                <PageSection
+                    title="Root Folders"
+                    headingLevel={2}
+                >
+                    <ComparisonRootFolderTable data={comparisonRootFolders} />
+                </PageSection>
                 <ComparisonTreeSection comparison={comparison} />
             </article>
         </>
