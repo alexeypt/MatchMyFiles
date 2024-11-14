@@ -9,13 +9,20 @@ import { ComparisonFileItemModel, ComparisonFolderItemModel } from '@/comparison
 
 
 interface ComparisonItemDetailsModalProps {
+    rootFolderColorMap: Map<number, string>;
     comparisonId: number;
     item: ComparisonTreeItem;
     isOpen: boolean;
     onClose: () => void;
 }
 
-export default function ComparisonItemDetailsModal({ item, comparisonId, isOpen, onClose }: ComparisonItemDetailsModalProps) {
+export default function ComparisonItemDetailsModal({
+    rootFolderColorMap,
+    item,
+    comparisonId,
+    isOpen,
+    onClose
+}: ComparisonItemDetailsModalProps) {
     return (
         <Modal
             isOpen={isOpen}
@@ -42,6 +49,7 @@ export default function ComparisonItemDetailsModal({ item, comparisonId, isOpen,
                             {
                                 item.type === ComparisonTreeItemType.Folder && (
                                     <ComparisonFolderDetailsModalContent
+                                        rootFolderColorMap={rootFolderColorMap}
                                         item={item.data as ComparisonFolderItemModel}
                                         comparisonId={comparisonId}
                                     />
@@ -50,6 +58,7 @@ export default function ComparisonItemDetailsModal({ item, comparisonId, isOpen,
                             {
                                 item.type === ComparisonTreeItemType.File && (
                                     <ComparisonFileDetailsModalContent
+                                        rootFolderColorMap={rootFolderColorMap}
                                         item={item.data as ComparisonFileItemModel}
                                         comparisonId={comparisonId}
                                     />

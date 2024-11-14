@@ -4,19 +4,22 @@ import { Link } from '@nextui-org/react';
 import FormattedDateTime from '@/common/components/FormattedDateTime';
 import KeyValueList from '@/common/components/KeyValueList';
 import { ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';
+import { convertHexToRgbaColor } from '@/common/helpers/colorHelper';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 import { roundNumber } from '@/common/helpers/numberHelper';
 import { generateUrl } from '@/common/helpers/urlHelper';
 import getComparisonFolder, { ComparisonFolderDetailsModel } from '@/comparison/data-access/queries/getComparisonFolderQuery';
 import { ComparisonFolderItemModel } from '@/comparison/data-access/queries/getComparisonQuery';
+import FolderDuplicationMode from '@/comparison/models/folderDuplicationMode';
 
 
 interface ComparisonFolderDetailsModalContentProps {
+    rootFolderColorMap: Map<number, string>;
     item: ComparisonFolderItemModel;
     comparisonId: number;
 }
 
-export default function ComparisonFolderDetailsModalContent({ item, comparisonId }: ComparisonFolderDetailsModalContentProps) {
+export default function ComparisonFolderDetailsModalContent({ item, comparisonId, rootFolderColorMap }: ComparisonFolderDetailsModalContentProps) {
     const [folderDetails, setFolderDetails] = useState<ComparisonFolderDetailsModel | null>(null);
     useEffect(() => {
         async function load() {
@@ -77,32 +80,53 @@ export default function ComparisonFolderDetailsModalContent({ item, comparisonId
                             Has Duplicates with:
                         </h3>
                         <ul className="border-2 divide-y-2">
-                            {folderDetails.duplicationInfo.map(item => (
-                                <li
-                                    key={item.rootFolderId}
-                                    className="p-3 text-lg"
-                                >
-                                    <p className="flex gap-4">
-                                        <span className="font-bold">Root Folder Name:</span>
-                                        {' '}
-                                        <Link
-                                            href={generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: item.rootFolderId })}
-                                            className="text-lg"
+                            {
+                                folderDetails.duplicationInfo.map(duplicationItem => {
+                                    const folderDuplicationMode = item.duplicationInfo.find(info => info.rootFolderId === duplicationItem.rootFolderId)?.duplicationMode;
+
+                                    const backgroundColor = folderDuplicationMode === FolderDuplicationMode.Partial
+                                        ? convertHexToRgbaColor(rootFolderColorMap.get(duplicationItem.rootFolderId)!, 0.5)
+                                        : rootFolderColorMap.get(duplicationItem.rootFolderId);
+
+                                    return (
+                                        <li
+                                            key={duplicationItem.rootFolderId}
+                                            className="p-3 text-lg bg-[--duplicated-color] wrap-anywhere"
+                                            style={{
+                                                '--duplicated-color': backgroundColor
+                                            }}
                                         >
-                                            {item.rootFolderName}
-                                        </Link>
-                                    </p>
-                                    <p className="flex gap-4">
-                                        <span className="font-bold">Root Folder Path:</span> {item.rootFolderPath}
-                                    </p>
-                                    <p className="flex gap-4">
-                                        <span className="font-bold">Duplicated Files Count:</span> {item.duplicatedFilesCount}
-                                    </p>
-                                    <p className="flex gap-4">
-                                        <span className="font-bold">Duplicated Files Size:</span> {getFormattedSize(item.duplicatedFilesSize)}
-                                    </p>
-                                </li>
-                            ))}
+                                            <p className="flex gap-4">
+                                                <span className="font-bold shrink-0">Status:</span>
+                                                {
+                                                    folderDuplicationMode === FolderDuplicationMode.Full
+                                                        ? 'Totally Duplicated'
+                                                        : 'Partially Duplicated'
+                                                }
+                                            </p>
+                                            <p className="flex gap-4">
+                                                <span className="font-bold shrink-0">Root Folder Name:</span>
+                                                {' '}
+                                                <Link
+                                                    href={generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: duplicationItem.rootFolderId })}
+                                                    className="text-lg"
+                                                >
+                                                    {duplicationItem.rootFolderName}
+                                                </Link>
+                                            </p>
+                                            <p className="flex gap-4">
+                                                <span className="font-bold shrink-0">Root Folder Path:</span> {duplicationItem.rootFolderPath}
+                                            </p>
+                                            <p className="flex gap-4">
+                                                <span className="font-bold shrink-0">Duplicated Files Count:</span> {duplicationItem.duplicatedFilesCount}
+                                            </p>
+                                            <p className="flex gap-4">
+                                                <span className="font-bold ">Duplicated Files Size:</span> {getFormattedSize(duplicationItem.duplicatedFilesSize)}
+                                            </p>
+                                        </li>
+                                    );
+                                })
+                            }
                         </ul>
                     </section>
                 )

@@ -109,6 +109,7 @@ export default function ComparisonTreeSection({ comparison, rootFolderColorMap }
                 </UncontrolledTreeEnvironment>
             </div>
             <ComparisonItemDetailsModal
+                rootFolderColorMap={rootFolderColorMap}
                 comparisonId={comparison.id}
                 item={selectedItem!}
                 isOpen={isDetailsModalOpened}

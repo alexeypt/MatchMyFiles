@@ -11,11 +11,12 @@ import { ComparisonFileItemModel } from '@/comparison/data-access/queries/getCom
 
 
 interface ComparisonFileDetailsModalContentProps {
+    rootFolderColorMap: Map<number, string>;
     item: ComparisonFileItemModel;
     comparisonId: number;
 }
 
-export default function ComparisonFileDetailsModalContent({ item, comparisonId }: ComparisonFileDetailsModalContentProps) {
+export default function ComparisonFileDetailsModalContent({ rootFolderColorMap, item, comparisonId }: ComparisonFileDetailsModalContentProps) {
     const [fileDetails, setFileDetails] = useState<ComparisonFileDetailsModel | null>(null);
     useEffect(() => {
         async function load() {
@@ -80,32 +81,41 @@ export default function ComparisonFileDetailsModalContent({ item, comparisonId }
                             Duplicated with:
                         </h3>
                         <ul className="border-2 divide-y-2">
-                            {fileDetails.duplicationInfo.map(item => (
-                                <li
-                                    key={item.fileId}
-                                    className="p-3 text-lg"
-                                >
-                                    <p className="flex gap-4">
-                                        <span className="font-bold">Root Folder Name:</span>
-                                        {' '}
-                                        <Link
-                                            href={generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: item.rootFolderId })}
-                                            className="text-lg"
+                            {
+                                fileDetails.duplicationInfo.map(duplicationItem => {
+                                    const backgroundColor = rootFolderColorMap.get(duplicationItem.rootFolderId);
+
+                                    return (
+                                        <li
+                                            key={duplicationItem.fileId}
+                                            className="p-3 text-lg bg-[--duplicated-color] wrap-anywhere"
+                                            style={{
+                                                '--duplicated-color': backgroundColor
+                                            }}
                                         >
-                                            {item.rootFolderName}
-                                        </Link>
-                                    </p>
-                                    <p className="flex gap-4">
-                                        <span className="font-bold">Root Folder Path:</span> {item.rootFolderPath}
-                                    </p>
-                                    <p className="flex gap-4">
-                                        <span className="font-bold">File Name:</span> {item.fullName}
-                                    </p>
-                                    <p className="flex gap-4">
-                                        <span className="font-bold">File Path:</span> {item.absolutePath}
-                                    </p>
-                                </li>
-                            ))}
+                                            <p className="flex gap-4">
+                                                <span className="font-bold shrink-0">Root Folder Name:</span>
+                                                {' '}
+                                                <Link
+                                                    href={generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: duplicationItem.rootFolderId })}
+                                                    className="text-lg"
+                                                >
+                                                    {duplicationItem.rootFolderName}
+                                                </Link>
+                                            </p>
+                                            <p className="flex gap-4">
+                                                <span className="font-bold shrink-0">Root Folder Path:</span> {duplicationItem.rootFolderPath}
+                                            </p>
+                                            <p className="flex gap-4">
+                                                <span className="font-bold shrink-0">File Name:</span> {duplicationItem.fullName}
+                                            </p>
+                                            <p className="flex gap-4">
+                                                <span className="font-bold shrink-0">File Path:</span> {duplicationItem.absolutePath}
+                                            </p>
+                                        </li>
+                                    );
+                                })
+                            }
                         </ul>
                     </section>
                 )
