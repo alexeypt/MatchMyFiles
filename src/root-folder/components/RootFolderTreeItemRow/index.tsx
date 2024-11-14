@@ -2,24 +2,36 @@
 
 import React, { useCallback } from 'react';
 import { Button } from '@nextui-org/react';
+import classNames from 'classnames';
 
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
-import { RootFolderTreeItem } from '@/root-folder/components/RootFolderTreeSection';
+import { RootFolderTreeItem, RootFolderTreeItemType } from '@/root-folder/components/RootFolderTreeSection';
 
 
 interface RootFolderTreeItemRowProps {
+    duplicatedFileIds: Set<number>;
     title: string;
     item: RootFolderTreeItem;
     onSelectItem: (item: RootFolderTreeItem) => void;
 }
 
-export default function RootFolderTreeItemRow({ title, item, onSelectItem }: RootFolderTreeItemRowProps) {
+export default function RootFolderTreeItemRow({
+    duplicatedFileIds,
+    title,
+    item,
+    onSelectItem
+}: RootFolderTreeItemRowProps) {
     const onSelectItemButtonClicked = useCallback(() => {
         onSelectItem(item);
     }, [item, onSelectItem]);
+
+    const className = classNames(
+        'flex justify-between items-center gap-3 w-full pt-1 pb-1 pl-2',
+        { 'bg-green-200': item.type === RootFolderTreeItemType.File && duplicatedFileIds.has(item.data.id) }
+    );
     
     return (
-        <div className={'flex justify-between items-center gap-3 w-full pt-1 pb-1 pl-2'}>
+        <div className={className}>
             <div className="flex-grow">
                 {title}
             </div>

@@ -21,6 +21,13 @@ export interface RootFolderFolderItemModel {
     parentFolderId: number | null;
 }
 
+export interface RootFolderDuplicatedFileModel {
+    fileId: number;
+    size: number;
+    fullName: string;
+    absolutePath: string;
+}
+
 export interface RootFolderDetailsModel {
     id: number;
     name: string;
@@ -29,6 +36,7 @@ export interface RootFolderDetailsModel {
     path: string;
     status: RootFolderProcessingStatus;
     createdAt: Date;
+    duplicationData: RootFolderDuplicatedFileModel[][];
     foldersCount: number;
     filesCount: number;
     comparisonsCount: number;
@@ -48,6 +56,7 @@ export default async function getRootFolder(id: number): Promise<RootFolderDetai
             size: true,
             path: true,
             status: true,
+            duplicationData: true,
             createdAt: true,
             _count: {
                 select: {
@@ -60,7 +69,8 @@ export default async function getRootFolder(id: number): Promise<RootFolderDetai
                 select: {
                     id: true,
                     fullName: true,
-                    size: true
+                    size: true,
+                    absolutePath: true
                 }
             },
             folders: {
@@ -88,6 +98,10 @@ export default async function getRootFolder(id: number): Promise<RootFolderDetai
         throw new NotFoundError();
     }
 
+    const duplicationData = (rootFolder.duplicationData ?? []) as number[][];
+    const duplicatedFileIds = new Set(duplicationData.flatMap(duplicationGroup => duplicationGroup.map(fileId => fileId)));
+    const filesMap = new Map(rootFolder.files.filter(file => duplicatedFileIds.has(file.id)).map(file => ([file.id, file])));
+
     return {
         id: rootFolder.id,
         name: rootFolder.name,
@@ -95,6 +109,16 @@ export default async function getRootFolder(id: number): Promise<RootFolderDetai
         size: Number(rootFolder.size),
         path: rootFolder.path,
         status: rootFolder.status,
+        duplicationData: duplicationData.map(duplicationGroup => duplicationGroup.map(fileId => {
+            const fileInfo = filesMap.get(fileId)!;
+
+            return {
+                fileId: fileInfo.id,
+                size: Number(fileInfo.size),
+                fullName: fileInfo.fullName,
+                absolutePath: fileInfo.absolutePath
+            };
+        })),
         createdAt: rootFolder.createdAt,
         filesCount: rootFolder._count.files,
         foldersCount: rootFolder._count.folders,

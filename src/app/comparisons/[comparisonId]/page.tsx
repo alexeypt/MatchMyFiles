@@ -25,10 +25,10 @@ export default async function ComparisonEditPage({ params }: { params: { compari
         ...comparison.rootFolders
     ];
 
-    const rootFolderColorMap = new Map<number, string>(comparison.rootFolders.map((rootFolder, index) => [
+    const rootFolderColorMap = new Map<number, string>(comparisonRootFolders.map((rootFolder, index) => ([
         rootFolder.id,
         COMPARISON_ROOT_FOLDER_COLORS[index % COMPARISON_ROOT_FOLDER_COLORS.length]
-    ]));
+    ])));
 
     return (
         <>

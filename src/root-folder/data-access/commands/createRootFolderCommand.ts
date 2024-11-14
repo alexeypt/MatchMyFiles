@@ -1,6 +1,7 @@
 'use server';
 
 import { RootFolder } from '@prisma/client';
+import { getSelfDuplicatedFiles } from '@prisma/client/sql';
 
 import prismaClient from "@/common/helpers/prismaClient";
 import socketIO from '@/common/helpers/socketIOClient';
@@ -58,13 +59,17 @@ async function processRootFolder(rootFolder: RootFolder) {
 
     await createFolder(rootFolderInfo, rootFolder.id, null);
 
+    const duplicatedFiles = await prismaClient.$queryRawTyped(getSelfDuplicatedFiles(rootFolder.id));
+    const duplicationData = duplicatedFiles.map(duplicatedGroup => (duplicatedGroup.fileIds as number[]));
+
     await prismaClient.rootFolder.update({
         where: {
             id: rootFolder.id
         },
         data: {
             status: 'Completed',
-            size: rootFolderInfo.size
+            size: rootFolderInfo.size,
+            duplicationData
         }
     });
 

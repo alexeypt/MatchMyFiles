@@ -1,4 +1,5 @@
 const COMPARISON_ROOT_FOLDER_COLORS = [
+    '#bbf7d0',
     '#fb923c',
     '#a3e635',
     '#c084fc',

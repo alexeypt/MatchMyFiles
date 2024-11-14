@@ -65,7 +65,7 @@ export default function ComparisonTreeItemRow({
 
     return (
         <div
-            className={'flex justify-between items-center gap-3 w-full pt-1 pb-1 pl-2'}
+            className="flex justify-between items-center gap-3 w-full pt-1 pb-1 pl-2"
             style={{ background: background }}
         >
             <div className="flex-grow">

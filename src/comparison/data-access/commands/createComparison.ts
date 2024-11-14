@@ -1,6 +1,7 @@
 'use server';
 
 import { ComparisonProcessingStatus, Prisma } from "@prisma/client";
+import { getDuplicatedFiles } from "@prisma/client/sql";
 
 import prismaClient from "@/common/helpers/prismaClient";
 import { ComparisonResultData, ComparisonResultDuplicatedItemData } from "@/comparison/types/comparisonResultData";
@@ -13,18 +14,8 @@ export interface CreateComparisonModel {
     folderIds: number[];
 }
 
-async function processComparison(comparison: CreateComparisonModel, comparisonId: number) {
-    // TODO: moved to prisma typed sql
-    const duplicatedFiles = await prismaClient.$queryRaw<{
-        primaryFileId: number;
-        secondaryFileId: number;
-        rootFolderId: number;
-    }[]>`
-        select f1.id as "primaryFileId", f2.id as "secondaryFileId", f2."rootFolderId"
-        from public."File" f1
-        join public."File" f2 on f1.hash = f2.hash
-        where f1."rootFolderId" in (${comparison.primaryFolderId}) and f2."rootFolderId" in (${Prisma.join(comparison.folderIds)})
-    `;
+export async function processComparison(primaryFolderId: number, secondaryFolderIds: number[], comparisonId: number) {
+    const duplicatedFiles = await prismaClient.$queryRawTyped(getDuplicatedFiles(primaryFolderId, [primaryFolderId, ...secondaryFolderIds]));
 
     const duplicatedFilesMap = duplicatedFiles.reduce((map, file) => {
         const item = map.get(file.primaryFileId);
@@ -79,7 +70,7 @@ export default async function createComparison(values: CreateComparisonModel) {
         }
     });
 
-    await processComparison(values, comparison.id);
+    await processComparison(values.primaryFolderId!, values.folderIds, comparison.id);
 
     return comparison;
 }

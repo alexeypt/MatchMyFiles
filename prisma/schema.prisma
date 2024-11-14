@@ -60,12 +60,13 @@ model Folder {
 }
 
 model RootFolder {
-    id          Int                        @id @default(autoincrement())
-    name        String
-    description String?
-    path        String
-    size        BigInt
-    status      RootFolderProcessingStatus @default(Created)
+    id              Int                        @id @default(autoincrement())
+    name            String
+    description     String?
+    path            String
+    size            BigInt
+    status          RootFolderProcessingStatus @default(Created)
+    duplicationData Json?
 
     folders               Folder[]
     files                 File[]

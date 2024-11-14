@@ -71,6 +71,10 @@ export default function RootFolderTreeSection({ rootFolder }: RootFolderTreeSect
 
     const rootItem = rootFolder.folders.find(folder => !folder.parentFolderId)!;
 
+    const duplicatedFileIds = useMemo(() => {
+        return new Set(rootFolder.duplicationData.flatMap(duplicationGroup => duplicationGroup.map(file => file.fileId)));
+    }, [rootFolder.duplicationData]);
+
     const onSelectItem = useCallback((item: RootFolderTreeItem) => {
         setSelectedItem(item);
         showDetailsModal();
@@ -90,6 +94,7 @@ export default function RootFolderTreeSection({ rootFolder }: RootFolderTreeSect
                     renderItemTitle={({ item, title }) => {
                         return (
                             <RootFolderTreeItemRow
+                                duplicatedFileIds={duplicatedFileIds}
                                 item={item.data}
                                 title={title}
                                 onSelectItem={onSelectItem}
