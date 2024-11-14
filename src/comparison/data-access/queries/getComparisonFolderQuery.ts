@@ -10,11 +10,22 @@ import { ComparisonResultData, ComparisonResultDuplicatedItemData } from "@/comp
 export interface ComparisonFolderDetailsModel {
     id: number;
     name: string;
+    size: number;
     absolutePath: string;
     relativePath: string;
-    size: number;
+    folderCreatedDate: Date;
+    folderModifiedDate: Date;
+    folderContentModifiedDate: Date;
     filesCount: number;
     duplicatedFilesCount: number;
+    duplicatedFilesSize: number;
+    duplicationInfo: {
+        rootFolderId: number;
+        rootFolderName: string;
+        rootFolderPath: string;
+        duplicatedFilesCount: number;
+        duplicatedFilesSize: number;
+    }[];
 }
 
 export default async function getComparisonFolder(comparisonId: number, folderId: number): Promise<ComparisonFolderDetailsModel> {
@@ -25,8 +36,12 @@ export default async function getComparisonFolder(comparisonId: number, folderId
         select: {
             id: true,
             name: true,
+            size: true,
             absolutePath: true,
-            relativePath: true
+            relativePath: true,
+            folderCreatedDate: true,
+            folderModifiedDate: true,
+            folderContentModifiedDate: true
         }
     });
 
@@ -42,7 +57,7 @@ export default async function getComparisonFolder(comparisonId: number, folderId
         where: {
             folderId: {
                 in: folderIds
-            }    
+            }
         },
         select: {
             id: true,
@@ -50,14 +65,23 @@ export default async function getComparisonFolder(comparisonId: number, folderId
         }
     });
 
-    const folderSize = files.reduce((acc, file) => acc + Number(file.size), 0);
-
     const comparison = await prismaClient.comparison.findFirst({
         where: {
             id: comparisonId
         },
         select: {
-            data: true
+            data: true,
+            comparisonRootFolders: {
+                select: {
+                    rootFolder: {
+                        select: {
+                            id: true,
+                            name: true,
+                            path: true
+                        }
+                    }
+                }
+            }
         }
     });
 
@@ -67,14 +91,55 @@ export default async function getComparisonFolder(comparisonId: number, folderId
 
     const comparisonResultMap = new Map<number, ComparisonResultDuplicatedItemData[]>((comparison.data as ComparisonResultData).map(item => ([item.fileId, item.duplicatedFiles])));
     const duplicatedFiles = files.filter(file => comparisonResultMap.has(file.id));
+    const duplicatedFilesSize = duplicatedFiles.reduce((acc, file) => acc + Number(file.size), 0);
+
+    const fileSizeMap = new Map(files.map(file => ([file.id, Number(file.size)])));
+    const rootFolderInfoMap = new Map(comparison.comparisonRootFolders.map(comparisonRootFolder => [comparisonRootFolder.rootFolder.id, comparisonRootFolder.rootFolder]));
+
+    const duplicationInfo = (comparison.data as ComparisonResultData)
+        .filter(item => fileSizeMap.has(item.fileId))
+        .reduce((map, item) => {
+            // we should ignore cases when the same file is duplicated several times
+            const processedRootFolders = new Set<number>();
+
+            item.duplicatedFiles.forEach(duplicatedFile => {
+                if (processedRootFolders.has(duplicatedFile.rootFolderId)) {
+                    return;
+                }
+
+                const mapItem = map.get(duplicatedFile.rootFolderId);
+                map.set(duplicatedFile.rootFolderId, {
+                    duplicatedFilesCount: (mapItem?.duplicatedFilesCount ?? 0) + 1,
+                    duplicatedFilesSize: (mapItem?.duplicatedFilesSize ?? 0) + (fileSizeMap.get(item.fileId) ?? 0)
+                });
+
+                processedRootFolders.add(duplicatedFile.rootFolderId);
+            });
+
+            return map;
+        }, new Map<number, {
+            duplicatedFilesCount: number;
+            duplicatedFilesSize: number;
+        }>());
 
     return {
         id: folder.id,
         name: folder.name,
+        size: Number(folder.size),
         absolutePath: folder.absolutePath,
         relativePath: folder.relativePath,
+        folderCreatedDate: folder.folderCreatedDate,
+        folderModifiedDate: folder.folderModifiedDate,
+        folderContentModifiedDate: folder.folderContentModifiedDate,
         filesCount: files.length,
         duplicatedFilesCount: duplicatedFiles.length,
-        size: folderSize
+        duplicatedFilesSize,
+        duplicationInfo: Array.from(duplicationInfo.entries()).map(([rootFolderId, data]) => ({
+            rootFolderId,
+            rootFolderName: rootFolderInfoMap.get(rootFolderId)!.name,
+            rootFolderPath: rootFolderInfoMap.get(rootFolderId)!.path,
+            duplicatedFilesCount: data.duplicatedFilesCount,
+            duplicatedFilesSize: data.duplicatedFilesSize
+        }))
     };
 }

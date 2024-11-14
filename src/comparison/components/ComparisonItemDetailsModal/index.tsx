@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
 
 import Heading from '@/common/components/Heading';
-import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
+import ComparisonFileDetailsModalContent from '@/comparison/components/ComparisonFileDetailsModalContent';
 import ComparisonFolderDetailsModalContent from '@/comparison/components/ComparisonFolderDetailsModalContent';
 import { ComparisonTreeItem, ComparisonTreeItemType } from '@/comparison/components/ComparisonTreeSection';
 import { ComparisonFileItemModel, ComparisonFolderItemModel } from '@/comparison/data-access/queries/getComparisonQuery';
@@ -15,31 +15,30 @@ interface ComparisonItemDetailsModalProps {
     onClose: () => void;
 }
 
-export default function ComparisonItemDetailsModal({ item, comparisonId, isOpen, onClose }: ComparisonItemDetailsModalProps) {    
+export default function ComparisonItemDetailsModal({ item, comparisonId, isOpen, onClose }: ComparisonItemDetailsModalProps) {
     return (
         <Modal
             isOpen={isOpen}
-            size='xl'
+            size="2xl"
+            classNames={
+                {
+                    closeButton: 'text-4xl'
+                }
+            }
             onClose={onClose}
         >
             <ModalContent>
                 {() => (
-                    <>
+                    <div className="p-6">
                         <ModalHeader className="flex flex-col gap-1">
-                            <Heading level={2}>
-                                {item.type === ComparisonTreeItemType.Folder ? 'Folder' : 'File'}: {item.title}
+                            <Heading
+                                className="text-3xl font-serif"
+                                level={2}
+                            >
+                                {item.type === ComparisonTreeItemType.Folder ? 'Folder Details' : 'File Details'}
                             </Heading>
                         </ModalHeader>
-                        <ModalBody>
-                            {item.type === ComparisonTreeItemType.File && (
-                                <dl>
-                                    <dt>Name:</dt>
-                                    <dd>{(item.data as ComparisonFileItemModel).fullName}</dd>
-
-                                    <dt>Size:</dt>
-                                    <dd>{getFormattedSize((item.data as ComparisonFileItemModel).size)}</dd>
-                                </dl>
-                            )}
+                        <ModalBody className="pb-4">
                             {
                                 item.type === ComparisonTreeItemType.Folder && (
                                     <ComparisonFolderDetailsModalContent
@@ -48,8 +47,16 @@ export default function ComparisonItemDetailsModal({ item, comparisonId, isOpen,
                                     />
                                 )
                             }
+                            {
+                                item.type === ComparisonTreeItemType.File && (
+                                    <ComparisonFileDetailsModalContent
+                                        item={item.data as ComparisonFileItemModel}
+                                        comparisonId={comparisonId}
+                                    />
+                                )
+                            }
                         </ModalBody>
-                    </>
+                    </div>
                 )}
             </ModalContent>
         </Modal>

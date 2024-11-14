@@ -5,81 +5,84 @@ import FormattedDateTime from '@/common/components/FormattedDateTime';
 import KeyValueList from '@/common/components/KeyValueList';
 import { ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
-import { roundNumber } from '@/common/helpers/numberHelper';
 import { generateUrl } from '@/common/helpers/urlHelper';
-import getComparisonFolder, { ComparisonFolderDetailsModel } from '@/comparison/data-access/queries/getComparisonFolderQuery';
-import { ComparisonFolderItemModel } from '@/comparison/data-access/queries/getComparisonQuery';
+import getComparisonFile, { ComparisonFileDetailsModel } from '@/comparison/data-access/queries/getComparisonFileQuery';
+import { ComparisonFileItemModel } from '@/comparison/data-access/queries/getComparisonQuery';
 
 
-interface ComparisonFolderDetailsModalContentProps {
-    item: ComparisonFolderItemModel;
+interface ComparisonFileDetailsModalContentProps {
+    item: ComparisonFileItemModel;
     comparisonId: number;
 }
 
-export default function ComparisonFolderDetailsModalContent({ item, comparisonId }: ComparisonFolderDetailsModalContentProps) {
-    const [folderDetails, setFolderDetails] = useState<ComparisonFolderDetailsModel | null>(null);
+export default function ComparisonFileDetailsModalContent({ item, comparisonId }: ComparisonFileDetailsModalContentProps) {
+    const [fileDetails, setFileDetails] = useState<ComparisonFileDetailsModel | null>(null);
     useEffect(() => {
         async function load() {
-            setFolderDetails(await getComparisonFolder(comparisonId, item.id));
+            setFileDetails(await getComparisonFile(comparisonId, item.id));
         }
 
         load();
     }, [comparisonId, item.id]);
 
-    const folderDetailsInfo = useMemo(() => {
-        if (!folderDetails) {
+    const fileDetailsInfo = useMemo(() => {
+        if (!fileDetails) {
             return new Map();
         }
         return new Map<string, ReactNode>([
-            ['Name', folderDetails.name],
-            ['Absolute Path', folderDetails.absolutePath],
-            ['Relative Path', folderDetails.relativePath],
+            ['Name', fileDetails.name],
+            ['Extension', fileDetails.extension],
+            ['Absolute Path', fileDetails.absolutePath],
+            ['Relative Path', fileDetails.relativePath],
+            ['Relative Path', fileDetails.relativePath],
+            ['Size', getFormattedSize(fileDetails.size)],
+            ['Latitude', fileDetails.latitude],
+            ['Longitude', fileDetails.longitude],
             ['Created Date', (
                 <FormattedDateTime
-                    key={+folderDetails.folderCreatedDate}
-                    dateTime={folderDetails.folderCreatedDate}
+                    key={+fileDetails.fileCreatedDate}
+                    dateTime={fileDetails.fileCreatedDate}
                 />
             )],
             ['Modified Date', (
                 <FormattedDateTime
-                    key={+folderDetails.folderModifiedDate}
-                    dateTime={folderDetails.folderModifiedDate}
+                    key={+fileDetails.fileModifiedDate}
+                    dateTime={fileDetails.fileModifiedDate}
                 />
             )],
             ['Modified Content Date', (
                 <FormattedDateTime
-                    key={+folderDetails.folderContentModifiedDate}
-                    dateTime={folderDetails.folderContentModifiedDate}
+                    key={+fileDetails.fileContentModifiedDate}
+                    dateTime={fileDetails.fileContentModifiedDate}
                 />
             )],
-            ['Total Files Count', folderDetails.filesCount],
-            ['Duplicated Files Count',
-                `${folderDetails.duplicatedFilesCount} (${roundNumber(folderDetails.duplicatedFilesCount / folderDetails.filesCount * 100.0, 1)}%)`
-            ],
-            ['Total Size', getFormattedSize(folderDetails.size)],
-            ['Duplicated Size',
-                `${getFormattedSize(folderDetails.duplicatedFilesSize)} (${roundNumber(folderDetails.duplicatedFilesSize / folderDetails.size * 100.0, 1)}%)`
+            ['Is Duplicated', fileDetails.isDuplicated
+                ? <span className="text-green-800">Yes</span>
+                : <span className="text-red-800">No</span>
             ]
         ]);
-    }, [folderDetails]);
+    }, [fileDetails]);
 
-    if (!folderDetails) {
+    if (!fileDetails) {
         return null;
     }
 
     return (
         <div>
-            <KeyValueList items={folderDetailsInfo} />
+            <KeyValueList
+                items={fileDetailsInfo}
+                skipNullableValues
+            />
             {
-                folderDetails.duplicationInfo.length > 0 && (
+                fileDetails.duplicationInfo.length > 0 && (
                     <section className="font-serif mt-6 flex flex-col gap-3">
                         <h3 className="text-2xl text-blue-950">
-                            Has Duplicates with:
+                            Duplicated with:
                         </h3>
                         <ul className="border-2 divide-y-2">
-                            {folderDetails.duplicationInfo.map(item => (
+                            {fileDetails.duplicationInfo.map(item => (
                                 <li
-                                    key={item.rootFolderId}
+                                    key={item.fileId}
                                     className="p-3 text-lg"
                                 >
                                     <p className="flex gap-4">
@@ -96,10 +99,10 @@ export default function ComparisonFolderDetailsModalContent({ item, comparisonId
                                         <span className="font-bold">Root Folder Path:</span> {item.rootFolderPath}
                                     </p>
                                     <p className="flex gap-4">
-                                        <span className="font-bold">Duplicated Files Count:</span> {item.duplicatedFilesCount}
+                                        <span className="font-bold">File Name:</span> {item.fullName}
                                     </p>
                                     <p className="flex gap-4">
-                                        <span className="font-bold">Duplicated Files Size:</span> {getFormattedSize(item.duplicatedFilesSize)}
+                                        <span className="font-bold">File Path:</span> {item.absolutePath}
                                     </p>
                                 </li>
                             ))}
