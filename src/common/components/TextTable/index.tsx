@@ -6,6 +6,7 @@ import { CellElement } from '@react-types/table/src/index';
 export interface TextTableColumnConfiguration<T> {
     key: keyof T;
     label: string;
+    width?: string;
 }
 
 export type TextTableRowConfiguration<T> = T & { key: number | string; };
@@ -40,7 +41,10 @@ export default function TextTable<T>({
             <TableHeader columns={columns}>
                 {
                     (column) =>
-                        <TableColumn key={column.key as string}>
+                        <TableColumn
+                            key={column.key as string}
+                            style={column.width ? {width: column.width} : undefined}
+                        >
                             {column.label}
                         </TableColumn>
                 }

@@ -5,10 +5,10 @@ import { Link, TableCell } from '@nextui-org/react';
 
 import TextTable, { TextTableColumnConfiguration, TextTableRowConfiguration } from '@/common/components/TextTable';
 import { COMPARISON_EDIT_ROUTE, ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';
+import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
+import { pluralize } from '@/common/helpers/pluralizationHelper';
 import { generateUrl } from '@/common/helpers/urlHelper';
 import { ComparisonListItemModel, ComparisonListItemRootFolderModel } from '@/comparison/data-access/queries/getComparisonsQuery';
-import { pluralize } from '@/common/helpers/pluralizationHelper';
-import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 
 
 interface ComparisonTableProps {
@@ -92,7 +92,7 @@ export default function ComparisonTable({ data }: ComparisonTableProps) {
                     <div className="text-base">
                         <ul className="flex flex-col gap-2">
                             {comparison.secondaryRootFolders.map(item => (
-                                <li>
+                                <li key={item.id}>
                                     <Link
                                         href={generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: item.id })}
                                         underline="hover"

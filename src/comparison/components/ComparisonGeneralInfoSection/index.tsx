@@ -8,13 +8,13 @@ import FormattedDateTime from '@/common/components/FormattedDateTime';
 import KeyValueList from '@/common/components/KeyValueList';
 import PageSection from '@/common/components/PageSection';
 import { action } from '@/common/helpers/actionHelper';
+import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
+import { roundNumber } from '@/common/helpers/numberHelper';
 import ComparisonForm from '@/comparison/components/ComparisonForm';
 import updateComparison from '@/comparison/data-access/commands/updateComparisonCommand';
 import { ComparisonDetailsModel } from '@/comparison/data-access/queries/getComparisonQuery';
 import ComparisonFormModel from '@/comparison/models/comparisonFormModel';
 import { RootFolderNameModel } from '@/root-folder/data-access/queries/getRootFolderNamesQuery';
-import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
-import { roundNumber } from '@/common/helpers/numberHelper';
 
 
 interface ComparisonGeneralInfoSectionProps {
@@ -57,7 +57,7 @@ export default function ComparisonGeneralInfoSection({ comparison, rootFolders }
             ['Duplicated Files Count', `${duplicatedFilesCount} / ${totalFilesCount} (${duplicatedFilesCountPercent}%)`],
             ['Duplicated Files Size', `${getFormattedSize(duplicatedFilesSize)} / ${getFormattedSize(size)} (${duplicatedFilesSizePercent}%)`]
         ]);
-    }, [comparison.createdAt, comparison.rootFolders.length]);
+    }, [comparison.createdAt, duplicatedFilesCount, duplicatedFilesSize, size, totalFilesCount]);
 
     const initialFormValues = useMemo(() => {
         return ComparisonFormModel.mapFromComparisonModel(comparison);

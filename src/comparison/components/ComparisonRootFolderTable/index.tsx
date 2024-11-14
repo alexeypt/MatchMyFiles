@@ -2,22 +2,26 @@
 
 import React, { useCallback, useMemo } from 'react';
 import { Link, TableCell } from '@nextui-org/react';
+import classNames from 'classnames';
 
 import TextTable, { TextTableColumnConfiguration, TextTableRowConfiguration } from '@/common/components/TextTable';
 import { ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';
-import { generateUrl } from '@/common/helpers/urlHelper';
+import { convertHexToRgbaColor } from '@/common/helpers/colorHelper';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
-import { ComparisonRootFolderItemModel } from '@/comparison/data-access/queries/getComparisonQuery';
 import { roundNumber } from '@/common/helpers/numberHelper';
+import { generateUrl } from '@/common/helpers/urlHelper';
+import { ComparisonRootFolderItemModel } from '@/comparison/data-access/queries/getComparisonQuery';
 
 
 interface ComparisonRootFolderTableProps {
     data: ComparisonRootFolderItemModel[];
+    rootFolderColorMap: Map<number, string>;
 }
 
 interface ComparisonRootFolderTableItem {
     isPrimary: boolean;
     index: number;
+    id: number;
     name: string;
     path: string;
     size: number;
@@ -26,8 +30,8 @@ interface ComparisonRootFolderTableItem {
     duplicatedFilesCountPercent: number;
     duplicatedFilesSize: number;
     duplicatedFilesSizePercent: number;
-    duplicatedColor: null;
-    partiallyDuplicatedColor: null;
+    duplicatedColor?: string;
+    partiallyDuplicatedColor?: string;
 }
 
 const COLUMNS: TextTableColumnConfiguration<ComparisonRootFolderTableItem>[] = [
@@ -37,35 +41,38 @@ const COLUMNS: TextTableColumnConfiguration<ComparisonRootFolderTableItem>[] = [
     },
     {
         key: "name",
-        label: "Name",
+        label: "Name"
     },
     {
         key: "path",
-        label: "Path",
+        label: "Path"
     },
     {
         key: "duplicatedFilesCount",
-        label: "Duplicated Files Count",
+        label: "Duplicated Files Count"
     },
     {
         key: "duplicatedFilesSize",
-        label: "Duplicated Files Size",
+        label: "Duplicated Files Size"
     },
     {
         key: "duplicatedColor",
         label: "Duplicated color",
+        width: '200px'
     },
     {
         key: "partiallyDuplicatedColor",
         label: "Partially Duplicated color",
+        width: '200px'
     },
 ];
 
-export default function ComparisonRootFolderTable({ data }: ComparisonRootFolderTableProps) {
+export default function ComparisonRootFolderTable({ data, rootFolderColorMap }: ComparisonRootFolderTableProps) {
     const rows: TextTableRowConfiguration<ComparisonRootFolderTableItem>[] = useMemo(() => {
         return data.map((item, index) => ({
             key: item.id,
             index: index + 1,
+            id: item.id,
             isPrimary: item.isPrimary,
             name: item.name,
             path: item.path,
@@ -77,10 +84,12 @@ export default function ComparisonRootFolderTable({ data }: ComparisonRootFolder
                 : 0,
             duplicatedFilesSize: item.duplicatedFilesSize,
             duplicatedFilesSizePercent: roundNumber(item.duplicatedFilesSize / item.size * 100.0, 1),
-            duplicatedColor: null,
-            partiallyDuplicatedColor: null
+            duplicatedColor: rootFolderColorMap.get(item.id),
+            partiallyDuplicatedColor: rootFolderColorMap.has(item.id)
+                ? convertHexToRgbaColor(rootFolderColorMap.get(item.id)!, 0.5)
+                : undefined
         }));
-    }, [data]);
+    }, [data, rootFolderColorMap]);
 
     const renderCellContent = useCallback((rootFolder: TextTableRowConfiguration<ComparisonRootFolderTableItem>, columnKey: keyof ComparisonRootFolderTableItem) => {
         switch (columnKey) {
@@ -112,16 +121,36 @@ export default function ComparisonRootFolderTable({ data }: ComparisonRootFolder
                     </div>
                 );
             case 'duplicatedColor':
-                return (
-                    <div className="text-base">
+                const duplicatedCellStyles = {
+                    '--duplicated-color': rootFolder.duplicatedColor
+                };
 
-                    </div>
+                const duplicatedCellClassName = classNames(
+                    'text-base',
+                    'bg-[--duplicated-color]'
+                );
+
+                return (
+                    <div
+                        style={duplicatedCellStyles}
+                        className={duplicatedCellClassName}
+                    />
                 );
             case 'partiallyDuplicatedColor':
-                return (
-                    <div className="text-base">
+                const partiallyDuplicatedCellStyles = {
+                    '--partially-duplicated-color': rootFolder.partiallyDuplicatedColor
+                };
 
-                    </div>
+                const partiallyDuplicatedCellClassName = classNames(
+                    'text-base',
+                    'bg-[--partially-duplicated-color]'
+                );
+
+                return (
+                    <div
+                        style={partiallyDuplicatedCellStyles}
+                        className={partiallyDuplicatedCellClassName}
+                    />
                 );
             default:
                 return (

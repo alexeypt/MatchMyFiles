@@ -8,9 +8,9 @@ import ConfirmableButton from '@/common/components/ConfirmableButton';
 import PageTitle from '@/common/components/PageTitle';
 import { ROOT_FOLDER_ROUTE } from '@/common/constants/routes';
 import { action } from '@/common/helpers/actionHelper';
+import { pluralize } from '@/common/helpers/pluralizationHelper';
 import removeRootFolder from '@/root-folder/data-access/commands/removeRootFolderCommand';
 import { RootFolderDetailsModel } from '@/root-folder/data-access/queries/getRootFolderQuery';
-import { pluralize } from '@/common/helpers/pluralizationHelper';
 
 
 interface RootFolderDetailsPageHeaderProps {
@@ -55,7 +55,7 @@ export default function RootFolderDetailsPageHeader({ rootFolder }: RootFolderDe
                             {
                                 !canBeRemoved && (
                                     <>
-                                        You can't remove <span className="font-bold">{rootFolder.name}</span> Root Folder
+                                        You can&apos;t remove <span className="font-bold">{rootFolder.name}</span> Root Folder
                                         because it is used in {pluralize(rootFolder.comparisonsCount, 'comparison')}.
                                         Please, remove such comparisons in order to remove this Root Folder.
                                     </>
@@ -75,7 +75,7 @@ export default function RootFolderDetailsPageHeader({ rootFolder }: RootFolderDe
                 Delete
             </ConfirmableButton>
         );
-    }, [onDelete, rootFolder.name]);
+    }, [onDelete, rootFolder.comparisonsCount, rootFolder.name]);
 
     const pageTitle = `Root Folder: ${rootFolder.name}`;
 

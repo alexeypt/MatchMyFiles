@@ -13,15 +13,20 @@ export interface ComparisonFileItemModel {
     fullName: string;
     size: number;
     isDuplicated: boolean;
+    duplicatedRootFolderIds: number[];
 }
 
 export interface ComparisonFolderItemModel {
     id: number;
     name: string;
+    size: number;
     childFolderIds: number[];
     childFileIds: number[];
     parentFolderId: number | null;
-    duplicationMode: FolderDuplicationMode;
+    duplicationInfo: {
+        rootFolderId: number;
+        duplicationMode: FolderDuplicationMode;
+    }[];
 }
 
 export interface ComparisonRootFolderItemModel {
@@ -47,35 +52,90 @@ export interface ComparisonDetailsModel {
     folders: ComparisonFolderItemModel[];
 }
 
-function setFoldersDuplicationMode(folder: ComparisonFolderItemModel, filesMap: Map<number, boolean>, foldersMap: Map<number, ComparisonFolderItemModel>) {
-    const areFilesTotallyDuplicated = folder.childFileIds.every(fileId => filesMap.get(fileId));
-    const hasAnyDuplicate = folder.childFileIds.some(fileId => filesMap.get(fileId));
+function setFoldersDuplicationMode(
+    folder: ComparisonFolderItemModel,
+    secondaryRootFolderIds: number[],
+    comparisonResultMap: Map<number, ComparisonResultDuplicatedItemData[]>,
+    foldersMap: Map<number, ComparisonFolderItemModel>
+) {
+    const totalFilesCount = folder.childFileIds.length;
 
-    let folderDuplicationMode = areFilesTotallyDuplicated
-        ? FolderDuplicationMode.Full
-        : hasAnyDuplicate
-            ? FolderDuplicationMode.Partial
-            : FolderDuplicationMode.None;
+    const duplicatedFilesCountMap = folder.childFileIds
+        .reduce((map, childFileId) => {
+            // we should ignore cases when the same file is duplicated several times
+            const processedRootFolders = new Set<number>();
+
+            comparisonResultMap.get(childFileId)?.forEach(duplicatedFile => {
+                if (processedRootFolders.has(duplicatedFile.rootFolderId)) {
+                    return;
+                }
+
+                const mapItem = map.get(duplicatedFile.rootFolderId);
+                const count = (mapItem ?? 0) + 1;
+                map.set(duplicatedFile.rootFolderId, count);
+
+                processedRootFolders.add(duplicatedFile.rootFolderId);
+            });
+
+            return map;
+        }, new Map<number, number>());
+
+    const duplicationInfoMap = new Map(secondaryRootFolderIds.map(rootFolderId => {
+        let folderDuplicationMode = FolderDuplicationMode.None;
+
+        if (totalFilesCount === 0) {
+            folderDuplicationMode = FolderDuplicationMode.Empty;
+        } else {
+            const duplicatedFilesCount = duplicatedFilesCountMap.get(rootFolderId);
+
+            if (!duplicatedFilesCount) {
+                folderDuplicationMode = FolderDuplicationMode.None;
+            } else if (totalFilesCount === duplicatedFilesCount) {
+                folderDuplicationMode = FolderDuplicationMode.Full;
+            } else {
+                folderDuplicationMode = FolderDuplicationMode.Partial;
+            }
+        }
+
+        return [rootFolderId, folderDuplicationMode];
+    }));
 
     for (const childFolderId of folder.childFolderIds) {
-        const childFolderDuplicationMode = setFoldersDuplicationMode(foldersMap.get(childFolderId)!, filesMap, foldersMap);
+        const childFolderDuplicationInfoMap = setFoldersDuplicationMode(
+            foldersMap.get(childFolderId)!,
+            secondaryRootFolderIds,
+            comparisonResultMap,
+            foldersMap);
 
-        if (childFolderDuplicationMode === FolderDuplicationMode.Full) {
-            folderDuplicationMode = folderDuplicationMode === FolderDuplicationMode.Full ? FolderDuplicationMode.Full : FolderDuplicationMode.Partial;
-        }
+        childFolderDuplicationInfoMap.forEach((childFolderDuplicationMode: FolderDuplicationMode, rootFolderId: number) => {
+            let folderDuplicationMode = duplicationInfoMap.get(rootFolderId)!;
 
-        if (childFolderDuplicationMode === FolderDuplicationMode.Partial) {
-            folderDuplicationMode = FolderDuplicationMode.Partial;
-        }
+            if (childFolderDuplicationMode === FolderDuplicationMode.Full) {
+                folderDuplicationMode = folderDuplicationMode === FolderDuplicationMode.Full || folderDuplicationMode === FolderDuplicationMode.Empty
+                    ? FolderDuplicationMode.Full
+                    : FolderDuplicationMode.Partial;
+            }
 
-        if (childFolderDuplicationMode === FolderDuplicationMode.None) {
-            folderDuplicationMode = folderDuplicationMode === FolderDuplicationMode.None ? FolderDuplicationMode.None : FolderDuplicationMode.Partial;
-        }
+            if (childFolderDuplicationMode === FolderDuplicationMode.Partial) {
+                folderDuplicationMode = FolderDuplicationMode.Partial;
+            }
+
+            if (childFolderDuplicationMode === FolderDuplicationMode.None) {
+                folderDuplicationMode = folderDuplicationMode === FolderDuplicationMode.None || folderDuplicationMode === FolderDuplicationMode.Empty
+                    ? FolderDuplicationMode.None
+                    : FolderDuplicationMode.Partial;
+            }
+
+            duplicationInfoMap.set(rootFolderId, folderDuplicationMode);
+        });
     }
 
-    folder.duplicationMode = folderDuplicationMode;
+    folder.duplicationInfo = Array.from(duplicationInfoMap).map(([rootFolderId, duplicationMode]) => ({
+        rootFolderId,
+        duplicationMode
+    }));
 
-    return folderDuplicationMode;
+    return duplicationInfoMap;
 }
 
 export default async function getComparison(id: number): Promise<ComparisonDetailsModel> {
@@ -137,6 +197,7 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
                 select: {
                     id: true,
                     name: true,
+                    size: true,
                     parentFolderId: true,
                     childFolders: {
                         select: {
@@ -164,28 +225,31 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
     const foldersMap = new Map<number, ComparisonFolderItemModel>(primaryRootFolderDetails.folders.map(folder => [folder.id, {
         id: folder.id,
         name: folder.name,
+        size: Number(folder.size),
         parentFolderId: folder.parentFolderId,
         childFileIds: folder.files.map(file => file.id),
         childFolderIds: folder.childFolders.map(childFolder => childFolder.id),
-        duplicationMode: FolderDuplicationMode.None
+        duplicationInfo: []
     }]));
-    const filesMap = new Map<number, boolean>(primaryRootFolderDetails.files.map(file => [file.id, comparisonResultMap.has(file.id)]));
 
     const primaryFolder = primaryRootFolderDetails.folders.find(folder => folder.parentFolderId === null)!;
+    const secondaryRootFolderIds = comparison.comparisonRootFolders
+        .filter(comparisonRootFolder => !comparisonRootFolder.isPrimary)
+        .map(comparisonRootFolder => comparisonRootFolder.rootFolder.id);
 
-    setFoldersDuplicationMode(foldersMap.get(primaryFolder.id)!, filesMap, foldersMap);
+    setFoldersDuplicationMode(foldersMap.get(primaryFolder.id)!, secondaryRootFolderIds, comparisonResultMap, foldersMap);
 
     const totalDuplicatedFilesSize = primaryRootFolderDetails.files
         .filter(file => comparisonResultMap.has(file.id))
         .reduce((acc, file) => acc + Number(file.size), 0);
+
+    // we should ignore cases when the same file is duplicated several times
+    const processedFilesSet = new Set<string>();
     const totalDuplicatedFilesSizeByRootFolderId = primaryRootFolderDetails.files
         .filter(file => comparisonResultMap.has(file.id))
         .reduce((map, file) => {
-            // we should ignore cases when the same file is duplicated several times
-            const processedRootFolders = new Set<number>();
-
             comparisonResultMap.get(file.id)!.forEach(duplicatedFile => {
-                if (processedRootFolders.has(duplicatedFile.rootFolderId)) {
+                if (processedFilesSet.has(`${duplicatedFile.rootFolderId}-${duplicatedFile.fileId}`)) {
                     return;
                 }
 
@@ -198,7 +262,7 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
                 } else {
                     map.set(duplicatedFile.rootFolderId, { totalSize: Number(file.size), totalCount: 1 });
                 }
-                processedRootFolders.add(duplicatedFile.rootFolderId);
+                processedFilesSet.add(`${duplicatedFile.rootFolderId}-${duplicatedFile.fileId}`);
             });
 
             return map;
@@ -236,7 +300,8 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
             id: file.id,
             fullName: file.fullName,
             size: Number(file.size),
-            isDuplicated: comparisonResultMap.has(file.id)
+            isDuplicated: comparisonResultMap.has(file.id),
+            duplicatedRootFolderIds: Array.from(new Set(comparisonResultMap.get(file.id)?.map(item => item.rootFolderId) ?? []).keys())
         })),
         folders: Array.from(foldersMap.values())
     };

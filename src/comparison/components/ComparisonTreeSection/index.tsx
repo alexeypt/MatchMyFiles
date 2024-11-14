@@ -2,17 +2,18 @@
 
 import React, { useCallback, useMemo, useState } from 'react';
 import { StaticTreeDataProvider, Tree, TreeItem, TreeItemIndex, UncontrolledTreeEnvironment } from 'react-complex-tree';
-import { Button } from '@nextui-org/react';
 
 import PageSection from '@/common/components/PageSection';
+import { getTreeKey } from '@/common/helpers/treeHelper';
 import useModalControl from '@/common/hooks/useModalControl';
 import ComparisonItemDetailsModal from '@/comparison/components/ComparisonItemDetailsModal';
+import ComparisonTreeItemRow from '@/comparison/components/ComparisonTreeItemRow';
 import { ComparisonDetailsModel, ComparisonFileItemModel, ComparisonFolderItemModel } from '@/comparison/data-access/queries/getComparisonQuery';
-import FolderDuplicationMode from '@/comparison/models/folderDuplicationMode';
 
 
 interface ComparisonTreeSectionProps {
     comparison: ComparisonDetailsModel;
+    rootFolderColorMap: Map<number, string>;
 }
 
 export enum ComparisonTreeItemType {
@@ -26,14 +27,14 @@ export interface ComparisonTreeItem {
     data: ComparisonFolderItemModel | ComparisonFileItemModel;
 }
 
-export default function ComparisonTreeSection({ comparison }: ComparisonTreeSectionProps) {
+export default function ComparisonTreeSection({ comparison, rootFolderColorMap }: ComparisonTreeSectionProps) {
     const [isDetailsModalOpened, showDetailsModal, hideDetailsModal] = useModalControl();
     const [selectedItem, setSelectedItem] = useState<ComparisonTreeItem>();
 
     const dataProvider = useMemo(() => {
         let items = comparison.files.reduce((result, file) => {
-            result[`file-${file.id}`] = {
-                index: `file-${file.id}`,
+            result[getTreeKey(file.id, 'file')] = {
+                index: getTreeKey(file.id, 'file'),
                 data: {
                     type: ComparisonTreeItemType.File,
                     title: file.fullName,
@@ -49,8 +50,8 @@ export default function ComparisonTreeSection({ comparison }: ComparisonTreeSect
         }, {} as Record<TreeItemIndex, TreeItem<ComparisonTreeItem>>);
 
         items = comparison.folders.reduce((result, folder) => {
-            result[`folder-${folder.id}`] = {
-                index: `folder-${folder.id}`,
+            result[getTreeKey(folder.id, 'folder')] = {
+                index: getTreeKey(folder.id, 'folder'),
                 data: {
                     type: ComparisonTreeItemType.Folder,
                     title: folder.name,
@@ -59,7 +60,9 @@ export default function ComparisonTreeSection({ comparison }: ComparisonTreeSect
                 canMove: false,
                 canRename: false,
                 isFolder: true,
-                children: folder.childFileIds.map(childFileId => `file-${childFileId}`).concat(folder.childFolderIds.map(childFolderId => `folder-${childFolderId}`))
+                children: folder.childFileIds
+                    .map(childFileId => getTreeKey(childFileId, 'file'))
+                    .concat(folder.childFolderIds.map(childFolderId => getTreeKey(childFolderId, 'folder')))
             };
 
             return result;
@@ -70,8 +73,8 @@ export default function ComparisonTreeSection({ comparison }: ComparisonTreeSect
 
     const rootItem = comparison.folders.find(folder => !folder.parentFolderId)!;
 
-    const onSelectItem = useCallback((item: TreeItem<ComparisonTreeItem>) => () => {
-        setSelectedItem(item.data);
+    const onSelectItem = useCallback((item: ComparisonTreeItem) => {
+        setSelectedItem(item);
         showDetailsModal();
     }, [showDetailsModal]);
 
@@ -85,41 +88,22 @@ export default function ComparisonTreeSection({ comparison }: ComparisonTreeSect
                     dataProvider={dataProvider}
                     getItemTitle={item => item.data.title}
                     canSearch
-                    canSearchByStartingTyping
                     renderDepthOffset={40}
                     renderItemTitle={({ item, title }) => {
-                        const isFile = item.data.type === ComparisonTreeItemType.File;
-                        const isDuplicated = isFile
-                            ? (item.data.data as ComparisonFileItemModel).isDuplicated
-                            : (item.data.data as ComparisonFolderItemModel).duplicationMode === FolderDuplicationMode.Full;
-
                         return (
-                            <div className={`flex justify-between w-full pt-1 pb-1 pl-2 ${isDuplicated ? 'bg-yellow-200' : ''}`}>
-                                <div className="flex-grow">
-                                    {title}
-                                </div>
-                                <div>
-                                    {isFile && (item.data.data as ComparisonFileItemModel).size}
-                                </div>
-                                <div>
-                                    <Button
-                                        size="sm"
-                                        color="primary"
-                                        radius="none"
-                                        aria-label={`View Details for ${item.data.title} item`}
-                                        onClick={onSelectItem(item)}
-                                    >
-                                        View Details
-                                    </Button>
-                                </div>
-                            </div>
+                            <ComparisonTreeItemRow
+                                rootFolderColorMap={rootFolderColorMap}
+                                item={item.data}
+                                title={title}
+                                onSelectItem={onSelectItem}
+                            />
                         );
                     }}
                     viewState={{}}
                 >
                     <Tree<ComparisonTreeItem>
-                        treeId="tree-3"
-                        rootItem={`folder-${rootItem.id}`}
+                        treeId="comparison-results-tree"
+                        rootItem={getTreeKey(rootItem.id, 'folder')}
                         treeLabel="Files and Folders Tree"
                     />
                 </UncontrolledTreeEnvironment>

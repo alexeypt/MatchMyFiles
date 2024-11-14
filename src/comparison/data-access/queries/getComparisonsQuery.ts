@@ -2,9 +2,9 @@
 
 import { ComparisonProcessingStatus } from "@prisma/client";
 
+import { roundNumber } from "@/common/helpers/numberHelper";
 import prismaClient from "@/common/helpers/prismaClient";
 import { ComparisonResultData } from "@/comparison/types/comparisonResultData";
-import { roundNumber } from "@/common/helpers/numberHelper";
 
 
 export interface ComparisonListItemRootFolderModel {
