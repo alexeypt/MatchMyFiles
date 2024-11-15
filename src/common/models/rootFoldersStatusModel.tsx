@@ -9,36 +9,49 @@ import SocketIOEventsMap from '@/common/types/socketIOEventsMap';
 
 
 export interface RootFolderStatus {
+    rootFolderId: number;
     percentStatus: number;
     message: string | null;
+    isFinished: boolean;
+    isFailed: boolean;
 }
 
 export default class RootFoldersStatusModel {
     private rootFolderStatusMap: Map<number, RootFolderStatus>;
-    private eventListenersMap: Map<number, Set<(status: RootFolderStatus | null) => void>>;
+    private eventListenersMap: Map<number, Set<(status: RootFolderStatus) => void>>;
+    private genericListeners: Set<(status: RootFolderStatus) => void>;
 
     constructor() {
         this.rootFolderStatusMap = new Map();
         this.eventListenersMap = new Map();
+        this.genericListeners = new Set();
     }
 
     init(socket: Socket<SocketIOEventsMap>) {
         socket.on(SocketEventType.RootFolderProcessingStatus, (rootFolderId, percentStatus, message) => {
             const rootFolderStatus = {
+                rootFolderId,
                 percentStatus,
-                message
+                message,
+                isFinished: false,
+                isFailed: false
             };
-            this.rootFolderStatusMap.set(rootFolderId, rootFolderStatus);
 
+            this.rootFolderStatusMap.set(rootFolderId, rootFolderStatus);
             this.notifyEventListeners(rootFolderId, rootFolderStatus);
         });
 
         socket.on(SocketEventType.RootFolderProcessingCompleted, (rootFolderId, rootFolderName) => {
-            if (this.rootFolderStatusMap.has(rootFolderId)) {
-                this.rootFolderStatusMap.delete(rootFolderId);
-            }
+            const rootFolderStatus: RootFolderStatus = {
+                isFinished: true,
+                isFailed: false,
+                percentStatus: 100,
+                rootFolderId,
+                message: 'Completed'
+            };
 
-            this.notifyEventListeners(rootFolderId, null);
+            this.rootFolderStatusMap.set(rootFolderId, rootFolderStatus);
+            this.notifyEventListeners(rootFolderId, rootFolderStatus);
 
             const rootFolderUrl = generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: rootFolderId });
             toast.success(
@@ -51,11 +64,18 @@ export default class RootFoldersStatusModel {
         });
 
         socket.on(SocketEventType.RootFolderProcessingFailed, (rootFolderId, rootFolderName) => {
-            if (this.rootFolderStatusMap.has(rootFolderId)) {
-                this.rootFolderStatusMap.delete(rootFolderId);
-            }
+            const item = this.rootFolderStatusMap.get(rootFolderId);
 
-            this.notifyEventListeners(rootFolderId, null);
+            const rootFolderStatus: RootFolderStatus = {
+                isFinished: true,
+                isFailed: true,
+                percentStatus: item?.percentStatus ?? 0,
+                rootFolderId,
+                message: 'Failed'
+            };
+
+            this.rootFolderStatusMap.set(rootFolderId, rootFolderStatus);
+            this.notifyEventListeners(rootFolderId, rootFolderStatus);
 
             const rootFolderUrl = generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: rootFolderId });
             toast.error(
@@ -68,7 +88,15 @@ export default class RootFoldersStatusModel {
         });
     }
 
-    attachEventListener(rootFolderId: number, callback: (status: RootFolderStatus | null) => void) {
+    attachGenericEventListener(callback: (status: RootFolderStatus) => void) {
+        this.genericListeners.add(callback);
+
+        return () => {
+            this.genericListeners.delete(callback);
+        };
+    }
+
+    attachEventListener(rootFolderId: number, callback: (status: RootFolderStatus) => void) {
         if (this.eventListenersMap.has(rootFolderId)) {
             this.eventListenersMap.get(rootFolderId)!.add(callback);
         } else {
@@ -84,11 +112,15 @@ export default class RootFoldersStatusModel {
         return this.rootFolderStatusMap.get(rootFolderId) ?? null;
     }
 
-    private notifyEventListeners(rootFolderId: number, rootFolderStatus: RootFolderStatus | null) {
+    private notifyEventListeners(rootFolderId: number, rootFolderStatus: RootFolderStatus) {
         if (this.eventListenersMap.has(rootFolderId)) {
             for (const callback of Array.from(this.eventListenersMap.get(rootFolderId)!)) {
                 callback(rootFolderStatus);
             }
+        }
+
+        for (const callback of Array.from(this.genericListeners)) {
+            callback(rootFolderStatus);
         }
     }
 }

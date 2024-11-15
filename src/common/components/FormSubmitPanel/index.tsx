@@ -7,12 +7,20 @@ interface FormSubmitPanelProps {
     isEditMode: boolean;
     onClose?: () => void;
     customNode?: ReactNode;
+    submitButtonLabel?: string;
 }
 
-export default function FormSubmitPanel({ isEditMode, onClose, customNode }: FormSubmitPanelProps) {
+export default function FormSubmitPanel({
+    isEditMode,
+    onClose,
+    customNode,
+    submitButtonLabel
+}: FormSubmitPanelProps) {
     const { isSubmitting, isValid, dirty } = useFormikContext();
 
     const isDisabled = isSubmitting || !dirty;
+
+    const buttonLabel = submitButtonLabel ?? (isEditMode ? 'Update' : 'Create');
 
     return (
         <div className="flex justify-between my-4">
@@ -25,7 +33,7 @@ export default function FormSubmitPanel({ isEditMode, onClose, customNode }: For
                     size="lg"
                     className={isDisabled ? 'opacity-60' : ''}
                 >
-                    {isEditMode ? 'Update' : 'Create'}
+                    {buttonLabel}
                 </Button>
             </div>
             <div>

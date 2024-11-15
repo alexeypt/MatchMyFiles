@@ -2,6 +2,7 @@
 "use client";
 
 import React, { ReactNode, useCallback, useMemo } from 'react';
+import { ComparisonProcessingStatus } from '@prisma/client';
 import { FormikHelpers } from 'formik';
 import { useRouter } from 'next/navigation';
 
@@ -12,6 +13,7 @@ import { action } from '@/common/helpers/actionHelper';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 import { roundNumber } from '@/common/helpers/numberHelper';
 import ComparisonForm from '@/comparison/components/ComparisonForm';
+import ComparisonReprocessButton from '@/comparison/components/ComparisonReprocessButton';
 import updateComparison from '@/comparison/data-access/commands/updateComparisonCommand';
 import { ComparisonDetailsModel } from '@/comparison/data-access/queries/getComparisonQuery';
 import ComparisonFormModel from '@/comparison/models/comparisonFormModel';
@@ -61,14 +63,30 @@ export default function ComparisonGeneralInfoSection({ comparison, rootFolders }
                     dateTime={comparison.createdAt}
                 />
             )],
+            ['Status', (
+                <>
+                    {comparison.status === ComparisonProcessingStatus.Completed && <span>{comparison.status}</span>}
+                    {comparison.status === ComparisonProcessingStatus.Failed && <span className="text-red-700">{comparison.status}</span>}
+                    {comparison.status === ComparisonProcessingStatus.Processing && <span className="text-yellow-700">{comparison.status}</span>}
+                </>
+            )],
             ['Duplicated Files Count', `${duplicatedFilesCount} / ${totalFilesCount} (${duplicatedFilesCountPercent}%)`],
             ['Duplicated Files Size', `${getFormattedSize(duplicatedFilesSize)} / ${getFormattedSize(size)} (${duplicatedFilesSizePercent}%)`]
         ]);
-    }, [comparison.createdAt, duplicatedFilesCount, duplicatedFilesSize, size, totalFilesCount]);
+    }, [comparison.createdAt, comparison.status, duplicatedFilesCount, duplicatedFilesSize, size, totalFilesCount]);
 
     const initialFormValues = useMemo(() => {
         return ComparisonFormModel.mapFromComparisonModel(comparison);
     }, [comparison]);
+
+    const reprocessButtonNode = useMemo(() => {
+        return (
+            <ComparisonReprocessButton
+                rootFolders={rootFolders}
+                comparison={comparison}
+            />
+        );
+    }, [comparison, rootFolders]);
 
     return (
         <PageSection
@@ -82,6 +100,7 @@ export default function ComparisonGeneralInfoSection({ comparison, rootFolders }
                         rootFolders={rootFolders}
                         onSubmit={onSubmit}
                         initialValues={initialFormValues}
+                        customButtonNode={reprocessButtonNode}
                         isEditMode
                     />
                 </div>

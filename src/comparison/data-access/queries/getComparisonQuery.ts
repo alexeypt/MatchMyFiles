@@ -1,6 +1,6 @@
 'use server';
 
-import { ComparisonProcessingStatus } from "@prisma/client";
+import { ComparisonProcessingStatus, RootFolderProcessingStatus } from "@prisma/client";
 
 import prismaClient from "@/common/helpers/prismaClient";
 import NotFoundError from "@/common/models/notFoundError";
@@ -35,6 +35,7 @@ export interface ComparisonRootFolderItemModel {
     name: string;
     path: string;
     size: number;
+    status: RootFolderProcessingStatus;
     totalFilesCount: number;
     duplicatedFilesCount: number;
     duplicatedFilesSize: number;
@@ -156,6 +157,7 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
                     rootFolder: {
                         select: {
                             id: true,
+                            status: true,
                             name: true,
                             path: true,
                             size: true,
@@ -186,6 +188,7 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
             name: true,
             path: true,
             size: true,
+            status: true,
             files: {
                 select: {
                     id: true,
@@ -236,7 +239,9 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
     const rootFolderIds = comparison.comparisonRootFolders
         .map(comparisonRootFolder => comparisonRootFolder.rootFolder.id);
 
-    setFoldersDuplicationMode(foldersMap.get(primaryFolder.id)!, rootFolderIds, comparisonResultMap, foldersMap);
+    if (primaryFolder) {
+        setFoldersDuplicationMode(foldersMap.get(primaryFolder.id)!, rootFolderIds, comparisonResultMap, foldersMap);
+    }
 
     const totalDuplicatedFilesSize = primaryRootFolderDetails.files
         .filter(file => comparisonResultMap.has(file.id))
@@ -276,6 +281,7 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
         primaryRootFolder: {
             isPrimary: true,
             id: primaryRootFolderDetails.id,
+            status: primaryRootFolderDetails.status,
             name: primaryRootFolderDetails.name,
             path: primaryRootFolderDetails.path,
             size: Number(primaryRootFolderDetails.size),
@@ -288,6 +294,7 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
             .map(comparisonRootFolder => ({
                 isPrimary: false,
                 id: comparisonRootFolder.rootFolder.id,
+                status: comparisonRootFolder.rootFolder.status,
                 name: comparisonRootFolder.rootFolder.name,
                 path: comparisonRootFolder.rootFolder.path,
                 size: Number(comparisonRootFolder.rootFolder.size),

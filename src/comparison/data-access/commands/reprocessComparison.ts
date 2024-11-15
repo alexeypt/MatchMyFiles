@@ -7,14 +7,7 @@ import NotFoundError from "@/common/models/notFoundError";
 import { processComparison } from "@/comparison/data-access/commands/createComparison";
 
 
-export interface CreateComparisonModel {
-    name: string;
-    description: string | null;
-    primaryFolderId: number | null;
-    folderIds: number[];
-}
-
-export default async function regenerateComparison(comparisonId: number) {
+export default async function reprocessComparison(comparisonId: number) {
     const comparison = await prismaClient.comparison.findFirst({
         where: {
             id: comparisonId

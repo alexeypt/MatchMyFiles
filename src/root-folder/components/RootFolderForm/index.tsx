@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo } from 'react';
+import React, { ReactNode } from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
@@ -10,7 +10,7 @@ import { isRequired } from '@/common/helpers/validationHelper';
 import RootFolderFormModel from '@/root-folder/models/rootFolderFormModel';
 
 
-interface SourceGroupFormProps {
+interface RootFolderFormProps {
     onSubmit: (data: RootFolderFormModel, formikHelpers: FormikHelpers<RootFolderFormModel>) => void;
     initialValues: RootFolderFormModel;
     isEditMode: boolean;
@@ -18,7 +18,7 @@ interface SourceGroupFormProps {
     onClose?: () => void;
 }
 
-const SourceGroupValidationSchema: Yup.ObjectSchema<RootFolderFormModel> = Yup.object({
+const RootFolderValidationSchema: Yup.ObjectSchema<RootFolderFormModel> = Yup.object({
     id: Yup.number().required(),
     name: Yup.string().required('Name is a required field'),
     folderPath: Yup.string().required('Folder Path is a required field'),
@@ -31,12 +31,12 @@ export default function RootFolderForm({
     isEditMode,
     customButtonNode,
     onClose
-}: SourceGroupFormProps) {
+}: RootFolderFormProps) {
     return (
         <div>
             <Formik<RootFolderFormModel>
                 initialValues={initialValues}
-                validationSchema={SourceGroupValidationSchema}
+                validationSchema={RootFolderValidationSchema}
                 onSubmit={onSubmit}
                 validateOnMount
             >
@@ -46,19 +46,19 @@ export default function RootFolderForm({
                         noValidate
                     >
                         <InputField
-                            isRequired={isRequired(SourceGroupValidationSchema, 'name')}
+                            isRequired={isRequired(RootFolderValidationSchema, 'name')}
                             name={nameof<RootFolderFormModel>('name')}
                             label="Name"
                             variant="bordered"
                         />
                         <TextAreaField
-                            isRequired={isRequired(SourceGroupValidationSchema, 'description')}
+                            isRequired={isRequired(RootFolderValidationSchema, 'description')}
                             name={nameof<RootFolderFormModel>('description')}
                             label="Description"
                             variant="bordered"
                         />
                         <InputField
-                            isRequired={isRequired(SourceGroupValidationSchema, 'folderPath')}
+                            isRequired={isRequired(RootFolderValidationSchema, 'folderPath')}
                             name={nameof<RootFolderFormModel>('folderPath')}
                             label="Folder Path"
                             variant="bordered"

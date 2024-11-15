@@ -41,7 +41,7 @@ export default function RootFolderGeneralInfoSection({ rootFolder }: RootFolderG
         }
     }, [router]);
 
-    const sourceGroupDetailsMap = useMemo(() => {
+    const rootFolderDetailsMap = useMemo(() => {
         return new Map<string, ReactNode>([
             ['Init Date', (
                 <FormattedDateTime
@@ -80,7 +80,7 @@ export default function RootFolderGeneralInfoSection({ rootFolder }: RootFolderG
             headingLevel={2}
         >
             <div className="flex flex-col gap-9">
-                <KeyValueList items={sourceGroupDetailsMap} />
+                <KeyValueList items={rootFolderDetailsMap} />
                 <div className="max-w-[50rem] w-full">
                     <RootFolderForm
                         initialValues={initialFormValues}

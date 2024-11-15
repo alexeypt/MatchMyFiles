@@ -47,13 +47,13 @@ export default class ComparisonFormModel {
         );
     }
 
-    static mapFromComparisonModel(source: ComparisonDetailsModel) {
+    static mapFromComparisonModel(comparison: ComparisonDetailsModel) {
         return new ComparisonFormModel(
-            source.id,
-            source.name,
-            source.description ?? '',
-            source.primaryRootFolder?.id.toString() ?? null,
-            source.rootFolders.map(rootFolder => rootFolder.id.toString())
+            comparison.id,
+            comparison.name,
+            comparison.description ?? '',
+            comparison.primaryRootFolder?.id.toString() ?? null,
+            comparison.rootFolders.map(rootFolder => rootFolder.id.toString())
         );
     }
 }

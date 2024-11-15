@@ -39,12 +39,12 @@ export default class RootFolderFormModel {
         );
     }
 
-    static mapFromRootFolderModel(source: RootFolderDetailsModel) {
+    static mapFromRootFolderModel(rootFolder: RootFolderDetailsModel) {
         return new RootFolderFormModel(
-            source.id,
-            source.name,
-            source.description ?? '',
-            source.path
+            rootFolder.id,
+            rootFolder.name,
+            rootFolder.description ?? '',
+            rootFolder.path
         );
     }
 }

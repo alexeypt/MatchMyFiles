@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import PageSection from '@/common/components/PageSection';
 import RootFoldersStatusContext from '@/common/contexts/rootFoldersStatusContext';
-import { RootFolderStatus } from '@/common/models/rootFoldersStatusModel';
+import RootFoldersStatusModel, { RootFolderStatus } from '@/common/models/rootFoldersStatusModel';
 import { RootFolderDetailsModel } from '@/root-folder/data-access/queries/getRootFolderQuery';
 
 
@@ -20,16 +20,21 @@ export default function RootFolderProgressBar({ rootFolder }: RootFolderProgress
     const rootFoldersStatusModel = useContext(RootFoldersStatusContext);
 
     useEffect(() => {
+        let detachEventListener: ReturnType<RootFoldersStatusModel['attachEventListener']> | null = null;
+
         if (rootFoldersStatusModel) {
             setStatus(rootFoldersStatusModel.getRootFolderStatus(rootFolder.id));
-            rootFoldersStatusModel.attachEventListener(rootFolder.id, status => {
-                if (status) {
-                    setStatus(status);
-                } else {
+            detachEventListener = rootFoldersStatusModel.attachEventListener(rootFolder.id, status => {
+                setStatus(status);
+                if (status.isFinished) {
                     router.refresh();
                 }
             });
         }
+
+        return () => {
+            detachEventListener?.();
+        };
     }, [rootFolder.id, rootFoldersStatusModel, router]);
 
     return (

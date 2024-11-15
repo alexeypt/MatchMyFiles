@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { ReactNode, useCallback } from 'react';
 import { SelectItem } from '@nextui-org/react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
@@ -20,6 +20,7 @@ interface ComparisonFormProps {
     onSubmit: (data: ComparisonFormModel, formikHelpers: FormikHelpers<ComparisonFormModel>) => void;
     initialValues: ComparisonFormModel;
     isEditMode: boolean;
+    customButtonNode?: ReactNode;
     onClose?: () => void;
 }
 
@@ -36,6 +37,7 @@ export default function ComparisonForm({
     onSubmit,
     initialValues,
     isEditMode,
+    customButtonNode,
     onClose
 }: ComparisonFormProps) {
     const onSetNewPrimaryFolder = useCallback((setFieldValue: FormikHelpers<ComparisonFormModel>['setFieldValue']) => () => {
@@ -97,6 +99,7 @@ export default function ComparisonForm({
                         />
                         <FormSubmitPanel
                             isEditMode={isEditMode}
+                            customNode={customButtonNode}
                             onClose={onClose}
                         />
                     </Form>
