@@ -105,10 +105,12 @@ enum RootFolderProcessingStatus {
     Created
     Processing
     Completed
+    Failed
 }
 
 enum ComparisonProcessingStatus {
     Created
     Processing
     Completed
+    Failed
 }

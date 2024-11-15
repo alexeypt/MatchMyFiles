@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
@@ -14,6 +14,7 @@ interface SourceGroupFormProps {
     onSubmit: (data: RootFolderFormModel, formikHelpers: FormikHelpers<RootFolderFormModel>) => void;
     initialValues: RootFolderFormModel;
     isEditMode: boolean;
+    customButtonNode?: ReactNode;
     onClose?: () => void;
 }
 
@@ -28,6 +29,7 @@ export default function RootFolderForm({
     onSubmit,
     initialValues,
     isEditMode,
+    customButtonNode,
     onClose
 }: SourceGroupFormProps) {
     return (
@@ -38,34 +40,40 @@ export default function RootFolderForm({
                 onSubmit={onSubmit}
                 validateOnMount
             >
-                <Form
-                    className="flex flex-col gap-5"
-                    noValidate
-                >
-                    <InputField
-                        isRequired={isRequired(SourceGroupValidationSchema, 'name')}
-                        name={nameof<RootFolderFormModel>('name')}
-                        label="Name"
-                        variant="bordered"
-                    />
-                    <TextAreaField
-                        isRequired={isRequired(SourceGroupValidationSchema, 'description')}
-                        name={nameof<RootFolderFormModel>('description')}
-                        label="Description"
-                        variant="bordered"
-                    />
-                    <InputField
-                        isRequired={isRequired(SourceGroupValidationSchema, 'folderPath')}
-                        name={nameof<RootFolderFormModel>('folderPath')}
-                        label="Folder Path"
-                        variant="bordered"
-                        isDisabled={isEditMode}
-                    />
-                    <FormSubmitPanel
-                        isEditMode={isEditMode}
-                        onClose={onClose}
-                    />
-                </Form>
+                {({ values }) => (
+                    <Form
+                        className="flex flex-col gap-5"
+                        noValidate
+                    >
+                        <InputField
+                            isRequired={isRequired(SourceGroupValidationSchema, 'name')}
+                            name={nameof<RootFolderFormModel>('name')}
+                            label="Name"
+                            variant="bordered"
+                        />
+                        <TextAreaField
+                            isRequired={isRequired(SourceGroupValidationSchema, 'description')}
+                            name={nameof<RootFolderFormModel>('description')}
+                            label="Description"
+                            variant="bordered"
+                        />
+                        <InputField
+                            isRequired={isRequired(SourceGroupValidationSchema, 'folderPath')}
+                            name={nameof<RootFolderFormModel>('folderPath')}
+                            label="Folder Path"
+                            variant="bordered"
+                            description={isEditMode && values.folderPath !== initialValues.folderPath
+                                ? "Folder Path update will lead to the Root Folder and Comparisons (where this Root Folder is used) reprocessing"
+                                : null
+                            }
+                        />
+                        <FormSubmitPanel
+                            isEditMode={isEditMode}
+                            customNode={customButtonNode}
+                            onClose={onClose}
+                        />
+                    </Form>
+                )}
             </Formik>
         </div>
     );

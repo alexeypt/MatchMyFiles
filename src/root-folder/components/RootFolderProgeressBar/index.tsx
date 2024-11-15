@@ -44,7 +44,6 @@ export default function RootFolderProgressBar({ rootFolder }: RootFolderProgress
                     size="md"
                     value={status?.percentStatus ?? 0}
                     color="success"
-                    showValueLabel
                     classNames={
                         {
                             track: 'h-6',
@@ -53,6 +52,8 @@ export default function RootFolderProgressBar({ rootFolder }: RootFolderProgress
                         }
                     }
                     className="max-w-md"
+                    showValueLabel
+                    disableAnimation
                 />
             </div>
         </PageSection>

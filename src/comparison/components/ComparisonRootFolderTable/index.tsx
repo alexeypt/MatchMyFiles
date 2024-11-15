@@ -163,7 +163,7 @@ export default function ComparisonRootFolderTable({ data, rootFolderColorMap }: 
 
     const renderCell = useCallback((comparison: TextTableRowConfiguration<ComparisonRootFolderTableItem>, columnKey: keyof ComparisonRootFolderTableItem) => {
         return (
-            <TableCell className={comparison.isPrimary ? 'bg-green-200' : ''}>
+            <TableCell className={comparison.isPrimary && columnKey !== 'partiallyDuplicatedColor' ? 'bg-green-200' : ''}>
                 {renderCellContent(comparison, columnKey)}
             </TableCell>
         );

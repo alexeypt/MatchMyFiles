@@ -65,8 +65,8 @@ export default function RootFolderDetailsPageHeader({ rootFolder }: RootFolderDe
                     )
                 }
                 confirmYesButtonLabel="Yes, Delete This Root Folder"
-                confirmNoButtonLabel={canBeRemoved ? 'Cancel, Keep This Root Folder' : 'OK'}
-                hideConfirmYesButton={!canBeRemoved}
+                confirmNoButtonLabel="Cancel, Keep This Root Folder"
+                isDisabledYesButton={!canBeRemoved}
                 type="button"
                 color="danger"
                 onClick={onDelete}

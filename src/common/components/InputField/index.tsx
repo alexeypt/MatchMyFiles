@@ -47,7 +47,8 @@ export default function InputField({
                 helperWrapper: !isInvalid ? 'p-0' : undefined,
                 input: isLargeText ? 'font-bold text-xl leading-5' : undefined,
                 label: 'text-nowrap',
-                inputWrapper: restProps.isDisabled ? 'bg-gray-100' : undefined
+                inputWrapper: restProps.isDisabled ? 'bg-gray-100' : undefined,
+                description: 'font-bold text-sm mt-1 text-red-900'
             }}
         />
     );

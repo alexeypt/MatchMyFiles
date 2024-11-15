@@ -25,7 +25,8 @@ export default class RootFolderFormModel {
         return {
             id: data.id,
             name: data.name,
-            description: data.description ?? null
+            description: data.description ?? null,
+            folderPath: data.folderPath
         };
     }
 

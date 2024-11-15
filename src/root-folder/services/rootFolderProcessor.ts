@@ -36,6 +36,7 @@ export interface FolderInfoModel {
     childFolders: FolderInfoModel[];
 }
 
+const MAX_SIZE_TO_GENERATE_CONTENT_HASH = 5000000;
 
 export class RootFolderProcessor {
     private totalItemsCount: number = 0;
@@ -148,10 +149,13 @@ export class RootFolderProcessor {
     private async getFileData(filePath: string): Promise<FileInfoModel> {
         const stats = await fs.stat(filePath);
         const relativePath = path.relative(this.rootFolderPath, filePath);
-        // const fileContent = await fs.readFile(filePath);
-        // const hash = await this.computeHash(filePath);
-        // TODO: use contentHash for small files and file size for large files as unique key for duplications
-        const hash = stats.size.toString();
+
+        let hash = stats.size.toString();
+
+        if (stats.size < MAX_SIZE_TO_GENERATE_CONTENT_HASH) {
+            hash = await this.computeHash(filePath);
+        }
+
         const ext = path.extname(filePath);
         const fileName = path.basename(filePath);
         const fileNameWithoutExt = path.basename(filePath, ext);
@@ -170,7 +174,7 @@ export class RootFolderProcessor {
                     }
                 }
             } catch (error) {
-                console.error(`Error parsing EXIF data for file ${filePath}:`, error);
+                console.error(`Error parsing EXIF data for file: ${filePath}`, error);
             }
         }
 

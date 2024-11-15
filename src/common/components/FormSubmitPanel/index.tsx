@@ -1,12 +1,15 @@
+import { ReactNode } from "react";
 import { Button } from "@nextui-org/react";
 import { useFormikContext } from "formik";
+
 
 interface FormSubmitPanelProps {
     isEditMode: boolean;
     onClose?: () => void;
+    customNode?: ReactNode;
 }
 
-export default function FormSubmitPanel({ isEditMode, onClose }: FormSubmitPanelProps) {
+export default function FormSubmitPanel({ isEditMode, onClose, customNode }: FormSubmitPanelProps) {
     const { isSubmitting, isValid, dirty } = useFormikContext();
 
     const isDisabled = isSubmitting || !dirty;
@@ -39,6 +42,7 @@ export default function FormSubmitPanel({ isEditMode, onClose }: FormSubmitPanel
                     )
                 }
             </div>
+            {customNode}
         </div>
     );
 }

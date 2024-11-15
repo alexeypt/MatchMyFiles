@@ -1,6 +1,6 @@
 'use server';
 
-import { RootFolder } from '@prisma/client';
+import { RootFolderProcessingStatus } from '@prisma/client';
 import { getSelfDuplicatedFiles } from '@prisma/client/sql';
 
 import prismaClient from "@/common/helpers/prismaClient";
@@ -53,27 +53,42 @@ async function createFolder(folderInfo: FolderInfoModel, rootFolderId: number, p
     }
 }
 
-async function processRootFolder(rootFolder: RootFolder) {
-    const rootFolderProcessor = new RootFolderProcessor(rootFolder.path, rootFolder.id);
-    const rootFolderInfo = await rootFolderProcessor.start();
+export async function processRootFolder(rootFolderId: number, rootFolderPath: string) {
+    const rootFolderProcessor = new RootFolderProcessor(rootFolderPath, rootFolderId);
 
-    await createFolder(rootFolderInfo, rootFolder.id, null);
+    let rootFolderInfo: FolderInfoModel | null = null;
 
-    const duplicatedFiles = await prismaClient.$queryRawTyped(getSelfDuplicatedFiles(rootFolder.id));
+    try {
+        rootFolderInfo = await rootFolderProcessor.start();
+        await createFolder(rootFolderInfo, rootFolderId, null);
+    } catch {
+        await prismaClient.rootFolder.update({
+            where: {
+                id: rootFolderId
+            },
+            data: {
+                status: RootFolderProcessingStatus.Failed
+            }
+        });
+
+        return;
+    }
+
+    const duplicatedFiles = await prismaClient.$queryRawTyped(getSelfDuplicatedFiles(rootFolderId));
     const duplicationData = duplicatedFiles.map(duplicatedGroup => (duplicatedGroup.fileIds as number[]));
 
     await prismaClient.rootFolder.update({
         where: {
-            id: rootFolder.id
+            id: rootFolderId
         },
         data: {
-            status: 'Completed',
+            status: RootFolderProcessingStatus.Completed,
             size: rootFolderInfo.size,
             duplicationData
         }
     });
 
-    socketIO.io.emit('rootFolder:processingCompleted', rootFolder.id);
+    socketIO.io.emit('rootFolder:processingCompleted', rootFolderId);
 }
 
 export default async function createRootFolder(values: CreateRootFolderModel) {
@@ -87,7 +102,7 @@ export default async function createRootFolder(values: CreateRootFolderModel) {
         }
     });
 
-    processRootFolder(rootFolder);
+    processRootFolder(rootFolder.id, rootFolder.path);
 
     return rootFolder.id;
 }

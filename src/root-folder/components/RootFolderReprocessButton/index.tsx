@@ -1,0 +1,79 @@
+'use client';
+
+import React, { useCallback } from 'react';
+import { Button } from '@nextui-org/react';
+import { RootFolderProcessingStatus } from '@prisma/client';
+import { useRouter } from 'next/navigation';
+
+import ConfirmableButton from '@/common/components/ConfirmableButton';
+import { action } from '@/common/helpers/actionHelper';
+import { pluralize } from '@/common/helpers/pluralizationHelper';
+import reprocessRootFolder from '@/root-folder/data-access/commands/reprocessRootFolderCommand';
+import { RootFolderDetailsModel } from '@/root-folder/data-access/queries/getRootFolderQuery';
+
+
+interface RootFolderReprocessButtonProps {
+    rootFolder: RootFolderDetailsModel;
+}
+
+export default function RootFolderReprocessButton({ rootFolder }: RootFolderReprocessButtonProps) {
+    const router = useRouter();
+
+    const onReprocess = useCallback(async () => {
+        const [isSuccess] = await action(async () => {
+            await reprocessRootFolder(rootFolder.id);
+        }, {
+            successText: 'The Root Folder reprocessing has been started',
+            errorText: 'Failed to start the Root Folder reprocessing'
+        });
+
+        if (isSuccess) {
+            router.refresh();
+        }
+    }, [router, rootFolder.id]);
+
+    if (rootFolder.status !== RootFolderProcessingStatus.Completed) {
+        return null;
+    }
+
+    if (rootFolder.comparisonsCount === 0) {
+        return (
+            <Button
+                type="button"
+                color="success"
+                className="bg-green-700 text-white"
+                onClick={onReprocess}
+                size="lg"
+            >
+                Reprocess
+            </Button>
+        );
+    }
+
+    return (
+        <ConfirmableButton
+            confirmTitle="Reprocess Root Folder"
+            confirmDescription={
+                (
+                    <p>
+                        <span className="font-bold">{rootFolder.name}</span> Root Folder is used
+                        in <span className="font-bold">{pluralize(rootFolder.comparisonsCount, 'comparison')}</span>.
+                        Reprocessing Root Folder means that all comparisons where this folder is used
+                        will be reprocessed as well without possibility to restore previous data. 
+                    </p>
+                )
+            }
+            confirmYesButtonLabel="Yes, Reprocess This Root Folder"
+            confirmNoButtonLabel="Cancel, Keep This Root Folder"
+            type="button"
+            color="success"
+            confirmableYesButtonClassName="bg-green-700 text-white"
+            confirmableNoButtonClassName="border-green-700 text-green-700"
+            className="bg-green-700 text-white"
+            onClick={onReprocess}
+            size="lg"
+        >
+            Reprocess
+        </ConfirmableButton>
+    );
+}

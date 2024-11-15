@@ -34,7 +34,7 @@ const config: Config = {
     plugins: [
         nextui({
             layout: {
-                disabledOpacity: 1
+                disabledOpacity: 0.6
             },
             themes: {
                 light: {
