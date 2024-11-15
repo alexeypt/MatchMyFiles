@@ -29,7 +29,11 @@ export default class ComparisonFormModel {
         return {
             id: data.id,
             name: data.name,
-            description: data.description ?? null
+            description: data.description ?? null,
+            primaryFolderId: +data.primaryRootFolderId!,
+            folderIds: data.rootFolderIdsToCompareWith
+                .map(rootFolderId => +rootFolderId)
+                .filter(rootFolderId => !!rootFolderId && rootFolderId !== +data.primaryRootFolderId!)
         };
     }
 

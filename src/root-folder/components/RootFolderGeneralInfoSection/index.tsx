@@ -25,7 +25,7 @@ export default function RootFolderGeneralInfoSection({ rootFolder }: RootFolderG
     const router = useRouter();
 
     const onSubmit = useCallback(async (data: RootFolderFormModel, formikHelpers: FormikHelpers<RootFolderFormModel>) => {
-        const [isSuccess, result] = await action<{ isReprocessingRequired: boolean }>(async () => {
+        const [isSuccess, result] = await action(async () => {
             return await updateRootFolder(RootFolderFormModel.mapToUpdateModel(data));
         }, {
             successText: 'The Root Folder has been successfully updated',

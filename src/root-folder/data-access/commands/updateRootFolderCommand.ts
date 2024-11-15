@@ -43,7 +43,7 @@ export default async function updateRootFolder(values: UpdateRootFolderModel) {
     }
 
     return {
-        id: updateRootFolder,
+        id: updatedRootFolder.id,
         isReprocessingRequired
     };
 }

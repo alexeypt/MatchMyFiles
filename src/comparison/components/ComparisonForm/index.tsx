@@ -73,7 +73,6 @@ export default function ComparisonForm({
                             label="Primary Root Folder"
                             variant="bordered"
                             items={rootFolders}
-                            isDisabled={isEditMode}
                             onSelectNewValue={onSetNewPrimaryFolder(setFieldValue)}
                         >
                             {
@@ -87,19 +86,15 @@ export default function ComparisonForm({
                                 )
                             }
                         </DropdownField>
-                        {
-                            !isEditMode && (
-                                <CheckboxGroupField
-                                    isRequired={isRequired(ComparisonValidationSchema, 'rootFolderIdsToCompareWith')}
-                                    name={nameof<ComparisonFormModel>('rootFolderIdsToCompareWith')}
-                                    label="Select Root Folders To Compare With"
-                                    items={rootFolders.filter(rootFolder => values.primaryRootFolderId ? rootFolder.id !== +values.primaryRootFolderId : true).map(rootFolder => ({
-                                        value: rootFolder.id.toString(),
-                                        label: `${rootFolder.name} (${rootFolder.path}, ${getFormattedSize(rootFolder.size)})`
-                                    }))}
-                                />
-                            )
-                        }
+                        <CheckboxGroupField
+                            isRequired={isRequired(ComparisonValidationSchema, 'rootFolderIdsToCompareWith')}
+                            name={nameof<ComparisonFormModel>('rootFolderIdsToCompareWith')}
+                            label="Select Root Folders To Compare With"
+                            items={rootFolders.filter(rootFolder => values.primaryRootFolderId ? rootFolder.id !== +values.primaryRootFolderId : true).map(rootFolder => ({
+                                value: rootFolder.id.toString(),
+                                label: `${rootFolder.name} (${rootFolder.path}, ${getFormattedSize(rootFolder.size)})`
+                            }))}
+                        />
                         <FormSubmitPanel
                             isEditMode={isEditMode}
                             onClose={onClose}

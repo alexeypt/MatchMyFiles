@@ -10,7 +10,7 @@ import { ComparisonResultData, ComparisonResultDuplicatedItemData } from "@/comp
 export interface CreateComparisonModel {
     name: string;
     description: string | null;
-    primaryFolderId: number | null;
+    primaryFolderId: number;
     folderIds: number[];
 }
 

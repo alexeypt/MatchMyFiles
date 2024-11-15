@@ -3,6 +3,7 @@
 
 import React, { ReactNode, useCallback, useMemo } from 'react';
 import { FormikHelpers } from 'formik';
+import { useRouter } from 'next/navigation';
 
 import FormattedDateTime from '@/common/components/FormattedDateTime';
 import KeyValueList from '@/common/components/KeyValueList';
@@ -23,9 +24,11 @@ interface ComparisonGeneralInfoSectionProps {
 }
 
 export default function ComparisonGeneralInfoSection({ comparison, rootFolders }: ComparisonGeneralInfoSectionProps) {
+    const router = useRouter();
+
     const onSubmit = useCallback(async (data: ComparisonFormModel, formikHelpers: FormikHelpers<ComparisonFormModel>) => {
-        const [isSuccess] = await action(async () => {
-            await updateComparison(ComparisonFormModel.mapToUpdateModel(data));
+        const [isSuccess, result] = await action(async () => {
+            return await updateComparison(ComparisonFormModel.mapToUpdateModel(data));
         }, {
             successText: 'The Comparison has been successfully updated',
             errorText: 'Failed to update the Comparison'
@@ -33,8 +36,12 @@ export default function ComparisonGeneralInfoSection({ comparison, rootFolders }
 
         if (isSuccess) {
             formikHelpers.resetForm({ values: data });
+
+            if (result?.isReprocessingRequired) {
+                router.refresh();
+            }
         }
-    }, []);
+    }, [router]);
 
     const {
         duplicatedFilesCount,
