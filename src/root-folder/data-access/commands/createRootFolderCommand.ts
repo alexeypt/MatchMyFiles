@@ -5,6 +5,7 @@ import { getSelfDuplicatedFiles } from '@prisma/client/sql';
 
 import prismaClient from "@/common/helpers/prismaClient";
 import socketIO from '@/common/helpers/socketIOClient';
+import SocketEventType from '@/common/types/socketEventType';
 import { FolderInfoModel, RootFolderProcessor } from '@/root-folder/services/rootFolderProcessor';
 
 
@@ -62,7 +63,7 @@ export async function processRootFolder(rootFolderId: number, rootFolderPath: st
         rootFolderInfo = await rootFolderProcessor.start();
         await createFolder(rootFolderInfo, rootFolderId, null);
     } catch {
-        await prismaClient.rootFolder.update({
+        const updateRootFolder = await prismaClient.rootFolder.update({
             where: {
                 id: rootFolderId
             },
@@ -71,13 +72,15 @@ export async function processRootFolder(rootFolderId: number, rootFolderPath: st
             }
         });
 
+        socketIO.io.emit(SocketEventType.RootFolderProcessingFailed, updateRootFolder.id, updateRootFolder.name);
+
         return;
     }
 
     const duplicatedFiles = await prismaClient.$queryRawTyped(getSelfDuplicatedFiles(rootFolderId));
     const duplicationData = duplicatedFiles.map(duplicatedGroup => (duplicatedGroup.fileIds as number[]));
 
-    await prismaClient.rootFolder.update({
+    const updateRootFolder = await prismaClient.rootFolder.update({
         where: {
             id: rootFolderId
         },
@@ -88,7 +91,7 @@ export async function processRootFolder(rootFolderId: number, rootFolderPath: st
         }
     });
 
-    socketIO.io.emit('rootFolder:processingCompleted', rootFolderId);
+    socketIO.io.emit(SocketEventType.RootFolderProcessingCompleted, updateRootFolder.id, updateRootFolder.name);
 }
 
 export default async function createRootFolder(values: CreateRootFolderModel) {

@@ -1,5 +1,10 @@
+import { toast } from 'react-toastify';
+import { Link } from '@nextui-org/react';
 import { Socket } from 'socket.io-client';
 
+import { ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';
+import { generateUrl } from '@/common/helpers/urlHelper';
+import SocketEventType from '@/common/types/socketEventType';
 import SocketIOEventsMap from '@/common/types/socketIOEventsMap';
 
 
@@ -18,7 +23,7 @@ export default class RootFoldersStatusModel {
     }
 
     init(socket: Socket<SocketIOEventsMap>) {
-        socket.on('rootFolder:processingStatus', (rootFolderId, percentStatus, message) => {
+        socket.on(SocketEventType.RootFolderProcessingStatus, (rootFolderId, percentStatus, message) => {
             const rootFolderStatus = {
                 percentStatus,
                 message
@@ -28,14 +33,39 @@ export default class RootFoldersStatusModel {
             this.notifyEventListeners(rootFolderId, rootFolderStatus);
         });
 
-        socket.on('rootFolder:processingCompleted', rootFolderId => {
+        socket.on(SocketEventType.RootFolderProcessingCompleted, (rootFolderId, rootFolderName) => {
             if (this.rootFolderStatusMap.has(rootFolderId)) {
                 this.rootFolderStatusMap.delete(rootFolderId);
             }
 
             this.notifyEventListeners(rootFolderId, null);
+
+            const rootFolderUrl = generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: rootFolderId });
+            toast.success(
+                <p>
+                    <Link href={rootFolderUrl}>
+                        <span className="font-bold">{rootFolderName} Root Folder</span>
+                    </Link> has been processed successfully
+                </p>
+            );
         });
 
+        socket.on(SocketEventType.RootFolderProcessingFailed, (rootFolderId, rootFolderName) => {
+            if (this.rootFolderStatusMap.has(rootFolderId)) {
+                this.rootFolderStatusMap.delete(rootFolderId);
+            }
+
+            this.notifyEventListeners(rootFolderId, null);
+
+            const rootFolderUrl = generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: rootFolderId });
+            toast.error(
+                <p>
+                    Failed to process <Link href={rootFolderUrl}>
+                        <span className="font-bold">{rootFolderName} Root Folder</span>
+                    </Link>
+                </p>
+            );
+        });
     }
 
     attachEventListener(rootFolderId: number, callback: (status: RootFolderStatus | null) => void) {

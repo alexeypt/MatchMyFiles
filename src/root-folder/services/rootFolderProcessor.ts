@@ -7,6 +7,7 @@ import sharp from 'sharp';
 import stream from 'stream/promises';
 
 import socketIO from '@/common/helpers/socketIOClient';
+import SocketEventType from '@/common/types/socketEventType';
 
 
 export interface FileInfoModel {
@@ -53,8 +54,7 @@ export class RootFolderProcessor {
 
     public async start() {
         var startTime = performance.now();
-        // TODO: move event names to constants
-        socketIO.io.emit('rootFolder:processingStatus', this.rootFolderId, 0, null);
+        socketIO.io.emit(SocketEventType.RootFolderProcessingStatus, this.rootFolderId, 0, null);
 
         await this.calculateFilesCount(this.rootFolderPath);
 
@@ -114,7 +114,7 @@ export class RootFolderProcessor {
 
                         if (this.itemsLeftToProcess % 10 === 0) {
                             socketIO.io.emit(
-                                'rootFolder:processingStatus',
+                                SocketEventType.RootFolderProcessingStatus,
                                 this.rootFolderId,
                                 (this.totalItemsCount - this.itemsLeftToProcess) / this.totalItemsCount * 100,
                                 `${(this.totalItemsCount - this.itemsLeftToProcess)} / ${this.totalItemsCount}`);
