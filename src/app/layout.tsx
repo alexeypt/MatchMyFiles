@@ -22,7 +22,7 @@ const notoSerif = Noto_Serif({
 export const metadata: Metadata = {
     title: "Match My Files - Simplify Duplicate File Detection and Management",
     description: "Effortlessly identify and manage duplicate files and folders with Match My Files. Compare directories, save space, and streamline your storage with our smart duplication detection tool.",
-    metadataBase: new URL(process.env.METADATA_BASE_URL)
+    metadataBase: new URL(`http:localhost:${process.env.APP_PORT}`)
 };
 
 export default async function RootLayout({
