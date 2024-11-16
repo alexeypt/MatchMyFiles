@@ -91,7 +91,10 @@ export default function ComparisonRootFolderTable({ data, rootFolderColorMap }: 
         }));
     }, [data, rootFolderColorMap]);
 
-    const renderCellContent = useCallback((rootFolder: TextTableRowConfiguration<ComparisonRootFolderTableItem>, columnKey: keyof ComparisonRootFolderTableItem) => {
+    const renderCellContent = useCallback((
+        rootFolder: TextTableRowConfiguration<ComparisonRootFolderTableItem>,
+        columnKey: keyof ComparisonRootFolderTableItem
+    ) => {
         switch (columnKey) {
             case 'name':
                 return (

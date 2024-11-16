@@ -82,7 +82,8 @@ export default function ComparisonFolderDetailsModalContent({ item, comparisonId
                         <ul className="border-2 divide-y-2">
                             {
                                 folderDetails.duplicationInfo.map(duplicationItem => {
-                                    const folderDuplicationMode = item.duplicationInfo.find(info => info.rootFolderId === duplicationItem.rootFolderId)?.duplicationMode;
+                                    const folderDuplicationMode = item.duplicationInfo
+                                        .find(info => info.rootFolderId === duplicationItem.rootFolderId)?.duplicationMode;
 
                                     const backgroundColor = folderDuplicationMode === FolderDuplicationMode.Partial
                                         ? convertHexToRgbaColor(rootFolderColorMap.get(duplicationItem.rootFolderId)!, 0.5)

@@ -76,7 +76,10 @@ export default async function ComparisonEditPage({ params }: { params: { compari
                             >
                                 Something went wrong!
                             </Heading>
-                            <p className="text-3xl font-serif">Comparison can&apos;t be processed. Please, check Root Folders used in comparison and their statuses.</p>
+                            <p className="text-3xl font-serif">
+                                Comparison can&apos;t be processed.
+                                Please, check Root Folders used in comparison and their statuses.
+                            </p>
                         </div>
                     )
                 }

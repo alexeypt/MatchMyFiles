@@ -6,6 +6,7 @@ import path from "path";
 import sharp from 'sharp';
 import stream from 'stream/promises';
 
+import { roundNumber } from '@/common/helpers/numberHelper';
 import socketIO from '@/common/helpers/socketIOClient';
 import SocketEventType from '@/common/types/socketEventType';
 
@@ -167,10 +168,12 @@ export class RootFolderProcessor {
                 const fileContent = await fs.readFile(filePath);
                 const metadata = await sharp(fileContent).metadata();
                 if (metadata.exif) {
-                    var exifMetadata = exifReader(metadata.exif);
-                    if (exifMetadata.GPSInfo?.GPSLatitude && exifMetadata.GPSInfo?.GPSLongitude) {
-                        latitude = exifMetadata.GPSInfo.GPSLatitude[0] + exifMetadata.GPSInfo.GPSLatitude[1] / 60 + exifMetadata.GPSInfo.GPSLatitude[2] / 3600;
-                        longitude = exifMetadata.GPSInfo.GPSLongitude[0] + exifMetadata.GPSInfo.GPSLongitude[1] / 60 + exifMetadata.GPSInfo.GPSLongitude[2] / 3600;
+                    const exifMetadata = exifReader(metadata.exif);
+                    const gpsLatitude = exifMetadata.GPSInfo?.GPSLatitude;
+                    const gpsLongitude = exifMetadata.GPSInfo?.GPSLongitude;
+                    if (gpsLatitude && gpsLongitude) {
+                        latitude = roundNumber(gpsLatitude[0] + gpsLatitude[1] / 60 + gpsLatitude[2] / 3600, 4);
+                        longitude = roundNumber(gpsLongitude[0] + gpsLongitude[1] / 60 + gpsLongitude[2] / 3600, 4);
                     }
                 }
             } catch (error) {

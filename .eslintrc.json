@@ -40,6 +40,7 @@
                 }
             }
         ],
+        "max-len": ["warn", { "code": 160, "ignoreStrings": true }],
         "semi": [
             "error",
             "always"

@@ -92,10 +92,14 @@ export default function ComparisonForm({
                             isRequired={isRequired(ComparisonValidationSchema, 'rootFolderIdsToCompareWith')}
                             name={nameof<ComparisonFormModel>('rootFolderIdsToCompareWith')}
                             label="Select Root Folders To Compare With"
-                            items={rootFolders.filter(rootFolder => values.primaryRootFolderId ? rootFolder.id !== +values.primaryRootFolderId : true).map(rootFolder => ({
-                                value: rootFolder.id.toString(),
-                                label: `${rootFolder.name} (${rootFolder.path}, ${getFormattedSize(rootFolder.size)})`
-                            }))}
+                            items={
+                                rootFolders
+                                    .filter(rootFolder => values.primaryRootFolderId ? rootFolder.id !== +values.primaryRootFolderId : true)
+                                    .map(rootFolder => ({
+                                        value: rootFolder.id.toString(),
+                                        label: `${rootFolder.name} (${rootFolder.path}, ${getFormattedSize(rootFolder.size)})`
+                                    }))
+                            }
                         />
                         <FormSubmitPanel
                             isEditMode={isEditMode}

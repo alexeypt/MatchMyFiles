@@ -89,12 +89,16 @@ export default async function getComparisonFolder(comparisonId: number, folderId
         throw new NotFoundError();
     }
 
-    const comparisonResultMap = new Map<number, ComparisonResultDuplicatedItemData[]>((comparison.data as ComparisonResultData).map(item => ([item.fileId, item.duplicatedFiles])));
+    const comparisonResultMap = new Map<number, ComparisonResultDuplicatedItemData[]>((comparison.data as ComparisonResultData).map(item => (
+        [item.fileId, item.duplicatedFiles]
+    )));
     const duplicatedFiles = files.filter(file => comparisonResultMap.has(file.id));
     const duplicatedFilesSize = duplicatedFiles.reduce((acc, file) => acc + Number(file.size), 0);
 
     const fileSizeMap = new Map(files.map(file => ([file.id, Number(file.size)])));
-    const rootFolderInfoMap = new Map(comparison.comparisonRootFolders.map(comparisonRootFolder => [comparisonRootFolder.rootFolder.id, comparisonRootFolder.rootFolder]));
+    const rootFolderInfoMap = new Map(comparison.comparisonRootFolders.map(comparisonRootFolder =>
+        [comparisonRootFolder.rootFolder.id, comparisonRootFolder.rootFolder]
+    ));
 
     const duplicationInfo = (comparison.data as ComparisonResultData)
         .filter(item => fileSizeMap.has(item.fileId))
