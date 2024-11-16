@@ -42,7 +42,7 @@ export default function ComparisonReprocessingForm({
                 value: rootFolder.id.toString(),
                 label: `${rootFolder.name} (${rootFolder.path}, ${getFormattedSize(rootFolder.size)})`
             }));
-    }, []);
+    }, [initialValues.rootFolderIds, rootFoldersMap]);
 
     return (
         <div>
