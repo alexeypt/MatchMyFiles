@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Match My Files
 
-## Getting Started
+**Match My Files** is a powerful tool for detecting and managing duplicate files and folders. Effortlessly compare folders, identify duplicate files using advanced file hashing and size matching, and streamline your file organization.
 
-First, run the development server:
+## Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Root Folder Processing: select any folder, and **Match My Files** will analyze recursively all files and folders within it, find duplicates within selected folder and save details for quick duplicates identification during comparisons with other root folders.
+- Advanced Comparison: compare files and folders between a primary root folder and secondary root folders to find duplicates efficiently.
+- Accurate Matching: identifies duplicates using file hashes for small and medium files and size matching for larger files.
+- User-Friendly Interface: simple, colorful, intuitive interface for streamlined duplicate detection and management.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+![Screenshot how Match My Files compare files](/assets/image1.png "Screenshot how Match My Files compare files").
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Libraries and tools
 
-## Learn More
+- [NextJS (App Router)](https://nextjs.org/)
+- [Prisma ORM](https://www.prisma.io/orm)
+- [Socket.io](https://socket.io/)
+- [NextUI](https://nextui.org/)
+- [Tailwind](https://tailwindcss.com/)
+- [Formik](https://formik.org/)
+- [Yup](https://github.com/jquense/yup)
 
-To learn more about Next.js, take a look at the following resources:
+## Run locally (development mode)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Check that `NodeJS` and `npm` have been installed (https://nodejs.org/en/download/package-manager/)
+- Check that `PostgreSQL` has been installed (https://www.postgresql.org/)
+- Create `.env.local` file in the project's root and add the following environment variables:
+    ```text
+    DATABASE_URL=
+    APP_PORT=
+    ```
+- Run the following command in the project's root to install all packages (it should be run only the first time):
+    ```shell
+    npm install
+    ```
+- Run the following commands in the project's root to prepare your database (it should be run only the first time):
+    ```shell
+    npm run prisma:migrate:dev
+    npm run prisma:generate:dev
+    npm run prisma:generate-sql:dev
+    ```
+- Run the following command in the project's root to actually start the app:
+    ```shell
+    npm run dev
+    ```
+- Open [http://localhost:4000](http://localhost:4000) with your browser to see the result (the exact port depends on the `APP_PORT` env variable)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Run locally (production mode)
 
-## Deploy on Vercel
+- Check that `NodeJS` and `npm` have been installed (https://nodejs.org/en/download/package-manager/)
+- Check that `PostgreSQL` has been installed (https://www.postgresql.org/)
+- Create `.env.production` file in the project's root and add the following environment variables:
+    ```text
+    DATABASE_URL=
+    APP_PORT=
+    ```
+- Run the following command in the project's root to install all packages (it should be run only the first time):
+    ```shell
+    npm install
+    ```
+- Run the following commands in the project's root to prepare your database (it should be run only the first time):
+    ```shell
+    npm run prisma:migrate:prod
+    npm run prisma:generate:prod
+    npm run prisma:generate-sql:prod
+    ```
+- Run the following command in the project's root to build the app:
+    ```shell
+    npm run build
+    ```
+- Run the following command in the project's root to actually start the app:
+    ```shell
+    npm run start
+    ```
+- Open [http://localhost:4000](http://localhost:4000) with your browser to see the result (the exact port depends on the `APP_PORT` env variable)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Prepared Powershell script `run.ps1` can be used to run the app in production mode on Windows environment. 
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Since the **Match My Files** application works on the user's file system to find duplicates, it should be run directly on the user's PC and cannot be used inside Docker.
