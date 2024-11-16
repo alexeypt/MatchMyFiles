@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import { Server } from 'socket.io';
 
 
 const prismaClientSingleton = () => {

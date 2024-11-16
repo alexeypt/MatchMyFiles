@@ -7,9 +7,12 @@
         "build": "npx dotenv -e .env.production -- next build",
         "start": "npx dotenv -e .env.production -- node server.mjs",
         "lint": "next lint",
-        "prisma:migrate:dev": "npx dotenv -e .env.local -- prisma migrate dev",
+        "prisma:generate:dev": "npx dotenv -e .env.local -- prisma generate",
         "prisma:generate-sql:dev": "npx dotenv -e .env.local -- prisma generate --sql",
-        "prisma:generate:prod": "npx dotenv -e .env.production -- prisma generate"
+        "prisma:migrate:dev": "npx dotenv -e .env.local -- prisma migrate dev",
+        "prisma:generate:prod": "npx dotenv -e .env.production -- prisma generate",
+        "prisma:generate-sql:prod": "npx dotenv -e .env.production -- prisma generate --sql",
+        "prisma:migrate:prod": "npx dotenv -e .env.production -- prisma migrate deploy"
     },
     "dependencies": {
         "@nextui-org/react": "2.4.8",
@@ -20,24 +23,24 @@
         "next": "14.2.4",
         "prisma": "^5.22.0",
         "react": "^18",
-        "react-complex-tree": "^2.4.4",
+        "react-complex-tree": "^2.4.5",
         "react-dom": "^18",
-        "react-toastify": "^10.0.5",
-        "sharp": "^0.33.4",
-        "socket.io": "^4.7.5",
-        "socket.io-client": "^4.7.5",
+        "react-toastify": "^10.0.6",
+        "sharp": "^0.33.5",
+        "socket.io": "^4.8.1",
+        "socket.io-client": "^4.8.1",
         "yup": "^1.4.0"
     },
     "devDependencies": {
-        "@types/node": "^20",
+        "@types/node": "^22",
         "@types/react": "^18",
         "@types/react-dom": "^18",
         "dotenv-cli": "^7.4.2",
         "eslint": "^8",
         "eslint-config-next": "14.2.4",
-        "eslint-plugin-simple-import-sort": "^12.1.0",
+        "eslint-plugin-simple-import-sort": "^12.1.1",
         "postcss": "^8",
-        "tailwindcss": "^3.4.1",
+        "tailwindcss": "^3.4.15",
         "typescript": "^5"
     }
 }

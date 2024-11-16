@@ -5,6 +5,7 @@ import RootFolderTable from "@/root-folder/components/RootFolderTable";
 import getRootFolders from "@/root-folder/data-access/queries/getRootFoldersQuery";
 
 
+export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
     title: "Match My Files > Root Folders"
 };

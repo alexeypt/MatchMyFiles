@@ -5,7 +5,7 @@ import { Server } from 'socket.io';
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost';
-const port =  process.env.APP_PORT ?? 3000;
+const port =  process.env.APP_PORT ?? 4000;
 
 // when using middleware `hostname` and `port` must be provided below
 const app = next({ dev, hostname, port });

@@ -5,6 +5,7 @@ import ComparisonCreatePageHeader from "@/comparison/components/ComparisonCreate
 import getRootFolderNamesQuery from "@/root-folder/data-access/queries/getRootFolderNamesQuery";
 
 
+export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
     title: "Match My Files > New Comparison"
 };

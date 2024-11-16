@@ -51,11 +51,11 @@ export default async function Home() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         <div className="bg-white p-6 rounded-lg shadow-md">
                             <h3 className="text-xl font-semibold mb-2">Root Folder Processing</h3>
-                            <p>Select any folder, and Match My Files will analyze all files within it, saving details for quick identification.</p>
+                            <p>Select any folder, and Match My Files will analyze all files within it, saving details for quick duplicates identification.</p>
                         </div>
                         <div className="bg-white p-6 rounded-lg shadow-md">
                             <h3 className="text-xl font-semibold mb-2">Advanced Comparison</h3>
-                            <p>Compare files between a primary folder and secondary folders to find duplicates efficiently.</p>
+                            <p>Compare files and folders between a primary Root Folder and secondary Root Folders to find duplicates efficiently.</p>
                         </div>
                         <div className="bg-white p-6 rounded-lg shadow-md">
                             <h3 className="text-xl font-semibold mb-2">Accurate Matching</h3>

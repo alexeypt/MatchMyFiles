@@ -5,6 +5,7 @@ import ComparisonTable from "@/comparison/components/ComparisonTable";
 import getComparisons from "@/comparison/data-access/queries/getComparisonsQuery";
 
 
+export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
     title: "Match My Files > Comparisons"
 };
