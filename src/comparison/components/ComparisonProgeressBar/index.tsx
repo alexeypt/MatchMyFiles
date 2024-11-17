@@ -6,7 +6,8 @@ import { RootFolderProcessingStatus } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 
 import PageSection from '@/common/components/PageSection';
-import RootFoldersStatusContext from '@/common/contexts/rootFoldersStatusContext';
+import SocketContext from '@/common/contexts/socketContext';
+import ComparisonsStatusModel from '@/common/models/comparisonsStatusModel';
 import RootFoldersStatusModel, { RootFolderStatus } from '@/common/models/rootFoldersStatusModel';
 import { ComparisonDetailsModel } from '@/comparison/data-access/queries/getComparisonQuery';
 
@@ -17,7 +18,7 @@ interface ComparisonProgressBarProps {
 
 export default function ComparisonProgressBar({ comparison }: ComparisonProgressBarProps) {
     const router = useRouter();
-    const rootFoldersStatusModel = useContext(RootFoldersStatusContext);
+    const socketContext = useContext(SocketContext);
 
     const rootFoldersMap = useMemo(() => {
         return new Map([
@@ -28,7 +29,7 @@ export default function ComparisonProgressBar({ comparison }: ComparisonProgress
 
     const [rootFolderStatusMap, setRootFolderStatusMap] = useState<Map<number, RootFolderStatus>>(() => {
         return new Map(Array.from(rootFoldersMap.values()).map(rootFolder => {
-            const socketStatus = rootFoldersStatusModel?.getRootFolderStatus(rootFolder.id);
+            const socketStatus = socketContext?.rootFoldersStatus.getRootFolderStatus(rootFolder.id);
             const dbStatus = rootFolder.status;
 
             if (dbStatus !== RootFolderProcessingStatus.Processing) {
@@ -56,18 +57,10 @@ export default function ComparisonProgressBar({ comparison }: ComparisonProgress
     });
 
     useEffect(() => {
-        const isCompleted = Array.from(rootFolderStatusMap.values()).every(rootFolderStatus => rootFolderStatus.isFinished);
-
-        if (isCompleted) {
-            router.refresh();
-        }
-    }, [rootFolderStatusMap, router]);
-
-    useEffect(() => {
         let detachEventListener: ReturnType<RootFoldersStatusModel['attachGenericEventListener']> | null = null;
 
-        if (rootFoldersStatusModel) {
-            detachEventListener = rootFoldersStatusModel.attachGenericEventListener(status => {
+        if (socketContext) {
+            detachEventListener = socketContext.rootFoldersStatus.attachGenericEventListener(status => {
                 if (status) {
                     setRootFolderStatusMap(prevMap => {
                         const newMap = new Map(prevMap);
@@ -82,7 +75,22 @@ export default function ComparisonProgressBar({ comparison }: ComparisonProgress
         return () => {
             detachEventListener?.();
         };
-    }, [rootFoldersStatusModel]);
+    }, [socketContext]);
+
+    useEffect(() => {
+        let detachEventListener: ReturnType<ComparisonsStatusModel['attachComparisonFinishedEventListener']> | null = null;
+
+        if (socketContext) {
+            detachEventListener = socketContext.comparisonsStatus.attachComparisonFinishedEventListener(comparison.id, () => {
+                console.log(2345);
+                router.refresh();
+            });
+        }
+
+        return () => {
+            detachEventListener?.();
+        };
+    }, [comparison.id, router, socketContext]);
 
     return (
         <PageSection
@@ -108,7 +116,7 @@ export default function ComparisonProgressBar({ comparison }: ComparisonProgress
                                     </p>
                                 </div>
                                 <div className="basis-1/2 flex-grow flex-shrink-0">
-                                    <p>
+                                    <div>
                                         <Progress
                                             aria-label="Processing..."
                                             label={rootFolderStatus.message ?? ''}
@@ -126,7 +134,7 @@ export default function ComparisonProgressBar({ comparison }: ComparisonProgress
                                             showValueLabel
                                             disableAnimation
                                         />
-                                    </p>
+                                    </div>
                                 </div>
                             </li>
                         );

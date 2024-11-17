@@ -71,7 +71,10 @@ export default async function reprocessRootFolder(rootFolderId: number) {
         }
     });
 
-    process(rootFolderId, rootFolder.path, comparisonIds);
+    const processTask = process(rootFolderId, rootFolder.path, comparisonIds);
 
-    return rootFolderId;
+    return {
+        rootFolderId,
+        processTask
+    };
 }

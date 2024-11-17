@@ -5,7 +5,7 @@ import { Progress } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 
 import PageSection from '@/common/components/PageSection';
-import RootFoldersStatusContext from '@/common/contexts/rootFoldersStatusContext';
+import SocketContext from '@/common/contexts/socketContext';
 import RootFoldersStatusModel, { RootFolderStatus } from '@/common/models/rootFoldersStatusModel';
 import { RootFolderDetailsModel } from '@/root-folder/data-access/queries/getRootFolderQuery';
 
@@ -17,14 +17,14 @@ interface RootFolderProgressBarProps {
 export default function RootFolderProgressBar({ rootFolder }: RootFolderProgressBarProps) {
     const router = useRouter();
     const [status, setStatus] = useState<RootFolderStatus | null>(null);
-    const rootFoldersStatusModel = useContext(RootFoldersStatusContext);
+    const socketContext = useContext(SocketContext);
 
     useEffect(() => {
         let detachEventListener: ReturnType<RootFoldersStatusModel['attachEventListener']> | null = null;
 
-        if (rootFoldersStatusModel) {
-            setStatus(rootFoldersStatusModel.getRootFolderStatus(rootFolder.id));
-            detachEventListener = rootFoldersStatusModel.attachEventListener(rootFolder.id, status => {
+        if (socketContext) {
+            setStatus(socketContext.rootFoldersStatus.getRootFolderStatus(rootFolder.id));
+            detachEventListener = socketContext.rootFoldersStatus.attachEventListener(rootFolder.id, status => {
                 setStatus(status);
                 if (status.isFinished) {
                     router.refresh();
@@ -35,7 +35,7 @@ export default function RootFolderProgressBar({ rootFolder }: RootFolderProgress
         return () => {
             detachEventListener?.();
         };
-    }, [rootFolder.id, rootFoldersStatusModel, router]);
+    }, [rootFolder.id, socketContext, router]);
 
     return (
         <PageSection

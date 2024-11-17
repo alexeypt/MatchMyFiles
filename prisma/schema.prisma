@@ -34,6 +34,8 @@ model File {
     updatedAt DateTime @updatedAt
 
     @@index([hash])
+    @@index([rootFolderId])
+    @@index([folderId])
 }
 
 model Folder {
@@ -50,13 +52,16 @@ model Folder {
     rootFolder   RootFolder @relation(fields: [rootFolderId], references: [id], onDelete: Cascade)
 
     parentFolderId Int?
-    parentFolder   Folder?  @relation("ChildFolders", fields: [parentFolderId], references: [id])
+    parentFolder   Folder?  @relation("ChildFolders", fields: [parentFolderId], references: [id], onDelete: Cascade)
     childFolders   Folder[] @relation("ChildFolders")
 
     files File[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@index([rootFolderId])
+    @@index([parentFolderId])
 }
 
 model RootFolder {

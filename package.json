@@ -6,6 +6,7 @@
         "dev": "npx dotenv -e .env.local -- node server.mjs",
         "build": "npx dotenv -e .env.production -- next build",
         "start": "npx dotenv -e .env.production -- node server.mjs",
+        "ts-check": "tsc --noEmit",
         "lint": "next lint",
         "prisma:generate:dev": "npx dotenv -e .env.local -- prisma generate",
         "prisma:generate-sql:dev": "npx dotenv -e .env.local -- prisma generate --sql",

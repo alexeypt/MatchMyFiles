@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import Heading from "@/common/components/Heading";
 import RootFolderDetailsPageHeader from "@/root-folder/components/RootFolderDetailsPageHeader";
 import RootFolderGeneralInfoSection from "@/root-folder/components/RootFolderGeneralInfoSection";
-import RootFolderProgressBar from "@/root-folder/components/RootFolderProgeressBar";
+import RootFolderProgressBar from "@/root-folder/components/RootFolderProgressBar";
 import RootFolderSelfDuplicationSection from "@/root-folder/components/RootFolderSelfDuplicationSection";
 import RootFolderTreeSection from "@/root-folder/components/RootFolderTreeSection";
 import getRootFolder from "@/root-folder/data-access/queries/getRootFolderQuery";

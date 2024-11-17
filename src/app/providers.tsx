@@ -6,7 +6,8 @@ import { NextUIProvider } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { io, Socket } from 'socket.io-client';
 
-import RootFoldersStatusContext from '@/common/contexts/rootFoldersStatusContext';
+import SocketContext, { SocketContextModel } from '@/common/contexts/socketContext';
+import ComparisonsStatusModel from '@/common/models/comparisonsStatusModel';
 import RootFoldersStatusModel from '@/common/models/rootFoldersStatusModel';
 import SocketIOEventsMap from '@/common/types/socketIOEventsMap';
 
@@ -22,18 +23,21 @@ export function Providers({
 }: ProviderProps) {
     const router = useRouter();
 
-    const [rootFolderStatusModel, setRootFolderStatusModel] = useState<RootFoldersStatusModel | null>(null);
+    const [socketContextModel, setSocketContextModel] = useState<SocketContextModel | null>(null);
 
     useEffect(() => {
-        // Create a socket connection
         const socket: Socket<SocketIOEventsMap> = io();
 
         const rootFolderStatusModel = new RootFoldersStatusModel();
+        const comparisonStatusModel = new ComparisonsStatusModel();
         rootFolderStatusModel.init(socket);
+        comparisonStatusModel.init(socket);
 
-        setRootFolderStatusModel(rootFolderStatusModel);
+        setSocketContextModel({
+            comparisonsStatus: comparisonStatusModel,
+            rootFoldersStatus: rootFolderStatusModel
+        });
 
-        // Clean up the socket connection on unmount
         return () => {
             socket.disconnect();
         };
@@ -41,10 +45,10 @@ export function Providers({
 
     return (
         <NextUIProvider navigate={router.push}>
-            <RootFoldersStatusContext.Provider value={rootFolderStatusModel}>
+            <SocketContext.Provider value={socketContextModel}>
                 {children}
                 <ToastContainer />
-            </RootFoldersStatusContext.Provider>
+            </SocketContext.Provider>
         </NextUIProvider>
     );
 }
