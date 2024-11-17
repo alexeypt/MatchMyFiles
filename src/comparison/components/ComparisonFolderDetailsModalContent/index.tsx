@@ -56,12 +56,14 @@ export default function ComparisonFolderDetailsModalContent({ item, comparisonId
                 />
             )],
             ['Total Files Count', folderDetails.filesCount],
-            ['Duplicated Files Count',
-                `${folderDetails.duplicatedFilesCount} (${roundNumber(folderDetails.duplicatedFilesCount / folderDetails.filesCount * 100.0, 1)}%)`
+            ['Duplicated Files Count', folderDetails.filesCount > 0
+                ? `${folderDetails.duplicatedFilesCount} (${roundNumber(folderDetails.duplicatedFilesCount / folderDetails.filesCount * 100.0, 1)}%)`
+                : '0 (0%)'
             ],
             ['Total Size', getFormattedSize(folderDetails.size)],
-            ['Duplicated Size',
-                `${getFormattedSize(folderDetails.duplicatedFilesSize)} (${roundNumber(folderDetails.duplicatedFilesSize / folderDetails.size * 100.0, 1)}%)`
+            ['Duplicated Size', folderDetails.size > 0
+                ? `${getFormattedSize(folderDetails.duplicatedFilesSize)} (${roundNumber(folderDetails.duplicatedFilesSize / folderDetails.size * 100.0, 1)}%)`
+                : `${getFormattedSize(folderDetails.duplicatedFilesSize)} (0%)`
             ]
         ]);
     }, [folderDetails]);

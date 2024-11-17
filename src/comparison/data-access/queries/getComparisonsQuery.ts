@@ -73,7 +73,7 @@ export default async function getComparisons(): Promise<ComparisonListItemModel[
             id: comparison.id,
             name: comparison.name,
             duplicatedFilesCount,
-            duplicatedFilesPercent: primaryRootFolder.rootFolder._count.files
+            duplicatedFilesPercent: primaryRootFolder.rootFolder._count.files > 0
                 ? roundNumber(duplicatedFilesCount / primaryRootFolder.rootFolder._count.files * 100.0, 1)
                 : 0,
             status,

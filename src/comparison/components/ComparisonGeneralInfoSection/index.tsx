@@ -53,8 +53,12 @@ export default function ComparisonGeneralInfoSection({ comparison, rootFolders }
     } = comparison.primaryRootFolder;
 
     const comparisonDetailsMap = useMemo(() => {
-        const duplicatedFilesCountPercent = roundNumber(duplicatedFilesCount / totalFilesCount * 100.0, 1);
-        const duplicatedFilesSizePercent = roundNumber(duplicatedFilesSize / size * 100.0, 1);
+        const duplicatedFilesCountPercent = totalFilesCount > 0
+            ? roundNumber(duplicatedFilesCount / totalFilesCount * 100.0, 1)
+            : 0;
+        const duplicatedFilesSizePercent = size > 0
+            ? roundNumber(duplicatedFilesSize / size * 100.0, 1)
+            : 0;
 
         return new Map<string, ReactNode>([
             ['Init Date', (

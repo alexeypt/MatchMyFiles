@@ -83,7 +83,9 @@ export default function ComparisonRootFolderTable({ data, rootFolderColorMap }: 
                 ? roundNumber(item.duplicatedFilesCount / item.totalFilesCount * 100.0, 1)
                 : 0,
             duplicatedFilesSize: item.duplicatedFilesSize,
-            duplicatedFilesSizePercent: roundNumber(item.duplicatedFilesSize / item.size * 100.0, 1),
+            duplicatedFilesSizePercent: item.size > 0
+                ? roundNumber(item.duplicatedFilesSize / item.size * 100.0, 1)
+                : 0,
             duplicatedColor: rootFolderColorMap.get(item.id),
             partiallyDuplicatedColor: rootFolderColorMap.has(item.id)
                 ? convertHexToRgbaColor(rootFolderColorMap.get(item.id)!, 0.5)
