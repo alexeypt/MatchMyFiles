@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import exifReader from 'exif-reader';
-import fs2 from 'fs';
+import fsSync from 'fs';
 import fs from 'fs/promises';
 import path from "path";
 import sharp from 'sharp';
@@ -83,7 +83,7 @@ export class RootFolderProcessor {
         }
     }
 
-    private async processDirectory(folderPath: string, stats: fs2.Stats) {
+    private async processDirectory(folderPath: string, stats: fsSync.Stats) {
         const folderInfo: FolderInfoModel = {
             name: path.basename(folderPath),
             absolutePath: folderPath,
@@ -136,14 +136,43 @@ export class RootFolderProcessor {
         return folderInfo;
     }
 
+    private async readSampleBytes(filepath: string, offsets: number[], sampleLength = 64) {
+        const fileHandle = await fs.open(filepath, 'r');
+        const buffer = Buffer.alloc(offsets.length * sampleLength);
+
+        try {
+            for (let i = 0; i < offsets.length; i++) {
+                const offset = offsets[i];
+                const sampleBuffer = Buffer.alloc(sampleLength);
+                await fileHandle.read(sampleBuffer, 0, sampleLength, offset);
+                sampleBuffer.copy(buffer, i * sampleLength);
+            }
+        } finally {
+            await fileHandle.close();
+        }
+
+        return buffer;
+    }
+
     private async computeHash(filepath: string) {
-        const input = fs2.createReadStream(filepath);
+        const input = fsSync.createReadStream(filepath);
         const hash = crypto.createHash('sha256');
-        
+
         // Connect the output of the `input` stream to the input of `hash`
         // and let Node.js do the streaming
         await stream.pipeline(input, hash);
-      
+
+        return hash.digest('hex');
+    }
+
+    private async computePartialHash(filepath: string, fileSize: number) {    
+        // Define offsets for sampling (beginning, middle, end)
+        const offsets = [0, Math.floor(fileSize / 2), Math.max(0, fileSize - 64)];
+    
+        const sampledBytes = await this.readSampleBytes(filepath, offsets);
+        const hash = crypto.createHash('sha256');
+        hash.update(sampledBytes);
+        hash.update(fileSize.toString());
         return hash.digest('hex');
     }
 
@@ -155,6 +184,8 @@ export class RootFolderProcessor {
 
         if (stats.size < MAX_SIZE_TO_GENERATE_CONTENT_HASH) {
             hash = await this.computeHash(filePath);
+        } else {
+            hash = await this.computePartialHash(filePath, stats.size);
         }
 
         const ext = path.extname(filePath);
