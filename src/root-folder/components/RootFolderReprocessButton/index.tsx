@@ -32,6 +32,12 @@ export default function RootFolderReprocessButton({ rootFolder }: RootFolderRepr
         }
     }, [router, rootFolder.id]);
 
+    const onConfirmReprocess = useCallback(async (hideConfirmModal: () => void) => {
+        await onReprocess();
+
+        hideConfirmModal();
+    }, [onReprocess]);
+
     if (rootFolder.status !== RootFolderProcessingStatus.Completed) {
         return null;
     }
@@ -70,7 +76,7 @@ export default function RootFolderReprocessButton({ rootFolder }: RootFolderRepr
             confirmableYesButtonClassName="bg-green-700 text-white"
             confirmableNoButtonClassName="border-green-700 text-green-700"
             className="bg-green-700 text-white"
-            onClick={onReprocess}
+            onClick={onConfirmReprocess}
             size="lg"
         >
             Reprocess

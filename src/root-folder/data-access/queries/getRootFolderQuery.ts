@@ -109,16 +109,23 @@ export default async function getRootFolder(id: number): Promise<RootFolderDetai
         size: Number(rootFolder.size),
         path: rootFolder.path,
         status: rootFolder.status,
-        duplicationData: duplicationData.map(duplicationGroup => duplicationGroup.map(fileId => {
-            const fileInfo = filesMap.get(fileId)!;
+        duplicationData: duplicationData
+            .map(duplicationGroup => duplicationGroup.map(fileId => {
+                const fileInfo = filesMap.get(fileId)!;
 
-            return {
-                fileId: fileInfo.id,
-                size: Number(fileInfo.size),
-                fullName: fileInfo.fullName,
-                absolutePath: fileInfo.absolutePath
-            };
-        })),
+                return {
+                    fileId: fileInfo.id,
+                    size: Number(fileInfo.size),
+                    fullName: fileInfo.fullName,
+                    absolutePath: fileInfo.absolutePath
+                };
+            }))
+            .sort((duplicationGroup1, duplicationGroup2) => {
+                const group1FileSize = duplicationGroup1[0]!.size;
+                const group2FileSize = duplicationGroup2[0]!.size;
+
+                return group2FileSize - group1FileSize;
+            }),
         createdAt: rootFolder.createdAt,
         filesCount: rootFolder._count.files,
         foldersCount: rootFolder._count.folders,

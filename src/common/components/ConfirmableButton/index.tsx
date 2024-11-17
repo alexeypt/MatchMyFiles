@@ -1,11 +1,11 @@
-import { ReactNode } from "react";
+import { ReactNode, useCallback } from "react";
 import { Button, ButtonProps, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 
 import Heading from '@/common/components/Heading';
 import useModalControl from "@/common/hooks/useModalControl";
 
 
-interface ConfirmableButtonProps extends ButtonProps {
+interface ConfirmableButtonProps extends Omit<ButtonProps, 'onClick'> {
     confirmTitle: string;
     confirmDescription: ReactNode;
     confirmYesButtonLabel: string;
@@ -15,7 +15,7 @@ interface ConfirmableButtonProps extends ButtonProps {
     confirmableYesButtonClassName?: string;
     confirmableNoButtonClassName?: string;
     isDisabledYesButton?: boolean;
-    onClick: () => void;
+    onClick: (hideModal: () => void) => void;
 }
 
 export default function ConfirmableButton({
@@ -32,6 +32,10 @@ export default function ConfirmableButton({
     ...restProps
 }: ConfirmableButtonProps) {
     const [isModalOpened, showModal, hideModal] = useModalControl();
+
+    const onYesButtonClicked = useCallback(() => {
+        onClick(hideModal);
+    }, [hideModal, onClick]);
 
     return (
         <>
@@ -74,7 +78,7 @@ export default function ConfirmableButton({
                                             color="danger"
                                             className={confirmableYesButtonClassName}
                                             isDisabled={isDisabledYesButton}
-                                            onClick={onClick}
+                                            onClick={onYesButtonClicked}
                                         >
                                             {confirmYesButtonLabel}
                                         </Button>

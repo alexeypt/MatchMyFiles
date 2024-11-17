@@ -4,6 +4,7 @@ import React from 'react';
 
 import PageSection from '@/common/components/PageSection';
 import { RootFolderDuplicatedFileModel } from '@/root-folder/data-access/queries/getRootFolderQuery';
+import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 
 
 interface RootFolderSelfDuplicationSectionProps {
@@ -19,11 +20,16 @@ export default function RootFolderSelfDuplicationSection({ duplicationData }: Ro
             <ul className="border-2 divide-y-2">
                 {
                     duplicationData.map((duplicationGroup, index) => {
+                        const fileSize = duplicationGroup[0]!.size;
+
                         return (
                             <li
                                 key={index}
-                                className="p-3 text-lg wrap-anywhere"
+                                className="p-5 text-lg wrap-anywhere"
                             >
+                                <p className="text-xl mb-3">
+                                    File Size: <span className="font-bold">{getFormattedSize(fileSize)}</span>
+                                </p>
                                 <ul className="list-disc ml-8">
                                     {
                                         duplicationGroup.map(duplicatedFile => (
