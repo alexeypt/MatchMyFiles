@@ -1,8 +1,11 @@
+import { Link } from "@nextui-org/react";
 import { ComparisonProcessingStatus, RootFolderProcessingStatus } from "@prisma/client";
 import { Metadata } from "next";
 
 import Heading from "@/common/components/Heading";
 import PageSection from "@/common/components/PageSection";
+import { ROOT_FOLDER_EDIT_ROUTE } from "@/common/constants/routes";
+import { generateUrl } from "@/common/helpers/urlHelper";
 import ComparisonDetailsPageHeader from "@/comparison/components/ComparisonDetailsPageHeader";
 import ComparisonGeneralInfoSection from "@/comparison/components/ComparisonGeneralInfoSection";
 import ComparisonProgressBar from "@/comparison/components/ComparisonProgeressBar";
@@ -33,9 +36,6 @@ export default async function ComparisonEditPage({ params }: { params: { compari
         COMPARISON_ROOT_FOLDER_COLORS[index % COMPARISON_ROOT_FOLDER_COLORS.length]
     ])));
 
-    const isProcessing = comparison.status === ComparisonProcessingStatus.Processing
-        || comparisonRootFolders.some(comparisonRootFolder => comparisonRootFolder.status === RootFolderProcessingStatus.Processing);
-
     return (
         <>
             <ComparisonDetailsPageHeader comparison={comparison} />
@@ -45,7 +45,7 @@ export default async function ComparisonEditPage({ params }: { params: { compari
                     comparison={comparison}
                 />
                 {
-                    comparison.status === ComparisonProcessingStatus.Completed && !isProcessing && (
+                    comparison.status === ComparisonProcessingStatus.Completed && (
                         <>
                             <PageSection
                                 title="Root Folders"
@@ -64,22 +64,38 @@ export default async function ComparisonEditPage({ params }: { params: { compari
                     )
                 }
                 {
-                    isProcessing && <ComparisonProgressBar comparison={comparison} />
+                    comparison.status === ComparisonProcessingStatus.Processing && <ComparisonProgressBar comparison={comparison} />
                 }
                 {
-                    comparison.status === ComparisonProcessingStatus.Failed && !isProcessing &&
+                    comparison.status === ComparisonProcessingStatus.Failed &&
                     (
                         <div className="flex flex-col gap-10">
                             <Heading
                                 level={2}
-                                className="text-5xl font-serif text-red-900"
+                                className="text-4xl font-serif text-red-900"
                             >
                                 Something went wrong!
                             </Heading>
-                            <p className="text-3xl font-serif">
+                            <div className="text-2xl font-serif">
                                 Comparison can&apos;t be processed.
-                                Please, check Root Folders used in comparison and their statuses.
-                            </p>
+                                The following Root Folders have <span className="text-red-900 font-bold">Failed</span> status:
+                                <ul className="list-disc ml-10 mt-2">
+                                    {
+                                        comparisonRootFolders
+                                            .filter(comparisonRootFolder => comparisonRootFolder.status === RootFolderProcessingStatus.Failed)
+                                            .map(comparisonRootFolder => (
+                                                <li key={comparisonRootFolder.id}>
+                                                    <Link
+                                                        href={generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: comparisonRootFolder.id })}
+                                                        className="text-lg"
+                                                    >
+                                                        {comparisonRootFolder.name} ({comparisonRootFolder.path})
+                                                    </Link>
+                                                </li>
+                                            ))
+                                    }
+                                </ul>
+                            </div>
                         </div>
                     )
                 }

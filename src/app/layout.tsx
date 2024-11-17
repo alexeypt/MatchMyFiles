@@ -32,7 +32,7 @@ export default async function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${inter.className} ${inter.variable} ${notoSerif.variable}`}>
+            <body className={`${inter.className} ${inter.variable} ${notoSerif.variable} wrap-anywhere`}>
                 <Providers>
                     <div className="flex min-h-screen flex-col">
                         <SkipToMainContentButton /> 

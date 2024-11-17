@@ -2,8 +2,8 @@
 
 import React, { useCallback, useMemo } from 'react';
 import { Link, TableCell } from '@nextui-org/react';
+import { RootFolderProcessingStatus } from '@prisma/client';
 
-import FormattedDateTime from '@/common/components/FormattedDateTime';
 import TextTable, { TextTableColumnConfiguration, TextTableRowConfiguration } from '@/common/components/TextTable';
 import { ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
@@ -21,6 +21,7 @@ interface RootFolderTableItem {
     name: string;
     path: string;
     size: number;
+    status: RootFolderProcessingStatus;
     itemsCountText: string;
     filesCount: number;
     foldersCount: number;
@@ -62,6 +63,7 @@ export default function RootFolderTable({ data }: RootFolderTableProps) {
             name: item.name,
             path: item.path,
             size: item.size,
+            status: item.status,
             itemsCountText: '',
             filesCount: item.filesCount,
             foldersCount: item.foldersCount,
@@ -108,8 +110,14 @@ export default function RootFolderTable({ data }: RootFolderTableProps) {
     }, []);
 
     const renderCell = useCallback((rootFolder: TextTableRowConfiguration<RootFolderTableItem>, columnKey: keyof RootFolderTableItem) => {
+        const backgroundClassName = rootFolder.status === RootFolderProcessingStatus.Processing
+            ? 'bg-yellow-100'
+            : rootFolder.status === RootFolderProcessingStatus.Failed
+                ? 'bg-red-100'
+                : undefined;
+
         return (
-            <TableCell>
+            <TableCell className={backgroundClassName}>
                 {renderCellContent(rootFolder, columnKey)}
             </TableCell>
         );

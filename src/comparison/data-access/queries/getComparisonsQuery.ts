@@ -4,6 +4,7 @@ import { ComparisonProcessingStatus } from "@prisma/client";
 
 import { roundNumber } from "@/common/helpers/numberHelper";
 import prismaClient from "@/common/helpers/prismaClient";
+import { getComparisonStatus } from "@/comparison/helpers/comparisonHelper";
 import { ComparisonResultData } from "@/comparison/types/comparisonResultData";
 
 
@@ -44,6 +45,7 @@ export default async function getComparisons(): Promise<ComparisonListItemModel[
                             name: true,
                             size: true,
                             path: true,
+                            status: true,
                             _count: {
                                 select: {
                                     files: true
@@ -62,6 +64,11 @@ export default async function getComparisons(): Promise<ComparisonListItemModel[
         const primaryRootFolder = comparison.comparisonRootFolders.find(item => item.isPrimary)!;
         const secondaryRootFolders = comparison.comparisonRootFolders.filter(item => !item.isPrimary);
 
+        const status = getComparisonStatus(
+            comparison.status,
+            comparison.comparisonRootFolders.map(comparisonRootFolder => comparisonRootFolder.rootFolder.status)
+        );
+
         return {
             id: comparison.id,
             name: comparison.name,
@@ -69,7 +76,7 @@ export default async function getComparisons(): Promise<ComparisonListItemModel[
             duplicatedFilesPercent: primaryRootFolder.rootFolder._count.files
                 ? roundNumber(duplicatedFilesCount / primaryRootFolder.rootFolder._count.files * 100.0, 1)
                 : 0,
-            status: comparison.status,
+            status,
             primaryRootFolder: {
                 id: primaryRootFolder.rootFolder.id,
                 name: primaryRootFolder.rootFolder.name,

@@ -70,8 +70,14 @@ export default function ComparisonGeneralInfoSection({ comparison, rootFolders }
                     {comparison.status === ComparisonProcessingStatus.Processing && <span className="text-yellow-700">{comparison.status}</span>}
                 </>
             )],
-            ['Duplicated Files Count', `${duplicatedFilesCount} / ${totalFilesCount} (${duplicatedFilesCountPercent}%)`],
-            ['Duplicated Files Size', `${getFormattedSize(duplicatedFilesSize)} / ${getFormattedSize(size)} (${duplicatedFilesSizePercent}%)`]
+            ['Duplicated Files Count', comparison.status === ComparisonProcessingStatus.Completed
+                ? `${duplicatedFilesCount} / ${totalFilesCount} (${duplicatedFilesCountPercent}%)`
+                : null
+            ],
+            ['Duplicated Files Size', comparison.status === ComparisonProcessingStatus.Completed
+                ? `${getFormattedSize(duplicatedFilesSize)} / ${getFormattedSize(size)} (${duplicatedFilesSizePercent}%)`
+                : null
+            ]
         ]);
     }, [comparison.createdAt, comparison.status, duplicatedFilesCount, duplicatedFilesSize, size, totalFilesCount]);
 
@@ -94,7 +100,10 @@ export default function ComparisonGeneralInfoSection({ comparison, rootFolders }
             headingLevel={2}
         >
             <div className="flex flex-col gap-9">
-                <KeyValueList items={comparisonDetailsMap} />
+                <KeyValueList
+                    items={comparisonDetailsMap}
+                    skipNullableValues
+                />
                 <div className="max-w-[50rem] w-full">
                     <ComparisonForm
                         rootFolders={rootFolders}

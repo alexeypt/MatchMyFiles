@@ -2,6 +2,7 @@
 
 import React, { useCallback, useMemo } from 'react';
 import { Link, TableCell } from '@nextui-org/react';
+import { ComparisonProcessingStatus } from '@prisma/client';
 
 import TextTable, { TextTableColumnConfiguration, TextTableRowConfiguration } from '@/common/components/TextTable';
 import { COMPARISON_EDIT_ROUTE, ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';
@@ -18,6 +19,7 @@ interface ComparisonTableProps {
 interface ComparisonTableItem {
     index: number;
     name: string;
+    status: ComparisonProcessingStatus;
     primaryRootFolder: ComparisonListItemRootFolderModel;
     secondaryRootFolders: ComparisonListItemRootFolderModel[];
     duplicatedFilesCount: number;
@@ -58,6 +60,7 @@ export default function ComparisonTable({ data }: ComparisonTableProps) {
             key: item.id,
             index: index + 1,
             name: item.name,
+            status: item.status,
             primaryRootFolder: item.primaryRootFolder,
             secondaryRootFolders: item.secondaryRootFolders,
             duplicatedFilesCount: item.duplicatedFilesCount,
@@ -129,8 +132,14 @@ export default function ComparisonTable({ data }: ComparisonTableProps) {
     }, []);
 
     const renderCell = useCallback((comparison: TextTableRowConfiguration<ComparisonTableItem>, columnKey: keyof ComparisonTableItem) => {
+        const backgroundClassName = comparison.status === ComparisonProcessingStatus.Processing
+            ? 'bg-yellow-100'
+            : comparison.status === ComparisonProcessingStatus.Failed
+                ? 'bg-red-100'
+                : undefined;
+
         return (
-            <TableCell>
+            <TableCell className={backgroundClassName}>
                 {renderCellContent(comparison, columnKey)}
             </TableCell>
         );

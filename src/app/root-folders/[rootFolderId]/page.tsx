@@ -43,11 +43,11 @@ export default async function RootFolderEditPage({ params }: { params: { rootFol
                         <div className="flex flex-col gap-10">
                             <Heading
                                 level={2}
-                                className="text-5xl font-serif text-red-900"
+                                className="text-4xl font-serif text-red-900"
                             >
                                 Something went wrong!
                             </Heading>
-                            <p className="text-3xl font-serif">Root Folder can&apos;t be processed. Please, check that folder path is correct.</p>
+                            <p className="text-2xl font-serif">Root Folder can&apos;t be processed. Please, check that folder path is correct.</p>
                         </div>
                     )
                 }

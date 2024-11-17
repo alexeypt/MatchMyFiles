@@ -4,6 +4,7 @@ import { ComparisonProcessingStatus, RootFolderProcessingStatus } from "@prisma/
 
 import prismaClient from "@/common/helpers/prismaClient";
 import NotFoundError from "@/common/models/notFoundError";
+import { getComparisonStatus } from "@/comparison/helpers/comparisonHelper";
 import FolderDuplicationMode from "@/comparison/models/folderDuplicationMode";
 import { ComparisonResultData, ComparisonResultDuplicatedItemData } from "@/comparison/types/comparisonResultData";
 
@@ -272,11 +273,16 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
             return map;
         }, new Map<number, { totalSize: number; totalCount: number; }>);
 
+    const comparisonStatus = getComparisonStatus(
+        comparison.status,
+        comparison.comparisonRootFolders.map(comparisonRootFolder => comparisonRootFolder.rootFolder.status)
+    );
+
     return {
         id: comparison.id,
         name: comparison.name,
         description: comparison.description,
-        status: comparison.status,
+        status: comparisonStatus,
         createdAt: comparison.createdAt,
         primaryRootFolder: {
             isPrimary: true,

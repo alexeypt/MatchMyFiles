@@ -1,3 +1,4 @@
+import { RootFolderProcessingStatus } from "@prisma/client";
 import { Metadata } from "next";
 
 import ComparisonCreatePageContent from "@/comparison/components/ComparisonCreatePageContent";
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ComparisonCreatePage() {
-    const rootFolders = await getRootFolderNamesQuery();
+    const rootFolders = await getRootFolderNamesQuery([RootFolderProcessingStatus.Completed]);
 
     return (
         <>

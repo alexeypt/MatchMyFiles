@@ -12,13 +12,15 @@ export interface RootFolderNameModel {
     size: number;
 }
 
-export default async function getRootFolderNamesQuery(): Promise<RootFolderNameModel[]> {
+export default async function getRootFolderNamesQuery(statuses?: RootFolderProcessingStatus[]): Promise<RootFolderNameModel[]> {
     const data = await prismaClient.rootFolder.findMany({
         orderBy: {
             createdAt: "asc"
         },
         where: {
-            status: RootFolderProcessingStatus.Completed
+            status: {
+                in: statuses
+            }
         },
         select: {
             id: true,
