@@ -9,7 +9,6 @@ import { processComparison } from "@/comparison/data-access/commands/createCompa
 
 export interface UpdateComparisonModel {
     id: number;
-    name: string;
     description: string | null;
     primaryFolderId: number;
     folderIds: number[];
@@ -74,7 +73,6 @@ export default async function updateComparison(values: UpdateComparisonModel): P
                 id: values.id
             },
             data: {
-                name: values.name,
                 description: values.description,
                 comparisonRootFolders: {
                     createMany: {
@@ -102,7 +100,6 @@ export default async function updateComparison(values: UpdateComparisonModel): P
             id: values.id
         },
         data: {
-            name: values.name,
             description: values.description
         }
     });

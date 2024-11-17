@@ -6,7 +6,6 @@ import * as Yup from 'yup';
 import CheckboxGroupField from '@/common/components/CheckboxGroupField';
 import DropdownField from '@/common/components/DropdownField';
 import FormSubmitPanel from '@/common/components/FormSubmitPanel';
-import InputField from '@/common/components/InputField';
 import TextAreaField from '@/common/components/TextAreaField';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 import { nameof } from '@/common/helpers/nameHelper';
@@ -26,7 +25,6 @@ interface ComparisonFormProps {
 
 const ComparisonValidationSchema: Yup.ObjectSchema<ComparisonFormModel> = Yup.object({
     id: Yup.number().required(),
-    name: Yup.string().required('Name is a required field'),
     description: Yup.string().default(''),
     primaryRootFolderId: Yup.string().required('Primary Root Folder is a required field'),
     rootFolderIdsToCompareWith: Yup.array().required('Please select Root Folders').min(1, 'Please select Root Folders').of(Yup.string().required())
@@ -54,21 +52,9 @@ export default function ComparisonForm({
             >
                 {({ values, setFieldValue }) => (
                     <Form
-                        className="flex flex-col gap-5"
+                        className="flex flex-col gap-7"
                         noValidate
                     >
-                        <InputField
-                            isRequired={isRequired(ComparisonValidationSchema, 'name')}
-                            name={nameof<ComparisonFormModel>('name')}
-                            label="Name"
-                            variant="bordered"
-                        />
-                        <TextAreaField
-                            isRequired={isRequired(ComparisonValidationSchema, 'description')}
-                            name={nameof<ComparisonFormModel>('description')}
-                            label="Description"
-                            variant="bordered"
-                        />
                         <DropdownField
                             name={nameof<ComparisonFormModel>('primaryRootFolderId')}
                             isRequired={isRequired(ComparisonValidationSchema, 'primaryRootFolderId')}
@@ -100,6 +86,12 @@ export default function ComparisonForm({
                                         label: `${rootFolder.name} (${rootFolder.path}, ${getFormattedSize(rootFolder.size)})`
                                     }))
                             }
+                        />
+                        <TextAreaField
+                            isRequired={isRequired(ComparisonValidationSchema, 'description')}
+                            name={nameof<ComparisonFormModel>('description')}
+                            label="Description"
+                            variant="bordered"
                         />
                         <FormSubmitPanel
                             isEditMode={isEditMode}

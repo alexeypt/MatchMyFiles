@@ -44,7 +44,6 @@ export interface ComparisonRootFolderItemModel {
 
 export interface ComparisonDetailsModel {
     id: number;
-    name: string;
     description: string | null;
     status: ComparisonProcessingStatus;
     createdAt: Date;
@@ -147,7 +146,6 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
         },
         select: {
             id: true,
-            name: true,
             description: true,
             status: true,
             createdAt: true,
@@ -280,7 +278,6 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
 
     return {
         id: comparison.id,
-        name: comparison.name,
         description: comparison.description,
         status: comparisonStatus,
         createdAt: comparison.createdAt,

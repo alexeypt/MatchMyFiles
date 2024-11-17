@@ -8,7 +8,6 @@ import { ComparisonResultData, ComparisonResultDuplicatedItemData } from "@/comp
 
 
 export interface CreateComparisonModel {
-    name: string;
     description: string | null;
     primaryFolderId: number;
     folderIds: number[];
@@ -56,7 +55,6 @@ export default async function createComparison(values: CreateComparisonModel) {
     }
     const comparison = await prismaClient.comparison.create({
         data: {
-            name: values.name,
             description: values.description,
             status: ComparisonProcessingStatus.Processing,
             comparisonRootFolders: {

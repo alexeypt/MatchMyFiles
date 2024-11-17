@@ -17,7 +17,6 @@ export interface ComparisonListItemRootFolderModel {
 
 export interface ComparisonListItemModel {
     id: number;
-    name: string;
     duplicatedFilesCount: number;
     duplicatedFilesPercent: number;
     status: ComparisonProcessingStatus;
@@ -32,7 +31,6 @@ export default async function getComparisons(): Promise<ComparisonListItemModel[
         },
         select: {
             id: true,
-            name: true,
             status: true,
             createdAt: true,
             data: true,
@@ -71,7 +69,6 @@ export default async function getComparisons(): Promise<ComparisonListItemModel[
 
         return {
             id: comparison.id,
-            name: comparison.name,
             duplicatedFilesCount,
             duplicatedFilesPercent: primaryRootFolder.rootFolder._count.files > 0
                 ? roundNumber(duplicatedFilesCount / primaryRootFolder.rootFolder._count.files * 100.0, 1)

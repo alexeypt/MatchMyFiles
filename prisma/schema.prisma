@@ -95,7 +95,6 @@ model ComparisonRootFolder {
 
 model Comparison {
     id          Int                        @id @default(autoincrement())
-    name        String
     description String?
     status      ComparisonProcessingStatus @default(Created)
     data        Json?

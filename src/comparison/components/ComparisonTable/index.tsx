@@ -18,7 +18,6 @@ interface ComparisonTableProps {
 
 interface ComparisonTableItem {
     index: number;
-    name: string;
     status: ComparisonProcessingStatus;
     primaryRootFolder: ComparisonListItemRootFolderModel;
     secondaryRootFolders: ComparisonListItemRootFolderModel[];
@@ -31,10 +30,6 @@ const COLUMNS: TextTableColumnConfiguration<ComparisonTableItem>[] = [
     {
         key: "index",
         label: '#'
-    },
-    {
-        key: "name",
-        label: "Name",
     },
     {
         key: "primaryRootFolder",
@@ -59,7 +54,6 @@ export default function ComparisonTable({ data }: ComparisonTableProps) {
         return data.map((item, index) => ({
             key: item.id,
             index: index + 1,
-            name: item.name,
             status: item.status,
             primaryRootFolder: item.primaryRootFolder,
             secondaryRootFolders: item.secondaryRootFolders,
@@ -114,7 +108,7 @@ export default function ComparisonTable({ data }: ComparisonTableProps) {
                 return (
                     <Link
                         href={editComparisonUrl}
-                        aria-label={`Edit ${comparison.name} comparison`}
+                        aria-label={`Edit ${comparison.primaryRootFolder.name} comparison`}
                         color="primary"
                         underline="hover"
                         className="text-primary-600"

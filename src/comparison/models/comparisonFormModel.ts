@@ -6,7 +6,6 @@ import { ComparisonDetailsModel } from '@/comparison/data-access/queries/getComp
 export default class ComparisonFormModel {
     constructor(
         public id: number,
-        public name: string,
         public description: string,
         public primaryRootFolderId: string | null,
         public rootFolderIdsToCompareWith: string[]
@@ -16,7 +15,6 @@ export default class ComparisonFormModel {
 
     static matToCreateModel(data: ComparisonFormModel): CreateComparisonModel {
         return {
-            name: data.name,
             description: data.description ?? null,
             primaryFolderId: +data.primaryRootFolderId!,
             folderIds: data.rootFolderIdsToCompareWith
@@ -28,7 +26,6 @@ export default class ComparisonFormModel {
     static mapToUpdateModel(data: ComparisonFormModel): UpdateComparisonModel {
         return {
             id: data.id,
-            name: data.name,
             description: data.description ?? null,
             primaryFolderId: +data.primaryRootFolderId!,
             folderIds: data.rootFolderIdsToCompareWith
@@ -41,7 +38,6 @@ export default class ComparisonFormModel {
         return new ComparisonFormModel(
             0,
             '',
-            '',
             null,
             []
         );
@@ -50,7 +46,6 @@ export default class ComparisonFormModel {
     static mapFromComparisonModel(comparison: ComparisonDetailsModel) {
         return new ComparisonFormModel(
             comparison.id,
-            comparison.name,
             comparison.description ?? '',
             comparison.primaryRootFolder?.id.toString() ?? null,
             comparison.rootFolders.map(rootFolder => rootFolder.id.toString())

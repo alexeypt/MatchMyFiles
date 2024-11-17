@@ -42,7 +42,7 @@ export default function RootFolderForm({
             >
                 {({ values }) => (
                     <Form
-                        className="flex flex-col gap-5"
+                        className="flex flex-col gap-7"
                         noValidate
                     >
                         <InputField

@@ -42,8 +42,7 @@ export default function ComparisonDetailsPageHeader({ comparison }: ComparisonDe
                 confirmDescription={
                     (
                         <p>
-                            <span className="font-bold">{comparison.name}</span> Comparison
-                            will be removed without restoring possibilities.
+                            This Comparison will be removed without restoring possibilities.
                         </p>
                     )
                 }
@@ -57,9 +56,9 @@ export default function ComparisonDetailsPageHeader({ comparison }: ComparisonDe
                 Delete
             </ConfirmableButton>
         );
-    }, [comparison.name, onDelete]);
+    }, [onDelete]);
 
-    const pageTitle = `Comparison: ${comparison.name}`;
+    const pageTitle = `Comparison: ${comparison.primaryRootFolder.name}`;
 
     const breadcrumbs: BreadcrumbItemModel[] = useMemo(() => {
         return [
