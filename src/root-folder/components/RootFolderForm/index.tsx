@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
@@ -18,9 +18,9 @@ interface RootFolderFormProps {
     onClose?: () => void;
 }
 
-const RootFolderValidationSchema: Yup.ObjectSchema<RootFolderFormModel> = Yup.object({
+const RootFolderValidationSchemaGenerator: (isEditMode: boolean) => Yup.ObjectSchema<RootFolderFormModel> = (isEditMode: boolean) => Yup.object({
     id: Yup.number().required(),
-    name: Yup.string().required('Name is a required field'),
+    name: isEditMode ? Yup.string().required('Display Name is a required field') : Yup.string().optional().default(''),
     folderPath: Yup.string().required('Folder Path is a required field'),
     description: Yup.string().default('')
 });
@@ -32,11 +32,15 @@ export default function RootFolderForm({
     customButtonNode,
     onClose
 }: RootFolderFormProps) {
+    const rootFolderValidationSchema = useMemo(() => {
+        return RootFolderValidationSchemaGenerator(isEditMode);
+    }, []);
+    
     return (
         <div>
             <Formik<RootFolderFormModel>
                 initialValues={initialValues}
-                validationSchema={RootFolderValidationSchema}
+                validationSchema={rootFolderValidationSchema}
                 onSubmit={onSubmit}
                 validateOnMount
             >
@@ -46,19 +50,7 @@ export default function RootFolderForm({
                         noValidate
                     >
                         <InputField
-                            isRequired={isRequired(RootFolderValidationSchema, 'name')}
-                            name={nameof<RootFolderFormModel>('name')}
-                            label="Name"
-                            variant="bordered"
-                        />
-                        <TextAreaField
-                            isRequired={isRequired(RootFolderValidationSchema, 'description')}
-                            name={nameof<RootFolderFormModel>('description')}
-                            label="Description"
-                            variant="bordered"
-                        />
-                        <InputField
-                            isRequired={isRequired(RootFolderValidationSchema, 'folderPath')}
+                            isRequired={isRequired(rootFolderValidationSchema, 'folderPath')}
                             name={nameof<RootFolderFormModel>('folderPath')}
                             label="Folder Path"
                             variant="bordered"
@@ -66,6 +58,18 @@ export default function RootFolderForm({
                                 ? "Folder Path update will lead to the Root Folder and Comparisons (where this Root Folder is used) reprocessing"
                                 : null
                             }
+                        />
+                        <InputField
+                            isRequired={isRequired(rootFolderValidationSchema, 'name')}
+                            name={nameof<RootFolderFormModel>('name')}
+                            label="Display Name"
+                            variant="bordered"
+                        />
+                        <TextAreaField
+                            isRequired={isRequired(rootFolderValidationSchema, 'description')}
+                            name={nameof<RootFolderFormModel>('description')}
+                            label="Description"
+                            variant="bordered"
                         />
                         <FormSubmitPanel
                             isEditMode={isEditMode}

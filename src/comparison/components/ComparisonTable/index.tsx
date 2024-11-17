@@ -79,26 +79,32 @@ export default function ComparisonTable({ data }: ComparisonTableProps) {
                             href={generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: comparison.primaryRootFolder.id })}
                             underline="hover"
                         >
-                            <span className="font-bold">{comparison.primaryRootFolder.name}&nbsp;</span>
+                            <div>
+                                <span className="font-bold">{comparison.primaryRootFolder.name}&nbsp;</span>
+                                <span>({comparison.primaryRootFolder.path}, {getFormattedSize(comparison.primaryRootFolder.size)})</span>
+                            </div>
                         </Link>
-                        <span>({comparison.primaryRootFolder.path}, {getFormattedSize(comparison.primaryRootFolder.size)})</span>
                     </div>
                 );
             case 'secondaryRootFolders':
                 return (
                     <div className="text-base">
                         <ul className="flex flex-col gap-2">
-                            {comparison.secondaryRootFolders.map(item => (
-                                <li key={item.id}>
-                                    <Link
-                                        href={generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: item.id })}
-                                        underline="hover"
-                                    >
-                                        <span className="font-bold">{item.name}&nbsp;</span>
-                                    </Link>
-                                    <span>({item.path}, {getFormattedSize(item.size)})</span>
-                                </li>
-                            ))}
+                            {
+                                comparison.secondaryRootFolders.map(item => (
+                                    <li key={item.id}>
+                                        <Link
+                                            href={generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: item.id })}
+                                            underline="hover"
+                                        >
+                                            <div>
+                                                <span className="font-bold">{item.name}&nbsp;</span>
+                                                <span>({item.path}, {getFormattedSize(item.size)})</span>
+                                            </div>
+                                        </Link>
+                                    </li>
+                                ))
+                            }
                         </ul>
                     </div>
                 );

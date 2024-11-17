@@ -95,9 +95,16 @@ export async function processRootFolder(rootFolderId: number, rootFolderPath: st
 }
 
 export default async function createRootFolder(values: CreateRootFolderModel) {
+    let rootFolderName = values.name;
+
+    if (!rootFolderName) {
+        rootFolderName = values.folderPath.split(/\\|\//).at(-1) ?? values.folderPath;
+    }
+
+
     const rootFolder = await prismaClient.rootFolder.create({
         data: {
-            name: values.name,
+            name: rootFolderName,
             description: values.description,
             path: values.folderPath,
             size: 0,
