@@ -22,6 +22,10 @@
         border-radius: 0;
     }
 
+    .rct-tree-item-button-focused {
+        outline-offset: -2px;
+    }
+
     .rct-tree-item-button.rct-tree-item-button-expanded,
     div[role="tree"]>ul.rct-tree-items-container>.rct-tree-item-li:last-of-type>.rct-tree-item-title-container>.rct-tree-item-button:not(.rct-tree-item-button-expanded),
     div[role="tree"]>ul.rct-tree-items-container>.rct-tree-item-li:last-of-type .rct-tree-item-li:last-of-type>.rct-tree-item-title-container>.rct-tree-item-button:not(.rct-tree-item-button-expanded) {
