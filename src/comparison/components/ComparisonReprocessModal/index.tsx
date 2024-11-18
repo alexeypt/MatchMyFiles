@@ -49,6 +49,7 @@ export default function ComparisonReprocessModal({
         <Modal
             isOpen={isOpen}
             size='xl'
+            scrollBehavior="inside"
             onClose={onClose}
         >
             <ModalContent>

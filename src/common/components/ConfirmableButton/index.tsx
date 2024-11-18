@@ -46,6 +46,7 @@ export default function ConfirmableButton({
             <Modal
                 isOpen={isModalOpened}
                 size='lg'
+                scrollBehavior="inside"
                 onClose={hideModal}
             >
                 <ModalContent>

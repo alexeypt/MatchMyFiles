@@ -27,6 +27,7 @@ export default function ComparisonItemDetailsModal({
         <Modal
             isOpen={isOpen}
             size="2xl"
+            scrollBehavior="inside"
             classNames={
                 {
                     closeButton: 'text-4xl'
@@ -34,9 +35,9 @@ export default function ComparisonItemDetailsModal({
             }
             onClose={onClose}
         >
-            <ModalContent>
+            <ModalContent className="md:p-6">
                 {() => (
-                    <div className="p-6">
+                    <>
                         <ModalHeader className="flex flex-col gap-1">
                             <Heading
                                 className="text-3xl font-serif"
@@ -65,7 +66,7 @@ export default function ComparisonItemDetailsModal({
                                 )
                             }
                         </ModalBody>
-                    </div>
+                    </>
                 )}
             </ModalContent>
         </Modal>

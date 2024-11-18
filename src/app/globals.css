@@ -23,3 +23,24 @@
         text-wrap: balance;
     }
 }
+
+/*
+    based on https://stackoverflow.com/questions/66166047/how-to-make-thin-scrollbar-in-chrome/66166118
+    only apply for not touch devices as touch devices usually have their own thin scrollbar
+*/
+
+@media(pointer: fine) {
+    section[role="dialog"] ::-webkit-scrollbar {
+        width: 9px;
+    }
+    
+    section[role="dialog"] ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    section[role="dialog"] ::-webkit-scrollbar-thumb {
+        background-color: rgba(155, 155, 155, 0.5);
+        border-radius: 14px;
+        border: transparent;
+    }
+}

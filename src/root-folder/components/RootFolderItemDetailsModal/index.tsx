@@ -19,6 +19,7 @@ export default function RootFolderItemDetailsModal({ item, isOpen, onClose }: Ro
         <Modal
             isOpen={isOpen}
             size="2xl"
+            scrollBehavior="inside"
             classNames={
                 {
                     closeButton: 'text-4xl'
@@ -26,9 +27,9 @@ export default function RootFolderItemDetailsModal({ item, isOpen, onClose }: Ro
             }
             onClose={onClose}
         >
-            <ModalContent>
+            <ModalContent className="md:p-6">
                 {() => (
-                    <div className="p-6">
+                    <>
                         <ModalHeader className="flex flex-col gap-1">
                             <Heading
                                 className="text-3xl font-serif"
@@ -49,7 +50,7 @@ export default function RootFolderItemDetailsModal({ item, isOpen, onClose }: Ro
                                 )
                             }
                         </ModalBody>
-                    </div>
+                    </>
                 )}
             </ModalContent>
         </Modal>

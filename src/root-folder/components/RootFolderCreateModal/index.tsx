@@ -45,6 +45,7 @@ export default function RootFolderCreateModal({ isOpen, onClose }: RootFolderCre
         <Modal
             isOpen={isOpen}
             size='xl'
+            scrollBehavior="inside"
             onClose={onClose}
         >
             <ModalContent>
