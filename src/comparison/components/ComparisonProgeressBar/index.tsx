@@ -61,14 +61,12 @@ export default function ComparisonProgressBar({ comparison }: ComparisonProgress
 
         if (socketContext) {
             detachEventListener = socketContext.rootFoldersStatus.attachGenericEventListener(status => {
-                if (status) {
-                    setRootFolderStatusMap(prevMap => {
-                        const newMap = new Map(prevMap);
-                        newMap.set(status.rootFolderId, status);
+                setRootFolderStatusMap(prevMap => {
+                    const newMap = new Map(prevMap);
+                    newMap.set(status.rootFolderId, status);
 
-                        return newMap;
-                    });
-                }
+                    return newMap;
+                });
             });
         }
 
@@ -81,8 +79,12 @@ export default function ComparisonProgressBar({ comparison }: ComparisonProgress
         let detachEventListener: ReturnType<ComparisonsStatusModel['attachComparisonFinishedEventListener']> | null = null;
 
         if (socketContext) {
+            if (!socketContext.comparisonsStatus.checkIsComparisonProcessing(comparison.id)) {
+                // it means that processing was really quick and while this component is being rendered, it has been completed
+                router.refresh();
+            }
+
             detachEventListener = socketContext.comparisonsStatus.attachComparisonFinishedEventListener(comparison.id, () => {
-                console.log(2345);
                 router.refresh();
             });
         }

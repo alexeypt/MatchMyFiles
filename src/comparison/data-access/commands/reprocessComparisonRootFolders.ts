@@ -15,6 +15,8 @@ async function waitTasks(comparisonId: number, reprocessTasks: Promise<void>[]) 
 }
 
 export default async function reprocessComparisonRootFolders(comparisonId: number, rootFolderIdsToReprocess: number[]) {
+    socketIO.io.emit(SocketEventType.ComparisonProcessingStarted, comparisonId);
+
     await prismaClient.comparison.update({
         where: {
             id: comparisonId

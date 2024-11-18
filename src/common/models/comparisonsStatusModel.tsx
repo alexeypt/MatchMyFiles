@@ -11,14 +11,25 @@ export interface ComparisonStatus {
 }
 
 export default class ComparisonsStatusModel {
+    private processingComparisons: Set<number>;
     private comparisonFinishedEventListenersMap: Map<number, Set<() => void>>;
 
     constructor() {
+        this.processingComparisons = new Set();
         this.comparisonFinishedEventListenersMap = new Map();
     }
 
+    checkIsComparisonProcessing(comparisonId: number) {
+        return this.processingComparisons.has(comparisonId);
+    }
+
     init(socket: Socket<SocketIOEventsMap>) {
+        socket.on(SocketEventType.ComparisonProcessingStarted, comparisonId => {
+            this.processingComparisons.add(comparisonId);
+        });
+
         socket.on(SocketEventType.ComparisonProcessingCompleted, comparisonId => {
+            this.processingComparisons.delete(comparisonId);
             if (this.comparisonFinishedEventListenersMap.has(comparisonId)) {
                 for (const callback of Array.from(this.comparisonFinishedEventListenersMap.get(comparisonId)!)) {
                     callback();

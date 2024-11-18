@@ -23,7 +23,13 @@ export default function RootFolderProgressBar({ rootFolder }: RootFolderProgress
         let detachEventListener: ReturnType<RootFoldersStatusModel['attachEventListener']> | null = null;
 
         if (socketContext) {
-            setStatus(socketContext.rootFoldersStatus.getRootFolderStatus(rootFolder.id));
+            const currentStatus = socketContext.rootFoldersStatus.getRootFolderStatus(rootFolder.id);
+            if (currentStatus?.isFinished) {
+                // it means that processing was really quick and while this component is being rendered, it has been completed
+                router.refresh();
+            }
+
+            setStatus(currentStatus);
             detachEventListener = socketContext.rootFoldersStatus.attachEventListener(rootFolder.id, status => {
                 setStatus(status);
                 if (status.isFinished) {
