@@ -139,7 +139,9 @@ export default function ComparisonRootFolderTable({ data, rootFolderColorMap }: 
                     <div
                         style={duplicatedCellStyles}
                         className={duplicatedCellClassName}
-                    />
+                    >
+                        &nbsp;
+                    </div>
                 );
             case 'partiallyDuplicatedColor':
                 const partiallyDuplicatedCellStyles = {
@@ -155,7 +157,9 @@ export default function ComparisonRootFolderTable({ data, rootFolderColorMap }: 
                     <div
                         style={partiallyDuplicatedCellStyles}
                         className={partiallyDuplicatedCellClassName}
-                    />
+                    >
+                        &nbsp;
+                    </div>
                 );
             default:
                 return (
