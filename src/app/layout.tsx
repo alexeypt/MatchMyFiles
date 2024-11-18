@@ -1,7 +1,9 @@
+import { Link } from "@nextui-org/react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Noto_Serif } from "next/font/google";
 
+import { HOME_ROUTE } from "@/common/constants/routes";
 import { Providers } from '@/app/providers';
 import Header from "@/layout/components/Header";
 import SkipToMainContentButton from "@/layout/components/SkipToMainContentButton";
@@ -35,7 +37,7 @@ export default async function RootLayout({
             <body className={`${inter.className} ${inter.variable} ${notoSerif.variable} wrap-anywhere`}>
                 <Providers>
                     <div className="flex min-h-screen flex-col">
-                        <SkipToMainContentButton /> 
+                        <SkipToMainContentButton />
                         <Header />
                         <div className="flex flex-col justify-between flex-grow">
                             <main
@@ -50,7 +52,12 @@ export default async function RootLayout({
                             <footer className="flex w-full items-end">
                                 <div className="bg-yellow-100 w-full">
                                     <div className="flex max-w-screen-2xl mx-auto h-10 justify-between items-center px-4 2xl:px-0">
-                                        <span className="text-xs font-bold">Match My Files v 1.0 (beta)</span>
+                                        <Link
+                                            className="text-xs font-bold text-black"
+                                            href={HOME_ROUTE}
+                                        >
+                                            Match My Files v 1.0 (beta)
+                                        </Link>
                                         <span className="text-xs">2024</span>
                                     </div>
                                 </div>

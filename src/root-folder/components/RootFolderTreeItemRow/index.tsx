@@ -31,24 +31,26 @@ export default function RootFolderTreeItemRow({
     );
     
     return (
-        <div className={className}>
-            <div className="flex-grow">
+        <span className={className}>
+            <span className="flex-grow">
                 {title}
-            </div>
-            <div className="text-base">
+            </span>
+            <span className="text-base">
                 {getFormattedSize(item.data.size)}
-            </div>
-            <div>
+            </span>
+            <span>
                 <Button
                     size="sm"
                     color="primary"
                     radius="none"
                     aria-label={`View Details for ${title} item`}
-                    onClick={onSelectItemButtonClicked}
+                    as="span"
+                    excludeFromTabOrder
+                    onPress={onSelectItemButtonClicked}
                 >
                     View Details
                 </Button>
-            </div>
-        </div>
+            </span>
+        </span>
     );
 }

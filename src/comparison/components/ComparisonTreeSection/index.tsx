@@ -78,6 +78,11 @@ export default function ComparisonTreeSection({ comparison, rootFolderColorMap }
         showDetailsModal();
     }, [showDetailsModal]);
 
+    const onPrimaryAction = useCallback((item: TreeItem) => {
+        setSelectedItem(item.data);
+        showDetailsModal();
+    }, [showDetailsModal]);
+
     return (
         <PageSection
             title="Files Tree"
@@ -99,7 +104,18 @@ export default function ComparisonTreeSection({ comparison, rootFolderColorMap }
                             />
                         );
                     }}
+                    renderItemsContainer={({ children, containerProps }) =>
+                        // react-complex-tree doesn't set role="group" for root tree items container but SiteImprove requires it
+                        <ul
+                            className="rct-tree-items-container"
+                            {...containerProps}
+                            role="group"
+                        >
+                            {children}
+                        </ul>
+                    }
                     viewState={{}}
+                    onPrimaryAction={onPrimaryAction}
                 >
                     <Tree<ComparisonTreeItem>
                         treeId="comparison-results-tree"
