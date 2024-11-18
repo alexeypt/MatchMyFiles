@@ -48,7 +48,7 @@ export default function RootFolderReprocessButton({ rootFolder }: RootFolderRepr
                 type="button"
                 color="success"
                 className="bg-green-700 text-white"
-                onClick={onReprocess}
+                onPress={onReprocess}
                 size="lg"
             >
                 Reprocess
@@ -76,7 +76,7 @@ export default function RootFolderReprocessButton({ rootFolder }: RootFolderRepr
             confirmableYesButtonClassName="bg-green-700 text-white"
             confirmableNoButtonClassName="border-green-700 text-green-700"
             className="bg-green-700 text-white"
-            onClick={onConfirmReprocess}
+            onPress={onConfirmReprocess}
             size="lg"
         >
             Reprocess

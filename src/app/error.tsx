@@ -18,7 +18,7 @@ export default function ErrorPage({
     const log = useCallback(async (error: Error & { digest?: string; }) => {
         console.error(error.message);
     }, []);
-    
+
     useEffect(() => {
         log(error);
     }, [error, log]);
@@ -39,7 +39,7 @@ export default function ErrorPage({
             {
                 reset && (
                     <Button
-                        onClick={() => reset()}
+                        onPress={() => reset()}
                         size="lg"
                         variant="solid"
                         color="primary"

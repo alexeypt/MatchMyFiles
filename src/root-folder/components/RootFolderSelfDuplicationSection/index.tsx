@@ -3,8 +3,8 @@
 import React from 'react';
 
 import PageSection from '@/common/components/PageSection';
-import { RootFolderDuplicatedFileModel } from '@/root-folder/data-access/queries/getRootFolderQuery';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
+import { RootFolderDuplicatedFileModel } from '@/root-folder/data-access/queries/getRootFolderQuery';
 
 
 interface RootFolderSelfDuplicationSectionProps {

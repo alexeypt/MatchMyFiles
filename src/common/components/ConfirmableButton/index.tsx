@@ -5,7 +5,7 @@ import Heading from '@/common/components/Heading';
 import useModalControl from "@/common/hooks/useModalControl";
 
 
-interface ConfirmableButtonProps extends Omit<ButtonProps, 'onClick'> {
+interface ConfirmableButtonProps extends Omit<ButtonProps, 'onPress'> {
     confirmTitle: string;
     confirmDescription: ReactNode;
     confirmYesButtonLabel: string;
@@ -15,7 +15,7 @@ interface ConfirmableButtonProps extends Omit<ButtonProps, 'onClick'> {
     confirmableYesButtonClassName?: string;
     confirmableNoButtonClassName?: string;
     isDisabledYesButton?: boolean;
-    onClick: (hideModal: () => void) => void;
+    onPress: (hideModal: () => void) => void;
 }
 
 export default function ConfirmableButton({
@@ -28,20 +28,20 @@ export default function ConfirmableButton({
     confirmableYesButtonClassName,
     confirmableNoButtonClassName,
     isDisabledYesButton,
-    onClick,
+    onPress,
     ...restProps
 }: ConfirmableButtonProps) {
     const [isModalOpened, showModal, hideModal] = useModalControl();
 
     const onYesButtonClicked = useCallback(() => {
-        onClick(hideModal);
-    }, [hideModal, onClick]);
+        onPress(hideModal);
+    }, [hideModal, onPress]);
 
     return (
         <>
             <Button
                 {...restProps}
-                onClick={showModal}
+                onPress={showModal}
             />
             <Modal
                 isOpen={isModalOpened}
@@ -66,7 +66,7 @@ export default function ConfirmableButton({
                                             color="danger"
                                             variant="bordered"
                                             className={confirmableNoButtonClassName}
-                                            onClick={hideModal}
+                                            onPress={hideModal}
                                         >
                                             {confirmNoButtonLabel}
                                         </Button>
@@ -78,7 +78,7 @@ export default function ConfirmableButton({
                                             color="danger"
                                             className={confirmableYesButtonClassName}
                                             isDisabled={isDisabledYesButton}
-                                            onClick={onYesButtonClicked}
+                                            onPress={onYesButtonClicked}
                                         >
                                             {confirmYesButtonLabel}
                                         </Button>

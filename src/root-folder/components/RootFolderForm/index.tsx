@@ -34,7 +34,7 @@ export default function RootFolderForm({
 }: RootFolderFormProps) {
     const rootFolderValidationSchema = useMemo(() => {
         return RootFolderValidationSchemaGenerator(isEditMode);
-    }, []);
+    }, [isEditMode]);
     
     return (
         <div>

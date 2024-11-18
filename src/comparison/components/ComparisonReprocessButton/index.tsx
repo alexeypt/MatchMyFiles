@@ -28,7 +28,7 @@ export default function ComparisonReprocessButton({ comparison, rootFolders }: C
                 type="button"
                 color="success"
                 className="bg-green-700 text-white"
-                onClick={showModal}
+                onPress={showModal}
                 size="lg"
             >
                 Reprocess Root Folders and Comparison

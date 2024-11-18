@@ -50,7 +50,7 @@ export default function ComparisonDetailsPageHeader({ comparison }: ComparisonDe
                 confirmNoButtonLabel="Cancel, Keep This Comparison"
                 type="button"
                 color="danger"
-                onClick={onDelete}
+                onPress={onDelete}
                 size="lg"
             >
                 Delete

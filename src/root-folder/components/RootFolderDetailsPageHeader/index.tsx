@@ -69,7 +69,7 @@ export default function RootFolderDetailsPageHeader({ rootFolder }: RootFolderDe
                 isDisabledYesButton={!canBeRemoved}
                 type="button"
                 color="danger"
-                onClick={onDelete}
+                onPress={onDelete}
                 size="lg"
             >
                 Delete

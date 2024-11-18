@@ -42,7 +42,7 @@ export default function FormSubmitPanel({
                         <Button
                             type="button"
                             color="danger"
-                            onClick={onClose}
+                            onPress={onClose}
                             size="lg"
                         >
                             Cancel

@@ -16,7 +16,7 @@ export default function RootFolderListPageHeader() {
             <Button
                 type="button"
                 color="primary"
-                onClick={openCreateModal}
+                onPress={openCreateModal}
                 size="lg"
             >
                 Create New Root Folder
