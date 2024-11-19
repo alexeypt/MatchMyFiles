@@ -34,7 +34,7 @@ export default function RootFolderReprocessButton({ rootFolder }: RootFolderRepr
         if (isSuccess) {
             router.refresh();
         }
-    }, [router, rootFolder.id]);
+    }, [rootFolder.filesCount, rootFolder.id, router]);
 
     const onConfirmReprocess = useCallback(async (hideConfirmModal: () => void) => {
         await onReprocess();
