@@ -81,8 +81,12 @@ export default function ComparisonTable({ data }: ComparisonTableProps) {
                             underline="hover"
                         >
                             <div>
-                                <span className="font-bold">{comparison.primaryRootFolder.name}</span>
-                                {' ('}
+                                <span
+                                    className="font-bold"
+                                    dangerouslySetInnerHTML={{
+                                        __html: getFormattedStringWithWordBreaks(comparison.primaryRootFolder.name)
+                                    }}
+                                /> (
                                 <span dangerouslySetInnerHTML={{
                                     __html: getFormattedStringWithWordBreaks(comparison.primaryRootFolder.path)
                                 }} /> , {getFormattedSize(comparison.primaryRootFolder.size)})
@@ -102,8 +106,12 @@ export default function ComparisonTable({ data }: ComparisonTableProps) {
                                             underline="hover"
                                         >
                                             <div>
-                                                <span className="font-bold">{item.name}</span>
-                                                {' ('}
+                                                <span
+                                                    className="font-bold"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: getFormattedStringWithWordBreaks(item.name)
+                                                    }}
+                                                /> (
                                                 <span dangerouslySetInnerHTML={{
                                                     __html: getFormattedStringWithWordBreaks(item.path)
                                                 }} />, {getFormattedSize(item.size)})

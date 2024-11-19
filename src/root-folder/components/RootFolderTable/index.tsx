@@ -8,6 +8,7 @@ import TextTable, { TextTableColumnConfiguration, TextTableRowConfiguration } fr
 import { ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 import { pluralize } from '@/common/helpers/pluralizationHelper';
+import { getFormattedStringWithWordBreaks } from '@/common/helpers/stringHelper';
 import { generateUrl } from '@/common/helpers/urlHelper';
 import { RootFolderListItemModel } from '@/root-folder/data-access/queries/getRootFoldersQuery';
 
@@ -75,18 +76,18 @@ export default function RootFolderTable({ data }: RootFolderTableProps) {
         switch (columnKey) {
             case 'size':
                 return (
-                    <div className="text-base">
+                    <div className="text-base min-w-32 md:min-w-28">
                         {getFormattedSize(rootFolder.size)}
                     </div>
                 );
             case 'itemsCountText':
                 return (
-                    <div className="text-base flex flex-col">
+                    <div className="text-base flex flex-col min-w-32 md:min-w-28">
                         {rootFolder.foldersCount > 0 && <p>{pluralize(rootFolder.foldersCount, 'folder')}</p>}
                         {rootFolder.filesCount > 0 && <p>{pluralize(rootFolder.filesCount, 'file')}</p>}
                     </div>
                 );
-            case "actions":
+            case 'actions':
                 const editRootFolderUrl = generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: rootFolder.key });
 
                 return (
@@ -95,14 +96,24 @@ export default function RootFolderTable({ data }: RootFolderTableProps) {
                         aria-label={`Edit ${rootFolder.name} root folder`}
                         color="primary"
                         underline="hover"
-                        className="text-primary-600"
+                        className="text-primary-600 min-w-32 md:min-w-fit"
                     >
                         View Details / Edit
                     </Link>
                 );
+            case 'name':
+            case 'path':
+                return (
+                    <span
+                        className="text-base min-w-48 md:min-w-fit"
+                        dangerouslySetInnerHTML={{
+                            __html: getFormattedStringWithWordBreaks(rootFolder[columnKey] as string)
+                        }}
+                    />
+                );
             default:
                 return (
-                    <span className="text-base">
+                    <span className="text-base min-w-10">
                         {rootFolder[columnKey] as string | number}
                     </span>
                 );
