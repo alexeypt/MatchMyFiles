@@ -27,7 +27,7 @@ export default function ComparisonReprocessButton({ comparison, rootFolders }: C
             <Button
                 type="button"
                 color="success"
-                className="bg-green-700 text-white"
+                className="bg-green-700 text-white w-full sm:w-fit"
                 onPress={showModal}
                 size="lg"
             >

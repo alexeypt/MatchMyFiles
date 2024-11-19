@@ -47,7 +47,7 @@ export default function RootFolderReprocessButton({ rootFolder }: RootFolderRepr
             <Button
                 type="button"
                 color="success"
-                className="bg-green-700 text-white"
+                className="w-full sm:w-fit bg-green-700 text-white"
                 onPress={onReprocess}
                 size="lg"
             >
@@ -58,6 +58,7 @@ export default function RootFolderReprocessButton({ rootFolder }: RootFolderRepr
 
     return (
         <ConfirmableButton
+            className="w-full sm:w-fit bg-green-700 text-white"
             confirmTitle="Reprocess Root Folder"
             confirmDescription={
                 (
@@ -65,7 +66,7 @@ export default function RootFolderReprocessButton({ rootFolder }: RootFolderRepr
                         <span className="font-bold">{rootFolder.name}</span> Root Folder is used
                         in <span className="font-bold">{pluralize(rootFolder.comparisonsCount, 'comparison')}</span>.
                         Reprocessing Root Folder means that all comparisons where this folder is used
-                        will be reprocessed as well without possibility to restore previous data. 
+                        will be reprocessed as well without possibility to restore previous data.
                     </p>
                 )
             }
@@ -75,7 +76,6 @@ export default function RootFolderReprocessButton({ rootFolder }: RootFolderRepr
             color="success"
             confirmableYesButtonClassName="bg-green-700 text-white"
             confirmableNoButtonClassName="border-green-700 text-green-700"
-            className="bg-green-700 text-white"
             onPress={onConfirmReprocess}
             size="lg"
         >

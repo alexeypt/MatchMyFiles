@@ -16,6 +16,7 @@ export default function ComparisonListPageHeader() {
                 href={COMPARISON_CREATE_ROUTE}
                 size="lg"
                 color="primary"
+                className="w-full sm:w-fit"
             >
                 Create New Comparison
             </Button>

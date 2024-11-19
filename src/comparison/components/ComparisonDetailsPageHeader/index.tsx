@@ -38,6 +38,7 @@ export default function ComparisonDetailsPageHeader({ comparison }: ComparisonDe
     const sideContent = useMemo(() => {
         return (
             <ConfirmableButton
+                className="w-full sm:w-fit"
                 confirmTitle="Delete Comparison"
                 confirmDescription={
                     (

@@ -23,33 +23,34 @@ export default function FormSubmitPanel({
     const buttonLabel = submitButtonLabel ?? (isEditMode ? 'Update' : 'Create');
 
     return (
-        <div className="flex justify-between my-4">
-            <div className="flex gap-4 items-center">
+        <div className="flex flex-col my-4 sm:flex-row sm:justify-between gap-4">
+            <div className="flex items-center">
                 <Button
                     type="submit"
                     isDisabled={isSubmitting || !dirty}
                     isLoading={isSubmitting}
                     color={isValid ? 'primary' : 'warning'}
                     size="lg"
-                    className={isDisabled ? 'opacity-60' : ''}
+                    className={isDisabled ? 'opacity-60 w-full sm:w-fit' : 'w-full sm:w-fit'}
                 >
                     {buttonLabel}
                 </Button>
             </div>
-            <div>
-                {
-                    onClose && (
+            {
+                onClose && (
+                    <div>
                         <Button
                             type="button"
                             color="danger"
-                            onPress={onClose}
                             size="lg"
+                            className="w-full sm:w-fit"
+                            onPress={onClose}
                         >
                             Cancel
                         </Button>
-                    )
-                }
-            </div>
+                    </div>
+                )
+            }
             {customNode}
         </div>
     );

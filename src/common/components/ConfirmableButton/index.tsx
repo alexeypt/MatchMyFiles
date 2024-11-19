@@ -1,5 +1,6 @@
 import { ReactNode, useCallback } from "react";
 import { Button, ButtonProps, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
+import classNames from "classnames";
 
 import Heading from '@/common/components/Heading';
 import useModalControl from "@/common/hooks/useModalControl";
@@ -37,6 +38,16 @@ export default function ConfirmableButton({
         onPress(hideModal);
     }, [hideModal, onPress]);
 
+    const mergedConfirmableNoButtonClassName = classNames(
+        'w-full sm:w-fit',
+        confirmableNoButtonClassName
+    );
+    
+    const mergedConfirmableYesButtonClassName = classNames(
+        'w-full sm:w-fit',
+        confirmableYesButtonClassName
+    );
+
     return (
         <>
             <Button
@@ -60,13 +71,13 @@ export default function ConfirmableButton({
                             <ModalBody>
                                 {confirmDescription}
                             </ModalBody>
-                            <ModalFooter className="justify-between gap-5">
+                            <ModalFooter className="flex-col-reverse sm:flex-row sm:justify-between gap-5">
                                 {
                                     !hideConfirmNoButton && (
                                         <Button
                                             color="danger"
                                             variant="bordered"
-                                            className={confirmableNoButtonClassName}
+                                            className={mergedConfirmableNoButtonClassName}
                                             onPress={hideModal}
                                         >
                                             {confirmNoButtonLabel}
@@ -77,7 +88,7 @@ export default function ConfirmableButton({
                                     !hideConfirmYesButton && (
                                         <Button
                                             color="danger"
-                                            className={confirmableYesButtonClassName}
+                                            className={mergedConfirmableYesButtonClassName}
                                             isDisabled={isDisabledYesButton}
                                             onPress={onYesButtonClicked}
                                         >

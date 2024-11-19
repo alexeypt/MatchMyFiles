@@ -40,6 +40,7 @@ export default function RootFolderDetailsPageHeader({ rootFolder }: RootFolderDe
 
         return (
             <ConfirmableButton
+                className="w-full sm:w-fit"
                 confirmTitle="Delete Root Folder"
                 confirmDescription={
                     (
