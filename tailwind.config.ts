@@ -51,6 +51,9 @@ const config: Config = {
             addUtilities({
                 '.wrap-anywhere': {
                     'overflow-wrap': 'anywhere'
+                },
+                '.wrap-normal': {
+                    'overflow-wrap': 'normal'
                 }
             });
         })

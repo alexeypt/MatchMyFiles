@@ -23,7 +23,7 @@ export default function TextTable<T>({
     rows,
     renderCell,
     ariaLabel
-}: TextTableProps<T>) {
+}: TextTableProps<T>) {        
     return (
         <Table
             isStriped
@@ -34,7 +34,7 @@ export default function TextTable<T>({
                 th: 'border-1 p-3 text-center text-bold text-base whitespace-normal',
                 tr: 'hover:bg-yellow-50',
                 wrapper: 'min-w-[50vw] overflow-x-auto p-0 md:p-4',
-                table: 'h-full',
+                table: 'h-full wrap-normal',
                 emptyWrapper: 'text-foreground-500'
             }}
         >
@@ -43,7 +43,11 @@ export default function TextTable<T>({
                     (column) =>
                         <TableColumn
                             key={column.key as string}
-                            style={column.width ? {width: column.width} : undefined}
+                            style={
+                                {
+                                    width: column.width
+                                }
+                            }
                         >
                             {column.label}
                         </TableColumn>

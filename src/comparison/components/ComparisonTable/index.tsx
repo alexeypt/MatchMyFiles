@@ -8,6 +8,7 @@ import TextTable, { TextTableColumnConfiguration, TextTableRowConfiguration } fr
 import { COMPARISON_EDIT_ROUTE, ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 import { pluralize } from '@/common/helpers/pluralizationHelper';
+import { getFormattedStringWithWordBreaks } from '@/common/helpers/stringHelper';
 import { generateUrl } from '@/common/helpers/urlHelper';
 import { ComparisonListItemModel, ComparisonListItemRootFolderModel } from '@/comparison/data-access/queries/getComparisonsQuery';
 
@@ -67,28 +68,31 @@ export default function ComparisonTable({ data }: ComparisonTableProps) {
         switch (columnKey) {
             case 'duplicatedFilesCount':
                 return (
-                    <div className="text-base">
+                    <div className="text-base min-w-48 md:min-w-fit">
                         {pluralize(comparison.duplicatedFilesCount, 'duplicated file')}
                         {comparison.duplicatedFilesPercent > 0 ? ` (${comparison.duplicatedFilesPercent}%)` : ''}
                     </div>
                 );
             case 'primaryRootFolder':
                 return (
-                    <div className="text-base">
+                    <div className="text-base min-w-48 md:min-w-fit">
                         <Link
                             href={generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: comparison.primaryRootFolder.id })}
                             underline="hover"
                         >
                             <div>
-                                <span className="font-bold">{comparison.primaryRootFolder.name}&nbsp;</span>
-                                <span>({comparison.primaryRootFolder.path}, {getFormattedSize(comparison.primaryRootFolder.size)})</span>
+                                <span className="font-bold">{comparison.primaryRootFolder.name}</span>
+                                {' ('}
+                                <span dangerouslySetInnerHTML={{
+                                    __html: getFormattedStringWithWordBreaks(comparison.primaryRootFolder.path)
+                                }} /> , {getFormattedSize(comparison.primaryRootFolder.size)})
                             </div>
                         </Link>
                     </div>
                 );
             case 'secondaryRootFolders':
                 return (
-                    <div className="text-base">
+                    <div className="text-base min-w-48 md:min-w-fit">
                         <ul className="flex flex-col gap-2">
                             {
                                 comparison.secondaryRootFolders.map(item => (
@@ -98,8 +102,11 @@ export default function ComparisonTable({ data }: ComparisonTableProps) {
                                             underline="hover"
                                         >
                                             <div>
-                                                <span className="font-bold">{item.name}&nbsp;</span>
-                                                <span>({item.path}, {getFormattedSize(item.size)})</span>
+                                                <span className="font-bold">{item.name}</span>
+                                                {' ('}
+                                                <span dangerouslySetInnerHTML={{
+                                                    __html: getFormattedStringWithWordBreaks(item.path)
+                                                }} />, {getFormattedSize(item.size)})
                                             </div>
                                         </Link>
                                     </li>
@@ -117,14 +124,14 @@ export default function ComparisonTable({ data }: ComparisonTableProps) {
                         aria-label={`Edit ${comparison.primaryRootFolder.name} comparison`}
                         color="primary"
                         underline="hover"
-                        className="text-primary-600"
+                        className="text-primary-600 min-w-32 md:min-w-fit"
                     >
                         View Details / Edit
                     </Link>
                 );
             default:
                 return (
-                    <span className="text-base">
+                    <span className="text-base min-w-10">
                         {comparison[columnKey] as string | number}
                     </span>
                 );
