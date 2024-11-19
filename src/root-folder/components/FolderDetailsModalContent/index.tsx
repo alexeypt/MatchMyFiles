@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import FormattedDateTime from '@/common/components/FormattedDateTime';
 import KeyValueList from '@/common/components/KeyValueList';
+import LoadingSpinner from '@/common/components/LoadingSpinner';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 import getFolder, { FolderDetailsModel } from '@/root-folder/data-access/queries/getFolderQuery';
 import { RootFolderFolderItemModel } from '@/root-folder/data-access/queries/getRootFolderQuery';
@@ -52,7 +53,11 @@ export default function FolderDetailsModalContent({ item }: FolderDetailsModalCo
     }, [folderDetails]);
 
     if (!folderDetails) {
-        return null;
+        return (
+            <div className="w-full h-40">
+                <LoadingSpinner />
+            </div>
+        );
     }
 
     return <KeyValueList items={folderDetailsInfo} />;

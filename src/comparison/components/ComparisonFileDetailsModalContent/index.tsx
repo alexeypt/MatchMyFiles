@@ -3,6 +3,7 @@ import { Link } from '@nextui-org/react';
 
 import FormattedDateTime from '@/common/components/FormattedDateTime';
 import KeyValueList from '@/common/components/KeyValueList';
+import LoadingSpinner from '@/common/components/LoadingSpinner';
 import { ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 import { generateUrl } from '@/common/helpers/urlHelper';
@@ -65,7 +66,11 @@ export default function ComparisonFileDetailsModalContent({ rootFolderColorMap, 
     }, [fileDetails]);
 
     if (!fileDetails) {
-        return null;
+        return (
+            <div className="w-full h-40">
+                <LoadingSpinner />
+            </div>
+        );
     }
 
     return (

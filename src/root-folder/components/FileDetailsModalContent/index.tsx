@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import FormattedDateTime from '@/common/components/FormattedDateTime';
 import KeyValueList from '@/common/components/KeyValueList';
+import LoadingSpinner from '@/common/components/LoadingSpinner';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 import getFile, { FileDetailsModel } from '@/root-folder/data-access/queries/getFileQuery';
 import { RootFolderFileItemModel } from '@/root-folder/data-access/queries/getRootFolderQuery';
@@ -56,7 +57,11 @@ export default function FileDetailsModalContent({ item }: FileDetailsModalConten
     }, [fileDetails]);
 
     if (!fileDetails) {
-        return null;
+        return (
+            <div className="w-full h-40">
+                <LoadingSpinner />
+            </div>
+        );
     }
 
     return (
