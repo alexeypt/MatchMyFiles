@@ -47,7 +47,7 @@ export function Providers({
         <NextUIProvider navigate={router.push}>
             <SocketContext.Provider value={socketContextModel}>
                 {children}
-                <ToastContainer />
+                <ToastContainer autoClose={3000} />
             </SocketContext.Provider>
         </NextUIProvider>
     );

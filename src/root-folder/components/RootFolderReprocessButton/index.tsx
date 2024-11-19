@@ -16,6 +16,8 @@ interface RootFolderReprocessButtonProps {
     rootFolder: RootFolderDetailsModel;
 }
 
+const MIN_FILES_COUNT_TO_SHOW_START_PROCESSING_NOTIFICATION = 100;
+
 export default function RootFolderReprocessButton({ rootFolder }: RootFolderReprocessButtonProps) {
     const router = useRouter();
 
@@ -23,7 +25,9 @@ export default function RootFolderReprocessButton({ rootFolder }: RootFolderRepr
         const [isSuccess] = await action(async () => {
             await reprocessRootFolder(rootFolder.id);
         }, {
-            successText: 'The Root Folder reprocessing has been started',
+            successText: rootFolder.filesCount > MIN_FILES_COUNT_TO_SHOW_START_PROCESSING_NOTIFICATION
+                ? 'The Root Folder reprocessing has been started'
+                : undefined,
             errorText: 'Failed to start the Root Folder reprocessing'
         });
 
