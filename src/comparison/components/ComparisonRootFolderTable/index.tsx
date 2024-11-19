@@ -9,6 +9,7 @@ import { ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';
 import { convertHexToRgbaColor } from '@/common/helpers/colorHelper';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 import { roundNumber } from '@/common/helpers/numberHelper';
+import { getFormattedStringWithWordBreaks } from '@/common/helpers/stringHelper';
 import { generateUrl } from '@/common/helpers/urlHelper';
 import { ComparisonRootFolderItemModel } from '@/comparison/data-access/queries/getComparisonQuery';
 
@@ -58,13 +59,13 @@ const COLUMNS: TextTableColumnConfiguration<ComparisonRootFolderTableItem>[] = [
     {
         key: "duplicatedColor",
         label: "Duplicated color",
-        width: '200px'
+        width: '170px'
     },
     {
         key: "partiallyDuplicatedColor",
         label: "Partially Duplicated color",
-        width: '200px'
-    },
+        width: '170px'
+    }
 ];
 
 export default function ComparisonRootFolderTable({ data, rootFolderColorMap }: ComparisonRootFolderTableProps) {
@@ -100,18 +101,32 @@ export default function ComparisonRootFolderTable({ data, rootFolderColorMap }: 
         switch (columnKey) {
             case 'name':
                 return (
-                    <div className="text-base">
+                    <div className="text-base min-w-32 md:min-w-fit">
                         <Link
                             href={generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: rootFolder.key })}
                             underline="hover"
                         >
-                            <span className="font-bold">{rootFolder.name}&nbsp;</span>
+                            <span
+                                className="font-bold"
+                                dangerouslySetInnerHTML={{
+                                    __html: getFormattedStringWithWordBreaks(rootFolder.name)
+                                }}
+                            />
                         </Link>
                     </div>
                 );
+            case 'path':
+                return (
+                    <span
+                        className="text-base min-w-40 md:min-w-fit"
+                        dangerouslySetInnerHTML={{
+                            __html: getFormattedStringWithWordBreaks(rootFolder.path)
+                        }}
+                    />
+                );
             case 'duplicatedFilesCount':
                 return (
-                    <div className={`text-base ${rootFolder.duplicatedFilesCount > 0 && !rootFolder.isPrimary ? 'bg-yellow-200' : ''}`}>
+                    <div className={`text-base min-w-32 md:min-w-28 ${rootFolder.duplicatedFilesCount > 0 && !rootFolder.isPrimary ? 'bg-yellow-200' : ''}`}>
                         {rootFolder.duplicatedFilesCount} / {rootFolder.totalFilesCount}
                         {' '}
                         ({rootFolder.duplicatedFilesCountPercent}%)
@@ -119,7 +134,7 @@ export default function ComparisonRootFolderTable({ data, rootFolderColorMap }: 
                 );
             case 'duplicatedFilesSize':
                 return (
-                    <div className={`text-base ${rootFolder.duplicatedFilesSize > 0 && !rootFolder.isPrimary ? 'bg-yellow-200' : ''}`}>
+                    <div className={`text-base min-w-32 md:min-w-28 ${rootFolder.duplicatedFilesSize > 0 && !rootFolder.isPrimary ? 'bg-yellow-200' : ''}`}>
                         {getFormattedSize(rootFolder.duplicatedFilesSize)} / {getFormattedSize(rootFolder.size)}
                         {' '}
                         ({rootFolder.duplicatedFilesSizePercent}%)

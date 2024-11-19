@@ -105,7 +105,7 @@ export default function RootFolderTable({ data }: RootFolderTableProps) {
             case 'path':
                 return (
                     <span
-                        className="text-base min-w-48 md:min-w-fit"
+                        className="text-base min-w-40 md:min-w-fit"
                         dangerouslySetInnerHTML={{
                             __html: getFormattedStringWithWordBreaks(rootFolder[columnKey] as string)
                         }}
