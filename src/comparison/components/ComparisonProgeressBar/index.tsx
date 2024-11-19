@@ -107,13 +107,13 @@ export default function ComparisonProgressBar({ comparison }: ComparisonProgress
                         return (
                             <li
                                 key={rootFolderStatus.rootFolderId}
-                                className="p-3 text-lg wrap-anywhere flex gap-20"
+                                className="p-3 text-lg wrap-anywhere flex flex-col gap-5 lg:flex-row lg:gap-20"
                             >
                                 <div className="basis-1/2">
-                                    <p className="flex gap-4">
+                                    <p className="flex gap-x-4 flex-col md:flex-row">
                                         <span className="font-bold shrink-0">Root Folder Name:</span> {rootFolderDetails?.name}
                                     </p>
-                                    <p className="flex gap-4">
+                                    <p className="flex gap-x-4 flex-col md:flex-row">
                                         <span className="font-bold shrink-0">Root Folder Path:</span> {rootFolderDetails?.path}
                                     </p>
                                 </div>
