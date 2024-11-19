@@ -69,14 +69,14 @@ export default function ComparisonFileDetailsModalContent({ rootFolderColorMap, 
     }
 
     return (
-        <div>
+        <div className="wrap-anywhere">
             <KeyValueList
                 items={fileDetailsInfo}
                 skipNullableValues
             />
             {
                 fileDetails.duplicationInfo.length > 0 && (
-                    <section className="font-serif mt-6 flex flex-col gap-3">
+                    <section className="font-serif md:mt-6 flex flex-col gap-3">
                         <h3 className="text-2xl text-blue-950">
                             Duplicated with:
                         </h3>
@@ -88,12 +88,12 @@ export default function ComparisonFileDetailsModalContent({ rootFolderColorMap, 
                                     return (
                                         <li
                                             key={duplicationItem.fileId}
-                                            className="p-3 text-lg bg-[--duplicated-color] wrap-anywhere"
+                                            className="p-3 text-lg bg-[--duplicated-color] flex flex-col gap-2 md:gap-1"
                                             style={{
                                                 '--duplicated-color': backgroundColor
                                             }}
                                         >
-                                            <p className="flex gap-4">
+                                            <p className="flex gap-x-4 flex-col md:flex-row">
                                                 <span className="font-bold shrink-0">Root Folder Name:</span>
                                                 {' '}
                                                 <Link
@@ -103,13 +103,13 @@ export default function ComparisonFileDetailsModalContent({ rootFolderColorMap, 
                                                     {duplicationItem.rootFolderName}
                                                 </Link>
                                             </p>
-                                            <p className="flex gap-4">
+                                            <p className="flex gap-x-4 flex-col md:flex-row">
                                                 <span className="font-bold shrink-0">Root Folder Path:</span> {duplicationItem.rootFolderPath}
                                             </p>
-                                            <p className="flex gap-4">
+                                            <p className="flex gap-x-4 flex-col md:flex-row">
                                                 <span className="font-bold shrink-0">File Name:</span> {duplicationItem.fullName}
                                             </p>
-                                            <p className="flex gap-4">
+                                            <p className="flex gap-x-4 flex-col md:flex-row">
                                                 <span className="font-bold shrink-0">File Path:</span> {duplicationItem.absolutePath}
                                             </p>
                                         </li>
