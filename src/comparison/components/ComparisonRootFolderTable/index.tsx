@@ -117,16 +117,18 @@ export default function ComparisonRootFolderTable({ data, rootFolderColorMap }: 
                 );
             case 'path':
                 return (
-                    <span
-                        className="text-base min-w-40 md:min-w-fit"
-                        dangerouslySetInnerHTML={{
-                            __html: getFormattedStringWithWordBreaks(rootFolder.path)
-                        }}
-                    />
+                    <div className="text-base">
+                        <span
+                            className="text-base min-w-40 md:min-w-fit"
+                            dangerouslySetInnerHTML={{
+                                __html: getFormattedStringWithWordBreaks(rootFolder.path)
+                            }}
+                        />
+                    </div>
                 );
             case 'duplicatedFilesCount':
                 return (
-                    <div className={`text-base min-w-32 md:min-w-28 ${rootFolder.duplicatedFilesCount > 0 && !rootFolder.isPrimary ? 'bg-yellow-200' : ''}`}>
+                    <div className="text-base min-w-32 md:min-w-28">
                         {rootFolder.duplicatedFilesCount} / {rootFolder.totalFilesCount}
                         {' '}
                         ({rootFolder.duplicatedFilesCountPercent}%)
@@ -134,46 +136,10 @@ export default function ComparisonRootFolderTable({ data, rootFolderColorMap }: 
                 );
             case 'duplicatedFilesSize':
                 return (
-                    <div className={`text-base min-w-32 md:min-w-28 ${rootFolder.duplicatedFilesSize > 0 && !rootFolder.isPrimary ? 'bg-yellow-200' : ''}`}>
+                    <div className="text-base min-w-32 md:min-w-28">
                         {getFormattedSize(rootFolder.duplicatedFilesSize)} / {getFormattedSize(rootFolder.size)}
                         {' '}
                         ({rootFolder.duplicatedFilesSizePercent}%)
-                    </div>
-                );
-            case 'duplicatedColor':
-                const duplicatedCellStyles = {
-                    '--duplicated-color': rootFolder.duplicatedColor
-                };
-
-                const duplicatedCellClassName = classNames(
-                    'text-base',
-                    'bg-[--duplicated-color]'
-                );
-
-                return (
-                    <div
-                        style={duplicatedCellStyles}
-                        className={duplicatedCellClassName}
-                    >
-                        &nbsp;
-                    </div>
-                );
-            case 'partiallyDuplicatedColor':
-                const partiallyDuplicatedCellStyles = {
-                    '--partially-duplicated-color': rootFolder.partiallyDuplicatedColor
-                };
-
-                const partiallyDuplicatedCellClassName = classNames(
-                    'text-base',
-                    'bg-[--partially-duplicated-color]'
-                );
-
-                return (
-                    <div
-                        style={partiallyDuplicatedCellStyles}
-                        className={partiallyDuplicatedCellClassName}
-                    >
-                        &nbsp;
                     </div>
                 );
             default:
@@ -185,10 +151,62 @@ export default function ComparisonRootFolderTable({ data, rootFolderColorMap }: 
         }
     }, []);
 
-    const renderCell = useCallback((comparison: TextTableRowConfiguration<ComparisonRootFolderTableItem>, columnKey: keyof ComparisonRootFolderTableItem) => {
+    const renderCell = useCallback((rootFolder: TextTableRowConfiguration<ComparisonRootFolderTableItem>, columnKey: keyof ComparisonRootFolderTableItem) => {
+        if (columnKey === 'partiallyDuplicatedColor') {
+            const partiallyDuplicatedCellStyles = {
+                '--partially-duplicated-color': rootFolder.partiallyDuplicatedColor
+            };
+
+            const partiallyDuplicatedCellClassName = classNames(
+                'text-base',
+                'bg-[--partially-duplicated-color]'
+            );
+
+            return (
+                <TableCell
+                    style={partiallyDuplicatedCellStyles}
+                    className={partiallyDuplicatedCellClassName}
+                >
+                    &nbsp;
+                </TableCell>
+            );
+        }
+
+        if (columnKey === 'duplicatedColor') {
+            const duplicatedCellStyles = {
+                '--duplicated-color': rootFolder.duplicatedColor
+            };
+
+            const duplicatedCellClassName = classNames(
+                'text-base',
+                'bg-[--duplicated-color]'
+            );
+
+
+            return (
+                <TableCell
+                    style={duplicatedCellStyles}
+                    className={duplicatedCellClassName}
+                >
+                    &nbsp;
+                </TableCell>
+            );
+        }
+
+        if (!rootFolder.isPrimary && (
+            (columnKey === 'duplicatedFilesCount' && rootFolder.duplicatedFilesCount > 0) ||
+            (columnKey === 'duplicatedFilesSize' && rootFolder.duplicatedFilesSize > 0)
+        )) {
+            return (
+                <TableCell className="bg-yellow-200">
+                    {renderCellContent(rootFolder, columnKey)}
+                </TableCell>
+            );
+        }
+
         return (
-            <TableCell className={comparison.isPrimary && columnKey !== 'partiallyDuplicatedColor' ? 'bg-green-200' : ''}>
-                {renderCellContent(comparison, columnKey)}
+            <TableCell className={rootFolder.isPrimary ? 'bg-green-200' : ''}>
+                {renderCellContent(rootFolder, columnKey)}
             </TableCell>
         );
     }, [renderCellContent]);
