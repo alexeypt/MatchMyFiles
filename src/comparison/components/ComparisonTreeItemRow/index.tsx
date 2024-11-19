@@ -68,13 +68,13 @@ export default function ComparisonTreeItemRow({
             className="flex justify-between items-center gap-3 w-full pt-1 pb-1 pl-2"
             style={{ background: background }}
         >
-            <span className="flex-grow">
+            <span className="flex-grow min-w-32 w-min">
                 {title}
             </span>
-            <span className="text-base">
+            <span className="text-base shrink-0">
                 {getFormattedSize(item.data.size)}
             </span>
-            <span>
+            <span className="pr-2">
                 <Button
                     size="sm"
                     color="primary"

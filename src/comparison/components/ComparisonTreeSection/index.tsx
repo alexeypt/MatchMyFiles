@@ -88,41 +88,44 @@ export default function ComparisonTreeSection({ comparison, rootFolderColorMap }
             title="Files Tree"
             headingLevel={2}
         >
-            <div className="flex flex-col gap-9">
-                <UncontrolledTreeEnvironment<ComparisonTreeItem>
-                    dataProvider={dataProvider}
-                    getItemTitle={item => item.data.title}
-                    canSearch
-                    renderDepthOffset={40}
-                    renderItemTitle={({ item, title }) => {
-                        return (
-                            <ComparisonTreeItemRow
-                                rootFolderColorMap={rootFolderColorMap}
-                                item={item.data}
-                                title={title}
-                                onSelectItem={onSelectItem}
-                            />
-                        );
-                    }}
-                    renderItemsContainer={({ children, containerProps }) =>
-                        // react-complex-tree doesn't set role="group" for root tree items container but SiteImprove requires it
-                        <ul
-                            className="rct-tree-items-container"
-                            {...containerProps}
-                            role="group"
-                        >
-                            {children}
-                        </ul>
-                    }
-                    viewState={{}}
-                    onPrimaryAction={onPrimaryAction}
-                >
-                    <Tree<ComparisonTreeItem>
-                        treeId="comparison-results-tree"
-                        rootItem={getTreeKey(rootItem.id, 'folder')}
-                        treeLabel="Files and Folders Tree"
-                    />
-                </UncontrolledTreeEnvironment>
+            <div className="overflow-auto wrap-anywhere">
+                <div className="flex flex-col gap-9 min-w-[calc(100%+30px)] w-max -ml-[30px]">
+                    <UncontrolledTreeEnvironment<ComparisonTreeItem>
+                        dataProvider={dataProvider}
+                        getItemTitle={item => item.data.title}
+                        canSearch
+                        canSearchByStartingTyping
+                        renderDepthOffset={40}
+                        renderItemTitle={({ item, title }) => {
+                            return (
+                                <ComparisonTreeItemRow
+                                    rootFolderColorMap={rootFolderColorMap}
+                                    item={item.data}
+                                    title={title}
+                                    onSelectItem={onSelectItem}
+                                />
+                            );
+                        }}
+                        renderItemsContainer={({ children, containerProps }) =>
+                            // react-complex-tree doesn't set role="group" for root tree items container but SiteImprove requires it
+                            <ul
+                                className="rct-tree-items-container"
+                                {...containerProps}
+                                role="group"
+                            >
+                                {children}
+                            </ul>
+                        }
+                        viewState={{}}
+                        onPrimaryAction={onPrimaryAction}
+                    >
+                        <Tree<ComparisonTreeItem>
+                            treeId="comparison-results-tree"
+                            rootItem={getTreeKey(rootItem.id, 'folder')}
+                            treeLabel="Files and Folders Tree"
+                        />
+                    </UncontrolledTreeEnvironment>
+                </div>
             </div>
             <ComparisonItemDetailsModal
                 rootFolderColorMap={rootFolderColorMap}

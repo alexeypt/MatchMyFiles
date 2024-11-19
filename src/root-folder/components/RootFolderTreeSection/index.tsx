@@ -90,42 +90,44 @@ export default function RootFolderTreeSection({ rootFolder }: RootFolderTreeSect
             title="Files Tree"
             headingLevel={2}
         >
-            <div className="flex flex-col gap-9">
-                <UncontrolledTreeEnvironment
-                    dataProvider={dataProvider}
-                    getItemTitle={item => item.data.title}
-                    canSearch
-                    renderDepthOffset={40}
-                    renderItemTitle={({ item, title }) => {
-                        return (
-                            <RootFolderTreeItemRow
-                                duplicatedFileIds={duplicatedFileIds}
-                                item={item.data}
-                                title={title}
-                                onSelectItem={onSelectItem}
-                            />
-                        );
-                    }}
-                    renderItemsContainer={({ children, containerProps }) =>
-                        // react-complex-tree doesn't set role="group" for root tree items container but SiteImprove requires it
-                        <ul
-                            className="rct-tree-items-container"
-                            {...containerProps}
-                            role="group"
-                        >
-                            {children}
-                        </ul>
-                    }
-                    canSearchByStartingTyping
-                    viewState={{}}
-                    onPrimaryAction={onPrimaryAction}
-                >
-                    <Tree
-                        treeId="root-folder-tree"
-                        rootItem={getTreeKey(rootItem.id, 'folder')}
-                        treeLabel="Files and Folders Tree"
-                    />
-                </UncontrolledTreeEnvironment>
+            <div className="overflow-auto wrap-anywhere">
+                <div className="flex flex-col gap-9 min-w-[calc(100%+30px)] w-max -ml-[30px]">
+                    <UncontrolledTreeEnvironment
+                        dataProvider={dataProvider}
+                        getItemTitle={item => item.data.title}
+                        canSearch
+                        canSearchByStartingTyping
+                        renderDepthOffset={40}
+                        renderItemTitle={({ item, title }) => {
+                            return (
+                                <RootFolderTreeItemRow
+                                    duplicatedFileIds={duplicatedFileIds}
+                                    item={item.data}
+                                    title={title}
+                                    onSelectItem={onSelectItem}
+                                />
+                            );
+                        }}
+                        renderItemsContainer={({ children, containerProps }) =>
+                            // react-complex-tree doesn't set role="group" for root tree items container but SiteImprove requires it
+                            <ul
+                                className="rct-tree-items-container"
+                                {...containerProps}
+                                role="group"
+                            >
+                                {children}
+                            </ul>
+                        }
+                        viewState={{}}
+                        onPrimaryAction={onPrimaryAction}
+                    >
+                        <Tree
+                            treeId="root-folder-tree"
+                            rootItem={getTreeKey(rootItem.id, 'folder')}
+                            treeLabel="Files and Folders Tree"
+                        />
+                    </UncontrolledTreeEnvironment>
+                </div>
             </div>
             <RootFolderItemDetailsModal
                 item={selectedItem!}

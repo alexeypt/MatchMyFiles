@@ -32,13 +32,13 @@ export default function RootFolderTreeItemRow({
     
     return (
         <span className={className}>
-            <span className="flex-grow">
+            <span className="flex-grow min-w-32 w-min">
                 {title}
             </span>
-            <span className="text-base">
+            <span className="text-base shrink-0">
                 {getFormattedSize(item.data.size)}
             </span>
-            <span>
+            <span className="pr-2">
                 <Button
                     size="sm"
                     color="primary"
