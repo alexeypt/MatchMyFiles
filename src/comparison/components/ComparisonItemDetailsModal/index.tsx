@@ -4,8 +4,9 @@ import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
 import Heading from '@/common/components/Heading';
 import ComparisonFileDetailsModalContent from '@/comparison/components/ComparisonFileDetailsModalContent';
 import ComparisonFolderDetailsModalContent from '@/comparison/components/ComparisonFolderDetailsModalContent';
-import { ComparisonTreeItem, ComparisonTreeItemType } from '@/comparison/components/ComparisonTreeSection';
+import { ComparisonTreeItem } from '@/comparison/components/ComparisonTreeSection';
 import { ComparisonFileItemModel, ComparisonFolderItemModel } from '@/comparison/data-access/queries/getComparisonQuery';
+import TreeItemType from '@/folder-tree/models/treeItemType';
 
 
 interface ComparisonItemDetailsModalProps {
@@ -43,12 +44,12 @@ export default function ComparisonItemDetailsModal({
                                 className="text-3xl font-serif"
                                 level={2}
                             >
-                                {item.type === ComparisonTreeItemType.Folder ? 'Folder Details' : 'File Details'}
+                                {item.type === TreeItemType.Folder ? 'Folder Details' : 'File Details'}
                             </Heading>
                         </ModalHeader>
                         <ModalBody className="pb-4">
                             {
-                                item.type === ComparisonTreeItemType.Folder && (
+                                item.type === TreeItemType.Folder && (
                                     <ComparisonFolderDetailsModalContent
                                         rootFolderColorMap={rootFolderColorMap}
                                         item={item.data as ComparisonFolderItemModel}
@@ -57,7 +58,7 @@ export default function ComparisonItemDetailsModal({
                                 )
                             }
                             {
-                                item.type === ComparisonTreeItemType.File && (
+                                item.type === TreeItemType.File && (
                                     <ComparisonFileDetailsModalContent
                                         rootFolderColorMap={rootFolderColorMap}
                                         item={item.data as ComparisonFileItemModel}

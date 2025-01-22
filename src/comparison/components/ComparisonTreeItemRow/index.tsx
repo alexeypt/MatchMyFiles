@@ -5,14 +5,17 @@ import { Button } from '@nextui-org/react';
 
 import { convertHexToRgbaColor } from '@/common/helpers/colorHelper';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
-import { ComparisonTreeItem, ComparisonTreeItemType } from '@/comparison/components/ComparisonTreeSection';
+import { getMarkupWithHighlights } from '@/common/helpers/stringHelper';
+import { ComparisonTreeItem } from '@/comparison/components/ComparisonTreeSection';
 import { ComparisonFileItemModel, ComparisonFolderItemModel } from '@/comparison/data-access/queries/getComparisonQuery';
 import FolderDuplicationMode from '@/comparison/models/folderDuplicationMode';
+import TreeItemType from '@/folder-tree/models/treeItemType';
 
 
 interface ComparisonTreeItemRowProps {
     rootFolderColorMap: Map<number, string>;
     title: string;
+    searchQuery: string;
     item: ComparisonTreeItem;
     onSelectItem: (item: ComparisonTreeItem) => void;
 }
@@ -25,6 +28,7 @@ const ACTIVE_FOLDER_DUPLICATION_MODES = new Set([
 export default function ComparisonTreeItemRow({
     rootFolderColorMap,
     title,
+    searchQuery,
     item,
     onSelectItem
 }: ComparisonTreeItemRowProps) {
@@ -33,7 +37,7 @@ export default function ComparisonTreeItemRow({
     }, [item, onSelectItem]);
 
     const background = useMemo(() => {
-        if (item.type === ComparisonTreeItemType.File) {
+        if (item.type === TreeItemType.File) {
             const duplicatedRootFoldersSet = new Set((item.data as ComparisonFileItemModel).duplicatedRootFolderIds);
             const gradientExpression = Array.from(rootFolderColorMap.entries())
                 .filter(([rootFolderId]) => duplicatedRootFoldersSet.has(rootFolderId))
@@ -63,14 +67,25 @@ export default function ComparisonTreeItemRow({
         return `linear-gradient(to right, ${gradientExpression})`;
     }, [item.data, item.type, rootFolderColorMap]);
 
+    const titleWithHighlights = searchQuery ? getMarkupWithHighlights(
+        title,
+        searchQuery,
+        'bg-yellow-300'
+    ) : title;
+
     return (
         <span
             className="flex justify-between items-center gap-3 w-full pt-1 pb-1 pl-2"
             style={{ background: background }}
         >
-            <span className="flex-grow min-w-32 w-min">
-                {title}
-            </span>
+            <span
+                className="flex-grow min-w-32 w-min"
+                dangerouslySetInnerHTML={
+                    {
+                        __html: titleWithHighlights
+                    }
+                }
+            />
             <span className="text-base shrink-0">
                 {getFormattedSize(item.data.size)}
             </span>

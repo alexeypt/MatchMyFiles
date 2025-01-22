@@ -2,9 +2,10 @@ import React from 'react';
 import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
 
 import Heading from '@/common/components/Heading';
+import TreeItemType from '@/folder-tree/models/treeItemType';
 import FileDetailsModalContent from '@/root-folder/components/FileDetailsModalContent';
 import FolderDetailsModalContent from '@/root-folder/components/FolderDetailsModalContent';
-import { RootFolderTreeItem, RootFolderTreeItemType } from '@/root-folder/components/RootFolderTreeSection';
+import { RootFolderTreeItem } from '@/root-folder/components/RootFolderTreeSection';
 import { RootFolderFileItemModel, RootFolderFolderItemModel } from '@/root-folder/data-access/queries/getRootFolderQuery';
 
 
@@ -35,17 +36,17 @@ export default function RootFolderItemDetailsModal({ item, isOpen, onClose }: Ro
                                 className="text-3xl font-serif"
                                 level={2}
                             >
-                                {item.type === RootFolderTreeItemType.Folder ? 'Folder Details' : 'File Details'}
+                                {item.type === TreeItemType.Folder ? 'Folder Details' : 'File Details'}
                             </Heading>
                         </ModalHeader>
                         <ModalBody className="pb-4">
                             {
-                                item.type === RootFolderTreeItemType.Folder && (
+                                item.type === TreeItemType.Folder && (
                                     <FolderDetailsModalContent item={item.data as RootFolderFolderItemModel} />
                                 )
                             }
                             {
-                                item.type === RootFolderTreeItemType.File && (
+                                item.type === TreeItemType.File && (
                                     <FileDetailsModalContent item={item.data as RootFolderFileItemModel} />
                                 )
                             }
