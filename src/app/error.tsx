@@ -43,7 +43,7 @@ export default function ErrorPage({
                         size="lg"
                         variant="solid"
                         color="primary"
-                        className="w-max min-w-48 text-xl"
+                        className="w-full sm:w-max sm:min-w-48 text-xl"
                     >
                         Try again
                     </Button>
