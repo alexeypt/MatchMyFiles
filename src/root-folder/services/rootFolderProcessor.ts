@@ -55,7 +55,7 @@ export class RootFolderProcessor {
 
     public async start() {
         var startTime = performance.now();
-        socketIO.io.emit(SocketEventType.RootFolderProcessingStatus, this.rootFolderId, 0, null);
+        socketIO.io.emit(SocketEventType.RootFolderProcessingStatus, this.rootFolderId, 0, 'Calculating...');
 
         await this.calculateFilesCount(this.rootFolderPath);
 
@@ -65,7 +65,9 @@ export class RootFolderProcessor {
         const result = await this.processDirectory(this.rootFolderPath, stats);
 
         var endTime = performance.now();
-        console.log(`Processing of ${this.rootFolderId} takes ${endTime - startTime} milliseconds`);
+        console.log(`Processing of ${this.rootFolderPath} takes ${endTime - startTime} milliseconds`);
+
+        socketIO.io.emit(SocketEventType.RootFolderProcessingStatus, this.rootFolderId, 100, 'Saving...');
 
         return result;
     }
@@ -76,7 +78,17 @@ export class RootFolderProcessor {
 
         for (const item of items) {
             const itemPath = path.join(folderPath, item);
-            const stats = await fs.stat(itemPath);
+
+            let stats: fsSync.Stats | null = null;
+            try {
+                stats = await fs.stat(itemPath);
+            } catch (error) {
+                console.dir(error);
+                console.log(`Skipping ${itemPath}`);
+
+                continue;
+            }
+
             if (stats.isDirectory()) {
                 await this.calculateFilesCount(itemPath);
             }
@@ -99,8 +111,18 @@ export class RootFolderProcessor {
         const items = await fs.readdir(folderPath);
         for (const item of items) {
             const itemPath = path.join(folderPath, item);
-            const stats = await fs.stat(itemPath);
-            if (stats.isDirectory()) {
+
+            let itemStats: fsSync.Stats | null = null;
+            try {
+                itemStats = await fs.stat(itemPath);
+            } catch (error: any) {
+                console.dir(error);
+                console.log(`Skipping ${itemPath}`);
+
+                continue;
+            }
+
+            if (itemStats.isDirectory()) {
                 const childFolderInfo = await this.processDirectory(itemPath, stats);
                 folderInfo.childFolders.push(childFolderInfo);
             } else {
@@ -108,7 +130,7 @@ export class RootFolderProcessor {
                     await Promise.all(Array.from(this.queue.values()));
                 }
 
-                const promise = this.getFileData(itemPath)
+                const promise = this.getFileData(itemPath, itemStats)
                     .then(fileData => {
                         folderInfo.files.push(fileData);
                         this.itemsLeftToProcess--;
@@ -117,7 +139,7 @@ export class RootFolderProcessor {
                             socketIO.io.emit(
                                 SocketEventType.RootFolderProcessingStatus,
                                 this.rootFolderId,
-                                (this.totalItemsCount - this.itemsLeftToProcess) / this.totalItemsCount * 100,
+                                Math.ceil((this.totalItemsCount - this.itemsLeftToProcess) / this.totalItemsCount * 100),
                                 `${(this.totalItemsCount - this.itemsLeftToProcess)} / ${this.totalItemsCount}`);
                         }
                     })
@@ -176,8 +198,7 @@ export class RootFolderProcessor {
         return hash.digest('hex');
     }
 
-    private async getFileData(filePath: string): Promise<FileInfoModel> {
-        const stats = await fs.stat(filePath);
+    private async getFileData(filePath: string, stats: fsSync.Stats): Promise<FileInfoModel> {
         const relativePath = path.relative(this.rootFolderPath, filePath);
 
         let hash = stats.size.toString();
