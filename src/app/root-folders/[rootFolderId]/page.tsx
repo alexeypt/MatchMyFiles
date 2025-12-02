@@ -1,7 +1,7 @@
-import { RootFolderProcessingStatus } from "@prisma/client";
 import { Metadata } from "next";
 
 import Heading from "@/common/components/Heading";
+import { RootFolderProcessingStatus } from "@/clients/prisma/client";
 import RootFolderDetailsPageHeader from "@/root-folder/components/RootFolderDetailsPageHeader";
 import RootFolderGeneralInfoSection from "@/root-folder/components/RootFolderGeneralInfoSection";
 import RootFolderProgressBar from "@/root-folder/components/RootFolderProgressBar";

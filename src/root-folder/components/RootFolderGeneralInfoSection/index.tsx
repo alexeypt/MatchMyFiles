@@ -1,7 +1,6 @@
 "use client";
 
 import React, { ReactNode, useCallback, useMemo } from 'react';
-import { RootFolderProcessingStatus } from '@prisma/client';
 import { FormikHelpers } from 'formik';
 import { useRouter } from 'next/navigation';
 
@@ -10,6 +9,7 @@ import KeyValueList from '@/common/components/KeyValueList';
 import PageSection from '@/common/components/PageSection';
 import { action } from '@/common/helpers/actionHelper';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
+import { RootFolderProcessingStatus } from '@/clients/prisma/client';
 import RootFolderForm from '@/root-folder/components/RootFolderForm';
 import RootFolderReprocessButton from '@/root-folder/components/RootFolderReprocessButton';
 import updateRootFolder from '@/root-folder/data-access/commands/updateRootFolderCommand';

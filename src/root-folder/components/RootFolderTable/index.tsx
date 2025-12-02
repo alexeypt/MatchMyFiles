@@ -2,7 +2,6 @@
 
 import React, { useCallback, useMemo } from 'react';
 import { Link, TableCell } from '@nextui-org/react';
-import { RootFolderProcessingStatus } from '@prisma/client';
 
 import TextTable, { TextTableColumnConfiguration, TextTableRowConfiguration } from '@/common/components/TextTable';
 import { ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';
@@ -10,6 +9,7 @@ import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 import { pluralize } from '@/common/helpers/pluralizationHelper';
 import { getFormattedStringWithWordBreaks } from '@/common/helpers/stringHelper';
 import { generateUrl } from '@/common/helpers/urlHelper';
+import { RootFolderProcessingStatus } from '@/clients/prisma/client';
 import { RootFolderListItemModel } from '@/root-folder/data-access/queries/getRootFoldersQuery';
 
 

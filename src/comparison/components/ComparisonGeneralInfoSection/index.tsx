@@ -2,7 +2,6 @@
 "use client";
 
 import React, { ReactNode, useCallback, useMemo } from 'react';
-import { ComparisonProcessingStatus } from '@prisma/client';
 import { FormikHelpers } from 'formik';
 import { useRouter } from 'next/navigation';
 
@@ -12,6 +11,7 @@ import PageSection from '@/common/components/PageSection';
 import { action } from '@/common/helpers/actionHelper';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 import { roundNumber } from '@/common/helpers/numberHelper';
+import { ComparisonProcessingStatus } from '@/clients/prisma/client';
 import ComparisonForm from '@/comparison/components/ComparisonForm';
 import ComparisonReprocessButton from '@/comparison/components/ComparisonReprocessButton';
 import updateComparison from '@/comparison/data-access/commands/updateComparisonCommand';

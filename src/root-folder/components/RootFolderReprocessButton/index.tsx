@@ -2,12 +2,12 @@
 
 import React, { useCallback } from 'react';
 import { Button } from '@nextui-org/react';
-import { RootFolderProcessingStatus } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 
 import ConfirmableButton from '@/common/components/ConfirmableButton';
 import { action } from '@/common/helpers/actionHelper';
 import { pluralize } from '@/common/helpers/pluralizationHelper';
+import { RootFolderProcessingStatus } from '@/clients/prisma/client';
 import reprocessRootFolder from '@/root-folder/data-access/commands/reprocessRootFolderCommand';
 import { RootFolderDetailsModel } from '@/root-folder/data-access/queries/getRootFolderQuery';
 

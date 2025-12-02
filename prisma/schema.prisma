@@ -1,12 +1,11 @@
 generator client {
-    provider        = "prisma-client-js"
+    provider        = "prisma-client"
     previewFeatures = ["typedSql"]
-    binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+    output   = "../src/clients/prisma"
 }
 
 datasource db {
     provider = "postgresql"
-    url      = env("DATABASE_URL")
 }
 
 model File {

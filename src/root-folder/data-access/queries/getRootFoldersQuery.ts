@@ -1,8 +1,7 @@
 'use server';
 
-import { RootFolderProcessingStatus } from "@prisma/client";
-
 import prismaClient from "@/common/helpers/prismaClient";
+import { RootFolderProcessingStatus } from "@/clients/prisma/client";
 
 
 export interface RootFolderListItemModel {

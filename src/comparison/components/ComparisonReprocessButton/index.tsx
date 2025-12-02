@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { Button } from '@nextui-org/react';
-import { ComparisonProcessingStatus } from '@prisma/client';
 
 import useModalControl from '@/common/hooks/useModalControl';
+import { ComparisonProcessingStatus } from '@/clients/prisma/client';
 import ComparisonReprocessModal from '@/comparison/components/ComparisonReprocessModal';
 import { ComparisonDetailsModel } from '@/comparison/data-access/queries/getComparisonQuery';
 import { RootFolderNameModel } from '@/root-folder/data-access/queries/getRootFolderNamesQuery';

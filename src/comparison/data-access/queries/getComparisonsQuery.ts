@@ -1,9 +1,8 @@
 'use server';
 
-import { ComparisonProcessingStatus } from "@prisma/client";
-
 import { roundNumber } from "@/common/helpers/numberHelper";
 import prismaClient from "@/common/helpers/prismaClient";
+import { ComparisonProcessingStatus } from "@/clients/prisma/client";
 import { getComparisonStatus } from "@/comparison/helpers/comparisonHelper";
 import { ComparisonResultData } from "@/comparison/types/comparisonResultData";
 

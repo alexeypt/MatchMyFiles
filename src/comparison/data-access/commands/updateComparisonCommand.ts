@@ -1,9 +1,8 @@
 'use server';
 
-import { ComparisonProcessingStatus } from "@prisma/client";
-
 import prismaClient from "@/common/helpers/prismaClient";
 import NotFoundError from "@/common/models/notFoundError";
+import { ComparisonProcessingStatus } from "@/clients/prisma/client";
 import { processComparison } from "@/comparison/data-access/commands/createComparison";
 
 

@@ -2,7 +2,6 @@
 
 import React, { useCallback, useMemo } from 'react';
 import { Link, TableCell } from '@nextui-org/react';
-import { ComparisonProcessingStatus } from '@prisma/client';
 
 import TextTable, { TextTableColumnConfiguration, TextTableRowConfiguration } from '@/common/components/TextTable';
 import { COMPARISON_EDIT_ROUTE, ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';
@@ -10,6 +9,7 @@ import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 import { pluralize } from '@/common/helpers/pluralizationHelper';
 import { getFormattedStringWithWordBreaks } from '@/common/helpers/stringHelper';
 import { generateUrl } from '@/common/helpers/urlHelper';
+import { ComparisonProcessingStatus } from '@/clients/prisma/client';
 import { ComparisonListItemModel, ComparisonListItemRootFolderModel } from '@/comparison/data-access/queries/getComparisonsQuery';
 
 

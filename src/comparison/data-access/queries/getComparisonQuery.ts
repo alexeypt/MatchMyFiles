@@ -1,9 +1,8 @@
 'use server';
 
-import { ComparisonProcessingStatus, RootFolderProcessingStatus } from "@prisma/client";
-
 import prismaClient from "@/common/helpers/prismaClient";
 import NotFoundError from "@/common/models/notFoundError";
+import { ComparisonProcessingStatus, RootFolderProcessingStatus } from "@/clients/prisma/client";
 import { getComparisonStatus } from "@/comparison/helpers/comparisonHelper";
 import FolderDuplicationMode from "@/comparison/models/folderDuplicationMode";
 import { ComparisonResultData, ComparisonResultDuplicatedItemData } from "@/comparison/types/comparisonResultData";

@@ -1,9 +1,8 @@
 'use server';
 
-import { getRecursiveChildFolderIds } from "@prisma/client/sql";
-
 import prismaClient from "@/common/helpers/prismaClient";
 import NotFoundError from "@/common/models/notFoundError";
+import { getRecursiveChildFolderIds } from "@/clients/prisma/sql";
 import { ComparisonResultData, ComparisonResultDuplicatedItemData } from "@/comparison/types/comparisonResultData";
 
 

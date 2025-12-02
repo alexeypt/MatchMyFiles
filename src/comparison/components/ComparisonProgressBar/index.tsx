@@ -2,13 +2,13 @@
 
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Progress } from '@nextui-org/react';
-import { RootFolderProcessingStatus } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 
 import PageSection from '@/common/components/PageSection';
 import SocketContext from '@/common/contexts/socketContext';
 import ComparisonsStatusModel from '@/common/models/comparisonsStatusModel';
 import RootFoldersStatusModel, { RootFolderStatus } from '@/common/models/rootFoldersStatusModel';
+import { RootFolderProcessingStatus } from '@/clients/prisma/client';
 import { ComparisonDetailsModel } from '@/comparison/data-access/queries/getComparisonQuery';
 
 

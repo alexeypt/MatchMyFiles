@@ -1,11 +1,10 @@
 'use server';
 
-import { RootFolderProcessingStatus } from '@prisma/client';
-import { getSelfDuplicatedFiles } from '@prisma/client/sql';
-
 import prismaClient from "@/common/helpers/prismaClient";
 import socketIO from '@/common/helpers/socketIOClient';
 import SocketEventType from '@/common/types/socketEventType';
+import { RootFolderProcessingStatus } from '@/clients/prisma/client';
+import { getSelfDuplicatedFiles } from '@/clients/prisma/sql';
 import { FolderInfoModel, RootFolderProcessor } from '@/root-folder/services/rootFolderProcessor';
 
 

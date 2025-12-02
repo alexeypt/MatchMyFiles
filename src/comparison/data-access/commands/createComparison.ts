@@ -1,9 +1,8 @@
 'use server';
 
-import { ComparisonProcessingStatus, Prisma } from "@prisma/client";
-import { getDuplicatedFiles } from "@prisma/client/sql";
-
 import prismaClient from "@/common/helpers/prismaClient";
+import { ComparisonProcessingStatus } from "@/clients/prisma/client";
+import { getDuplicatedFiles } from "@/clients/prisma/sql";
 import { ComparisonResultData, ComparisonResultDuplicatedItemData } from "@/comparison/types/comparisonResultData";
 
 

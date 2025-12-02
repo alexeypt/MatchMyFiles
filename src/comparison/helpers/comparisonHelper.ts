@@ -1,4 +1,4 @@
-import { ComparisonProcessingStatus, RootFolderProcessingStatus } from "@prisma/client";
+import { ComparisonProcessingStatus, RootFolderProcessingStatus } from "@/clients/prisma/client";
 
 
 export function getComparisonStatus(comparisonStatus: ComparisonProcessingStatus, rootFolderStatuses: RootFolderProcessingStatus[]) {

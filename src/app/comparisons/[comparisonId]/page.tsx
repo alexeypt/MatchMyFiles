@@ -1,14 +1,14 @@
 import { Link } from "@nextui-org/react";
-import { ComparisonProcessingStatus, RootFolderProcessingStatus } from "@prisma/client";
 import { Metadata } from "next";
 
 import Heading from "@/common/components/Heading";
 import PageSection from "@/common/components/PageSection";
 import { ROOT_FOLDER_EDIT_ROUTE } from "@/common/constants/routes";
 import { generateUrl } from "@/common/helpers/urlHelper";
+import { ComparisonProcessingStatus, RootFolderProcessingStatus } from "@/clients/prisma/client";
 import ComparisonDetailsPageHeader from "@/comparison/components/ComparisonDetailsPageHeader";
 import ComparisonGeneralInfoSection from "@/comparison/components/ComparisonGeneralInfoSection";
-import ComparisonProgressBar from "@/comparison/components/ComparisonProgeressBar";
+import ComparisonProgressBar from "@/comparison/components/ComparisonProgressBar";
 import ComparisonRootFolderTable from "@/comparison/components/ComparisonRootFolderTable";
 import ComparisonTreeSection from "@/comparison/components/ComparisonTreeSection";
 import COMPARISON_ROOT_FOLDER_COLORS from "@/comparison/constants/colors";

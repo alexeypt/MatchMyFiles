@@ -1,10 +1,9 @@
 'use server';
 
-import { ComparisonProcessingStatus } from "@prisma/client";
-
 import prismaClient from "@/common/helpers/prismaClient";
 import socketIO from "@/common/helpers/socketIOClient";
 import SocketEventType from "@/common/types/socketEventType";
+import { ComparisonProcessingStatus } from "@/clients/prisma/client";
 import reprocessRootFolder from "@/root-folder/data-access/commands/reprocessRootFolderCommand";
 
 
