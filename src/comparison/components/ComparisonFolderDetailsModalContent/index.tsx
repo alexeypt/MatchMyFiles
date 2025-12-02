@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
-import { Link } from '@nextui-org/react';
+import { Link } from "@heroui/link";
 
 import FormattedDateTime from '@/common/components/FormattedDateTime';
 import KeyValueList from '@/common/components/KeyValueList';

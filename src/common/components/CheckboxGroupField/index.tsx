@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { Checkbox, CheckboxGroup, CheckboxGroupProps } from "@nextui-org/react";
+import { Checkbox, CheckboxGroup, CheckboxGroupProps } from "@heroui/checkbox";
 import { useField } from "formik";
 
 

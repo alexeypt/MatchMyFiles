@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
-import { NextUIProvider } from '@nextui-org/react';
+import { HeroUIProvider } from "@heroui/system";
 import { useRouter } from 'next/navigation';
 import { io, Socket } from 'socket.io-client';
 
@@ -44,11 +44,11 @@ export function Providers({
     }, []);
 
     return (
-        <NextUIProvider navigate={router.push}>
+        <HeroUIProvider navigate={router.push}>
             <SocketContext.Provider value={socketContextModel}>
                 {children}
                 <ToastContainer autoClose={3000} />
             </SocketContext.Provider>
-        </NextUIProvider>
+        </HeroUIProvider>
     );
 }

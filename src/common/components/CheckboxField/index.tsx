@@ -1,4 +1,4 @@
-import { Checkbox, CheckboxProps, Input, InputProps } from "@nextui-org/react";
+import { Checkbox, CheckboxProps } from "@heroui/checkbox";
 import { useField } from "formik";
 
 

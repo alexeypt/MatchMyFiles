@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/button";
 
 import useModalControl from '@/common/hooks/useModalControl';
 import { ComparisonProcessingStatus } from '@/clients/prisma/client';

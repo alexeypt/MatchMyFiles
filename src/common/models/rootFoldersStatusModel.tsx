@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { Link } from '@nextui-org/react';
+import { Link } from "@heroui/link";
 import { Socket } from 'socket.io-client';
 
 import { ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';

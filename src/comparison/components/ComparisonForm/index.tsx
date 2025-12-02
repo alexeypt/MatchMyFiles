@@ -1,5 +1,5 @@
 import React, { ReactNode, useCallback } from 'react';
-import { SelectItem } from '@nextui-org/react';
+import { SelectItem } from "@heroui/select";
 import { Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 

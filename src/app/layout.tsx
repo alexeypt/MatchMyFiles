@@ -1,4 +1,4 @@
-import { Link } from "@nextui-org/react";
+import { Link } from "@heroui/link";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Noto_Serif } from "next/font/google";

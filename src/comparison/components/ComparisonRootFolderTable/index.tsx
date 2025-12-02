@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useCallback, useMemo } from 'react';
-import { Link, TableCell } from '@nextui-org/react';
+import { Link } from "@heroui/link";
+import { TableCell } from "@heroui/table";
 import classNames from 'classnames';
 
 import TextTable, { TextTableColumnConfiguration, TextTableRowConfiguration } from '@/common/components/TextTable';

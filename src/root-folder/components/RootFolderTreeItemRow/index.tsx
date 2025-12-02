@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback } from 'react';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/button";
 import classNames from 'classnames';
 
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Progress } from '@nextui-org/react';
+import { Progress } from "@heroui/progress";
 import { useRouter } from 'next/navigation';
 
 import PageSection from '@/common/components/PageSection';

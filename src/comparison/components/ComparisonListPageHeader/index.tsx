@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import {Button } from '@nextui-org/react';
+import { Button } from "@heroui/button";
 import Link from 'next/link';
 
 import PageTitle from '@/common/components/PageTitle';

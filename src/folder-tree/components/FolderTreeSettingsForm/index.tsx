@@ -1,5 +1,6 @@
 import React, { Key, useCallback } from 'react';
-import { Button, Select, SelectItem } from '@nextui-org/react';
+import { Button } from "@heroui/button";
+import { Select, SelectItem } from "@heroui/select";
 import { Form, Formik, FormikHelpers } from 'formik';
 
 import InputField from '@/common/components/InputField';

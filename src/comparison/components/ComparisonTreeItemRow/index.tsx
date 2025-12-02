@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useMemo } from 'react';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/button";
 
 import { convertHexToRgbaColor } from '@/common/helpers/colorHelper';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';

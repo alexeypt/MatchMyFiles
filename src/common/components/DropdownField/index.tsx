@@ -1,5 +1,5 @@
 import { Key, useCallback } from "react";
-import { Select, SelectProps } from "@nextui-org/react";
+import { Select, SelectProps } from "@heroui/select";
 import { FieldHelperProps, useField } from "formik";
 
 

@@ -1,5 +1,6 @@
 import { ReactNode, useCallback } from "react";
-import { Button, ButtonProps, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
+import { Button, ButtonProps } from "@heroui/button";
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@heroui/modal";
 import classNames from "classnames";
 
 import Heading from '@/common/components/Heading';

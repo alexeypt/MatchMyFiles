@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, TableBody, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
+import { Table, TableBody, TableColumn, TableHeader, TableRow } from "@heroui/table";
 import { CellElement } from '@react-types/table/src/index';
 
 

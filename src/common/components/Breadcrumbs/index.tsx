@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { BreadcrumbItem, Breadcrumbs as NextUIBreadcrumbs, BreadcrumbsProps as NextUIBreadcrumbsProps } from '@nextui-org/react';
+import { BreadcrumbItem, Breadcrumbs as NextUIBreadcrumbs, BreadcrumbsProps as NextUIBreadcrumbsProps } from "@heroui/breadcrumbs";
 
 
 export interface BreadcrumbItemModel {

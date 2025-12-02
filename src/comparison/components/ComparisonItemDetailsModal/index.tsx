@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
 
 import Heading from '@/common/components/Heading';
 import ComparisonFileDetailsModalContent from '@/comparison/components/ComparisonFileDetailsModalContent';

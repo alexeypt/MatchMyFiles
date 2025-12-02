@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ControlledTreeEnvironment, Tree, TreeItem, TreeItemIndex } from 'react-complex-tree';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/button";
 
 import { pluralize } from '@/common/helpers/pluralizationHelper';
 import { getTreeKey } from '@/common/helpers/treeHelper';

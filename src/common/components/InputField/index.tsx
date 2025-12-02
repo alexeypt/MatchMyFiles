@@ -1,5 +1,5 @@
 import { SyntheticEvent, useCallback } from "react";
-import { Input, InputProps } from "@nextui-org/react";
+import { Input, InputProps } from "@heroui/input";
 import { useField } from "formik";
 
 

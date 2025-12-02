@@ -1,4 +1,5 @@
-import { Button, Link } from "@nextui-org/react";
+import { Button } from "@heroui/button";
+import { Link } from "@heroui/link";
 
 import { ROOT_FOLDER_ROUTE } from "@/common/constants/routes";
 
