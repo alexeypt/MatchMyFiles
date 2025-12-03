@@ -10,7 +10,7 @@ import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 import { pluralize } from '@/common/helpers/pluralizationHelper';
 import { getFormattedStringWithWordBreaks } from '@/common/helpers/stringHelper';
 import { generateUrl } from '@/common/helpers/urlHelper';
-import { ComparisonProcessingStatus } from '@/clients/prisma/client';
+import { ComparisonProcessingStatus } from '@/clients/prisma/browser';
 import { ComparisonListItemModel, ComparisonListItemRootFolderModel } from '@/comparison/data-access/queries/getComparisonsQuery';
 
 

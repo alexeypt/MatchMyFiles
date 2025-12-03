@@ -11,7 +11,7 @@ import PageSection from '@/common/components/PageSection';
 import { action } from '@/common/helpers/actionHelper';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 import { roundNumber } from '@/common/helpers/numberHelper';
-import { ComparisonProcessingStatus } from '@/clients/prisma/client';
+import { ComparisonProcessingStatus } from '@/clients/prisma/browser';
 import ComparisonForm from '@/comparison/components/ComparisonForm';
 import ComparisonReprocessButton from '@/comparison/components/ComparisonReprocessButton';
 import updateComparison from '@/comparison/data-access/commands/updateComparisonCommand';

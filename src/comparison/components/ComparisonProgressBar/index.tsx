@@ -8,7 +8,7 @@ import PageSection from '@/common/components/PageSection';
 import SocketContext from '@/common/contexts/socketContext';
 import ComparisonsStatusModel from '@/common/models/comparisonsStatusModel';
 import RootFoldersStatusModel, { RootFolderStatus } from '@/common/models/rootFoldersStatusModel';
-import { RootFolderProcessingStatus } from '@/clients/prisma/client';
+import { RootFolderProcessingStatus } from '@/clients/prisma/browser';
 import { ComparisonDetailsModel } from '@/comparison/data-access/queries/getComparisonQuery';
 
 

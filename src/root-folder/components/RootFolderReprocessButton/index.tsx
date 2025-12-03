@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import ConfirmableButton from '@/common/components/ConfirmableButton';
 import { action } from '@/common/helpers/actionHelper';
 import { pluralize } from '@/common/helpers/pluralizationHelper';
-import { RootFolderProcessingStatus } from '@/clients/prisma/client';
+import { RootFolderProcessingStatus } from '@/clients/prisma/browser';
 import reprocessRootFolder from '@/root-folder/data-access/commands/reprocessRootFolderCommand';
 import { RootFolderDetailsModel } from '@/root-folder/data-access/queries/getRootFolderQuery';
 

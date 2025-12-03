@@ -10,7 +10,7 @@ import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
 import { pluralize } from '@/common/helpers/pluralizationHelper';
 import { getFormattedStringWithWordBreaks } from '@/common/helpers/stringHelper';
 import { generateUrl } from '@/common/helpers/urlHelper';
-import { RootFolderProcessingStatus } from '@/clients/prisma/client';
+import { RootFolderProcessingStatus } from '@/clients/prisma/browser';
 import { RootFolderListItemModel } from '@/root-folder/data-access/queries/getRootFoldersQuery';
 
 

@@ -4,7 +4,7 @@ import React from 'react';
 import { Button } from "@heroui/button";
 
 import useModalControl from '@/common/hooks/useModalControl';
-import { ComparisonProcessingStatus } from '@/clients/prisma/client';
+import { ComparisonProcessingStatus } from '@/clients/prisma/browser';
 import ComparisonReprocessModal from '@/comparison/components/ComparisonReprocessModal';
 import { ComparisonDetailsModel } from '@/comparison/data-access/queries/getComparisonQuery';
 import { RootFolderNameModel } from '@/root-folder/data-access/queries/getRootFolderNamesQuery';
