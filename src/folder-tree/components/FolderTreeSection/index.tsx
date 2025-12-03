@@ -25,7 +25,7 @@ interface FolderTreeSectionProps<TFolder extends FolderItemModel, TFile extends 
             item: TreeItem<TreeItemData<TFolder, TFile>>;
         },
         searchQuery: string
-    ) => React.ReactElement<any> | null | string;
+    ) => React.ReactElement<unknown> | null | string;
 }
 
 export default function FolderTreeSection<TFolder extends FolderItemModel, TFile extends FileItemModel>({

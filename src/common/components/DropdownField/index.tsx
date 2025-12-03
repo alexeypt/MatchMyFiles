@@ -18,9 +18,13 @@ export default function DropdownField<T extends object, TKey extends (number | s
     const [fieldProps, meta, fieldHelper] = useField<number | string>(name);
 
     const onSelectionChange = useCallback(async (newValue: (Set<Key> | 'all')) => {
-        const value: (string | number) = isNumberKey
-            ? +(newValue as Set<number>).values().next().value
+        const value = isNumberKey
+            ? Number((newValue as Set<number>).values().next().value)
             : (newValue as Set<string>).values().next().value;
+
+        if (value === undefined) {
+            return;
+        }
 
         await fieldHelper.setValue(value);
         fieldHelper.setTouched(true);
