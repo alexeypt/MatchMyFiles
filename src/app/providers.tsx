@@ -31,6 +31,7 @@ export function Providers({
         rootFolderStatusModel.init(socket);
         comparisonStatusModel.init(socket);
 
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSocketContextModel({
             comparisonsStatus: comparisonStatusModel,
             rootFoldersStatus: rootFolderStatusModel

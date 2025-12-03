@@ -97,6 +97,7 @@ export default function FolderTreeSection<TFolder extends FolderItemModel, TFile
 
     useEffect(() => {
         if (searchQuery && treeItemsCount < 100) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             onExpandAll();
         }
     }, [onExpandAll, searchQuery, treeItemsCount]);

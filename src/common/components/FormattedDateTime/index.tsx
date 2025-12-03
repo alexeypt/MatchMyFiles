@@ -36,6 +36,7 @@ export default function FormattedDateTime({ dateTime }: FormattedDateTimeProps) 
             minute: '2-digit'
         }).format(dateTime);
 
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setFormattedDateTime(`${formattedDate} ${formattedTime}`);
     }, [dateTime]);
 

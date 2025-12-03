@@ -29,6 +29,7 @@ export default function RootFolderProgressBar({ rootFolder }: RootFolderProgress
                 router.refresh();
             }
 
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setStatus(currentStatus);
             detachEventListener = socketContext.rootFoldersStatus.attachEventListener(rootFolder.id, status => {
                 setStatus(status);
