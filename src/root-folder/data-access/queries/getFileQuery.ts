@@ -1,7 +1,8 @@
 'use server';
 
+import { notFound } from 'next/navigation';
+
 import prismaClient from '@/common/helpers/prismaClient';
-import NotFoundError from '@/common/models/notFoundError';
 
 
 export interface FileDetailsModel {
@@ -41,7 +42,7 @@ export default async function getFile(id: number): Promise<FileDetailsModel> {
     });
 
     if (!file) {
-        throw new NotFoundError();
+        notFound();
     }
 
     return {

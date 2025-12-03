@@ -1,7 +1,8 @@
 'use server';
 
+import { notFound } from 'next/navigation';
+
 import prismaClient from '@/common/helpers/prismaClient';
-import NotFoundError from '@/common/models/notFoundError';
 import { getRecursiveChildFolderIds } from '@/clients/prisma/sql';
 import { ComparisonResultData, ComparisonResultDuplicatedItemData } from '@/comparison/types/comparisonResultData';
 
@@ -45,7 +46,7 @@ export default async function getComparisonFolder(comparisonId: number, folderId
     });
 
     if (!folder) {
-        throw new NotFoundError();
+        notFound();
     }
 
     const childFolders = await prismaClient.$queryRawTyped(getRecursiveChildFolderIds(folderId));
@@ -85,7 +86,7 @@ export default async function getComparisonFolder(comparisonId: number, folderId
     });
 
     if (!comparison) {
-        throw new NotFoundError();
+        notFound();
     }
 
     const comparisonResultMap = new Map<number, ComparisonResultDuplicatedItemData[]>((comparison.data as ComparisonResultData).map(item => (

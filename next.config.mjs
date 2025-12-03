@@ -3,8 +3,7 @@ const nextConfig = {
     experimental: {
         staleTimes: {
             dynamic: 0
-        },
-        serverExternalPackages: ['@prisma/client', '@prisma/adapter-pg']
+        }
     }
 };
 

@@ -1,7 +1,8 @@
 'use server';
 
+import { notFound } from 'next/navigation';
+
 import prismaClient from '@/common/helpers/prismaClient';
-import NotFoundError from '@/common/models/notFoundError';
 import { ComparisonProcessingStatus, RootFolderProcessingStatus } from '@/clients/prisma/client';
 import reprocessComparison from '@/comparison/data-access/commands/reprocessComparison';
 import { processRootFolder } from '@/root-folder/data-access/commands/createRootFolderCommand';
@@ -31,7 +32,7 @@ export default async function reprocessRootFolder(rootFolderId: number) {
     });
 
     if (!rootFolder) {
-        throw new NotFoundError();
+        notFound();
     }
 
     const comparisonIds = rootFolder.comparisonRootFolders.map(comparisonRootFolder => comparisonRootFolder.comparisonId);

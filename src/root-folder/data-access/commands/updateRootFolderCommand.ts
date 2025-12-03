@@ -1,8 +1,10 @@
 'use server';
 
+import { notFound } from 'next/navigation';
+
 import prismaClient from '@/common/helpers/prismaClient';
-import NotFoundError from '@/common/models/notFoundError';
 import reprocessRootFolder from '@/root-folder/data-access/commands/reprocessRootFolderCommand';
+
 
 export interface UpdateRootFolderModel {
     id: number;
@@ -22,7 +24,7 @@ export default async function updateRootFolder(values: UpdateRootFolderModel) {
     });
 
     if (!rootFolder) {
-        throw new NotFoundError();
+        notFound();
     }
 
     const updatedRootFolder = await prismaClient.rootFolder.update({

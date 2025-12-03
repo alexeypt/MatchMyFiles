@@ -1,7 +1,8 @@
 'use server';
 
+import { notFound } from 'next/navigation';
+
 import prismaClient from '@/common/helpers/prismaClient';
-import NotFoundError from '@/common/models/notFoundError';
 import { ComparisonResultData, ComparisonResultDuplicatedItemData } from '@/comparison/types/comparisonResultData';
 
 
@@ -51,7 +52,7 @@ export default async function getComparisonFile(comparisonId: number, fileId: nu
     });
 
     if (!file) {
-        throw new NotFoundError();
+        notFound();
     }
 
     const comparison = await prismaClient.comparison.findFirst({
@@ -64,7 +65,7 @@ export default async function getComparisonFile(comparisonId: number, fileId: nu
     });
 
     if (!comparison) {
-        throw new NotFoundError();
+        notFound();
     }
 
     const comparisonResultMap = new Map<number, ComparisonResultDuplicatedItemData[]>((comparison.data as ComparisonResultData)

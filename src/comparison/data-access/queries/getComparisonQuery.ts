@@ -1,7 +1,8 @@
 'use server';
 
+import { notFound } from 'next/navigation';
+
 import prismaClient from '@/common/helpers/prismaClient';
-import NotFoundError from '@/common/models/notFoundError';
 import { ComparisonProcessingStatus, RootFolderProcessingStatus } from '@/clients/prisma/client';
 import { getComparisonStatus } from '@/comparison/helpers/comparisonHelper';
 import FolderDuplicationMode from '@/comparison/models/folderDuplicationMode';
@@ -175,7 +176,7 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
     const primaryComparisonRootFolder = comparison?.comparisonRootFolders.find(comparisonRootFolder => comparisonRootFolder.isPrimary);
 
     if (!comparison || !primaryComparisonRootFolder) {
-        throw new NotFoundError();
+        notFound();
     }
 
     const primaryRootFolderDetails = await prismaClient.rootFolder.findFirst({
@@ -217,7 +218,7 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
     });
 
     if (!primaryRootFolderDetails) {
-        throw new NotFoundError();
+        notFound();
     }
 
     const comparisonResultMap = new Map<number, ComparisonResultDuplicatedItemData[]>(

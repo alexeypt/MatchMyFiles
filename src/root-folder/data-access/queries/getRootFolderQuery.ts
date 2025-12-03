@@ -1,7 +1,8 @@
 'use server';
 
+import { notFound } from 'next/navigation';
+
 import prismaClient from '@/common/helpers/prismaClient';
-import NotFoundError from '@/common/models/notFoundError';
 import { RootFolderProcessingStatus } from '@/clients/prisma/client';
 
 
@@ -94,7 +95,7 @@ export default async function getRootFolder(id: number): Promise<RootFolderDetai
     });
 
     if (!rootFolder) {
-        throw new NotFoundError();
+        notFound();
     }
 
     const duplicationData = (rootFolder.duplicationData ?? []) as number[][];

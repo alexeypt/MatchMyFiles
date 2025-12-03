@@ -1,7 +1,8 @@
 'use server';
 
+import { notFound } from 'next/navigation';
+
 import prismaClient from '@/common/helpers/prismaClient';
-import NotFoundError from '@/common/models/notFoundError';
 
 
 export interface FolderDetailsModel {
@@ -33,7 +34,7 @@ export default async function getFolder(id: number): Promise<FolderDetailsModel>
     });
 
     if (!folder) {
-        throw new NotFoundError();
+        notFound();
     }
 
     return {

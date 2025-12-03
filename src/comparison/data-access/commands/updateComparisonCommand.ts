@@ -1,7 +1,8 @@
 'use server';
 
+import { notFound } from 'next/navigation';
+
 import prismaClient from '@/common/helpers/prismaClient';
-import NotFoundError from '@/common/models/notFoundError';
 import { ComparisonProcessingStatus } from '@/clients/prisma/client';
 import { processComparison } from '@/comparison/data-access/commands/createComparison';
 
@@ -35,7 +36,7 @@ export default async function updateComparison(values: UpdateComparisonModel): P
     const primaryComparisonRootFolder = comparison?.comparisonRootFolders.find(comparisonRootFolder => comparisonRootFolder.isPrimary);
 
     if (!comparison || !primaryComparisonRootFolder) {
-        throw new NotFoundError();
+        notFound();
     }
 
     const secondaryRootFolderIdSet = new Set(comparison.comparisonRootFolders
