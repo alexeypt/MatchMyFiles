@@ -14,7 +14,8 @@ export const metadata: Metadata = {
     title: "Match My Files > Root Folder Details"
 };
 
-export default async function RootFolderEditPage({ params }: { params: { rootFolderId: string } }) {
+export default async function RootFolderEditPage(props: { params: Promise<{ rootFolderId: string }> }) {
+    const params = await props.params;
     const rootFolder = await getRootFolder(+params.rootFolderId);
 
     return (

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { BreadcrumbItem, Breadcrumbs as NextUIBreadcrumbs, BreadcrumbsProps as NextUIBreadcrumbsProps } from "@heroui/breadcrumbs";
+import { BreadcrumbItem, Breadcrumbs as HeroUIBreadcrumbs, BreadcrumbsProps as HeroUIBreadcrumbsProps } from "@heroui/breadcrumbs";
 
 
 export interface BreadcrumbItemModel {
@@ -8,7 +8,7 @@ export interface BreadcrumbItemModel {
     isCurrent: boolean;
 }
 
-interface BreadcrumbsProps extends Omit<NextUIBreadcrumbsProps, 'children'> {
+interface BreadcrumbsProps extends Omit<HeroUIBreadcrumbsProps, 'children'> {
     items: BreadcrumbItemModel[];
 }
 
@@ -17,13 +17,13 @@ export default function Breadcrumbs({ items, ...restProps }: BreadcrumbsProps) {
 
     useEffect(() => {
         if (navRef.current) {
-            // for some reason NextUI adds href attribute to li node but that's invalid
+            // for some reason HeroUI adds href attribute to li node but that's invalid
             Array.from(navRef.current.querySelectorAll('li')).forEach(liNode => liNode.removeAttribute('href'));
         }
     }, []);
 
     return (
-        <NextUIBreadcrumbs
+        <HeroUIBreadcrumbs
             ref={navRef}
             color="primary"
             underline="hover"
@@ -42,6 +42,6 @@ export default function Breadcrumbs({ items, ...restProps }: BreadcrumbsProps) {
                     </BreadcrumbItem>
                 ))
             }
-        </NextUIBreadcrumbs>
+        </HeroUIBreadcrumbs>
     );
 }

@@ -20,7 +20,8 @@ export const metadata: Metadata = {
     title: "Match My Files > Comparison Details"
 };
 
-export default async function ComparisonEditPage({ params }: { params: { comparisonId: string } }) {
+export default async function ComparisonEditPage(props: { params: Promise<{ comparisonId: string }> }) {
+    const params = await props.params;
     const [comparison, rootFolders] = await Promise.all([
         getComparison(+params.comparisonId),
         getRootFolderNamesQuery()

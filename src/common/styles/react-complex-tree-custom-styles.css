@@ -18,7 +18,7 @@
         padding-right: 0;
         margin-top: 0;
         margin-bottom: 0;
-        border: 2px solid hsl(var(--nextui-default-200) / var(--nextui-default-200-opacity, var(--tw-border-opacity)));
+        border: 2px solid theme('colors.gray.200');
         border-bottom: none;
         border-radius: 0;
     }
@@ -30,7 +30,7 @@
     .rct-tree-item-button.rct-tree-item-button-expanded,
     div[role="tree"]>ul.rct-tree-items-container>.rct-tree-item-li:last-of-type>.rct-tree-item-title-container>.rct-tree-item-button:not(.rct-tree-item-button-expanded),
     div[role="tree"]>ul.rct-tree-items-container>.rct-tree-item-li:last-of-type .rct-tree-item-li:last-of-type>.rct-tree-item-title-container>.rct-tree-item-button:not(.rct-tree-item-button-expanded) {
-        border-bottom: 2px solid hsl(var(--nextui-default-200) / var(--nextui-default-200-opacity, var(--tw-border-opacity)));
+        border-bottom: 2px solid theme('colors.gray.200');
     }
 
     .rct-tree-item-li-isFolder>ul.rct-tree-items-container>li.rct-tree-item-li:first-of-type>.rct-tree-item-title-container>.rct-tree-item-button {

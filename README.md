@@ -17,7 +17,7 @@
 - [NextJS (App Router)](https://nextjs.org/)
 - [Prisma ORM](https://www.prisma.io/orm)
 - [Socket.io](https://socket.io/)
-- [NextUI](https://nextui.org/)
+- [HeroUI](http://heroui.com/)
 - [Tailwind](https://tailwindcss.com/)
 - [Formik](https://formik.org/)
 - [Yup](https://github.com/jquense/yup)
