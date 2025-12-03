@@ -31,7 +31,7 @@ export default function Header() {
             onMenuOpenChange={setIsMenuOpen}
             isBordered
             classNames={{
-                wrapper: 'max-w-screen-2xl px-4 2xl:px-0'
+                wrapper: 'max-w-(--breakpoint-2xl) px-4 2xl:px-0'
             }}
         >
 

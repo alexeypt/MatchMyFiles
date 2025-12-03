@@ -7,7 +7,7 @@ import './index.css';
 */
 export default function LoadingSpinner() {
     return (
-        <div className="flex items-center justify-center h-full flex-grow text-blue-400">
+        <div className="flex items-center justify-center h-full grow text-blue-400">
             <div className="lds-spinner">
                 <div></div>
                 <div></div>

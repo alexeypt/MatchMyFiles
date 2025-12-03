@@ -108,7 +108,7 @@ export default function ComparisonGeneralInfoSection({ comparison, rootFolders }
                     items={comparisonDetailsMap}
                     skipNullableValues
                 />
-                <div className="max-w-[50rem] w-full">
+                <div className="max-w-200 w-full">
                     <ComparisonForm
                         rootFolders={rootFolders}
                         onSubmit={onSubmit}

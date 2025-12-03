@@ -23,14 +23,14 @@ export default function TextTable<T>({
     rows,
     renderCell,
     ariaLabel
-}: TextTableProps<T>) {        
+}: TextTableProps<T>) {
     return (
         <Table
             isStriped
             fullWidth
             aria-label={ariaLabel}
             classNames={{
-                td: 'border-1 p-0 [&>*]:p-3 [&>*]:h-full [&>*]:flex [&>*]:items-center [&>*]:justify-center text-center text-base',
+                td: 'border-1 p-0 *:p-3 *:h-full *:flex *:items-center *:justify-center text-center text-base',
                 th: 'border-1 p-3 text-center text-bold text-base whitespace-normal',
                 tr: 'hover:bg-yellow-50',
                 wrapper: 'min-w-[50vw] overflow-x-auto p-0 md:p-4',

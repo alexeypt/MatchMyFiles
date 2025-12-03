@@ -6,7 +6,7 @@ import { ROOT_FOLDER_ROUTE } from "@/common/constants/routes";
 
 export default async function Home() {
     return (
-        <div className="-mx-4 md:-mx-5 2xl:-mx-0 -mt-8 2xl:-mt-10">
+        <div className="-mx-4 md:-mx-5 2xl:mx-0 -mt-8 2xl:-mt-10">
             <section className="bg-primary text-white py-20">
                 <div className="flex flex-col items-center gap-6 px-6 text-center">
                     <h1 className="text-4xl font-bold font-serif">Simplify Duplicate File Detection and Management with Match My Files</h1>

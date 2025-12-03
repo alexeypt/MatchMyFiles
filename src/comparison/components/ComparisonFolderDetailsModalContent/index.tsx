@@ -99,7 +99,7 @@ export default function ComparisonFolderDetailsModalContent({ item, comparisonId
                                     return (
                                         <li
                                             key={duplicationItem.rootFolderId}
-                                            className="p-3 text-lg bg-[--duplicated-color] flex flex-col gap-2 md:gap-1"
+                                            className="p-3 text-lg bg-(--duplicated-color) flex flex-col gap-2 md:gap-1"
                                             style={{
                                                 '--duplicated-color': backgroundColor
                                             }}

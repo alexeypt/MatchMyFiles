@@ -160,7 +160,7 @@ export default function ComparisonRootFolderTable({ data, rootFolderColorMap }: 
 
             const partiallyDuplicatedCellClassName = classNames(
                 'text-base',
-                'bg-[--partially-duplicated-color]'
+                'bg-(--partially-duplicated-color)'
             );
 
             return (
@@ -180,7 +180,7 @@ export default function ComparisonRootFolderTable({ data, rootFolderColorMap }: 
 
             const duplicatedCellClassName = classNames(
                 'text-base',
-                'bg-[--duplicated-color]'
+                'bg-(--duplicated-color)'
             );
 
 

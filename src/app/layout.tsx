@@ -39,19 +39,19 @@ export default async function RootLayout({
                     <div className="flex min-h-screen flex-col">
                         <SkipToMainContentButton />
                         <Header />
-                        <div className="flex flex-col justify-between flex-grow">
+                        <div className="flex flex-col justify-between grow">
                             <main
-                                className="flex-grow flex flex-col items-center justify-between px-4 md:px-5 2xl:px-0 max-w-screen-2xl w-full mx-auto outline-none"
+                                className="grow flex flex-col items-center justify-between px-4 md:px-5 2xl:px-0 max-w-(--breakpoint-2xl) w-full mx-auto outline-none"
                                 id={PAGE_CONTAINER_ID}
                                 tabIndex={-1}
                             >
-                                <div className="flex-grow flex flex-col mt-8 mb-12 2xl:mt-10 2xl:mb-16 w-full">
+                                <div className="grow flex flex-col mt-8 mb-12 2xl:mt-10 2xl:mb-16 w-full">
                                     {children}
                                 </div>
                             </main>
                             <footer className="flex w-full items-end">
                                 <div className="bg-yellow-100 w-full">
-                                    <div className="flex max-w-screen-2xl mx-auto h-10 justify-between items-center px-4 2xl:px-0">
+                                    <div className="flex max-w-(--breakpoint-2xl) mx-auto h-10 justify-between items-center px-4 2xl:px-0">
                                         <Link
                                             className="text-xs font-bold text-black"
                                             href={HOME_ROUTE}

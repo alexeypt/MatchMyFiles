@@ -81,7 +81,7 @@ export default function RootFolderGeneralInfoSection({ rootFolder }: RootFolderG
         >
             <div className="flex flex-col gap-9">
                 <KeyValueList items={rootFolderDetailsMap} />
-                <div className="max-w-[50rem] w-full">
+                <div className="max-w-200 w-full">
                     <RootFolderForm
                         initialValues={initialFormValues}
                         customButtonNode={reprocessButtonNode}

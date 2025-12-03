@@ -117,7 +117,7 @@ export default function ComparisonProgressBar({ comparison }: ComparisonProgress
                                         <span className="font-bold shrink-0">Root Folder Path:</span> {rootFolderDetails?.path}
                                     </p>
                                 </div>
-                                <div className="basis-1/2 flex-grow flex-shrink-0">
+                                <div className="basis-1/2 grow shrink-0">
                                     <div>
                                         <Progress
                                             aria-label="Processing..."

@@ -43,7 +43,7 @@ export default function RootFolderTreeItemRow({
     return (
         <span className={className}>
             <span
-                className="flex-grow min-w-32 w-min"
+                className="grow min-w-32 w-min"
                 dangerouslySetInnerHTML={
                     {
                         __html: titleWithHighlights

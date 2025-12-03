@@ -79,7 +79,7 @@ export default function ComparisonTreeItemRow({
             style={{ background: background }}
         >
             <span
-                className="flex-grow min-w-32 w-min"
+                className="grow min-w-32 w-min"
                 dangerouslySetInnerHTML={
                     {
                         __html: titleWithHighlights

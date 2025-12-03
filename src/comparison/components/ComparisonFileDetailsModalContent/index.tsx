@@ -93,7 +93,7 @@ export default function ComparisonFileDetailsModalContent({ rootFolderColorMap, 
                                     return (
                                         <li
                                             key={duplicationItem.fileId}
-                                            className="p-3 text-lg bg-[--duplicated-color] flex flex-col gap-2 md:gap-1"
+                                            className="p-3 text-lg bg-(--duplicated-color) flex flex-col gap-2 md:gap-1"
                                             style={{
                                                 '--duplicated-color': backgroundColor
                                             }}

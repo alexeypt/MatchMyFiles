@@ -11,8 +11,6 @@ import ComparisonsStatusModel from '@/common/models/comparisonsStatusModel';
 import RootFoldersStatusModel from '@/common/models/rootFoldersStatusModel';
 import SocketIOEventsMap from '@/common/types/socketIOEventsMap';
 
-import 'react-toastify/dist/ReactToastify.min.css';
-
 
 interface ProviderProps {
     children: ReactNode;
