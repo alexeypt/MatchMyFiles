@@ -1,6 +1,6 @@
-import FileItemModel from "@/folder-tree/models/fileItemModel";
-import FolderItemModel from "@/folder-tree/models/folderItemModel";
-import TreeItemType from "@/folder-tree/models/treeItemType";
+import FileItemModel from '@/folder-tree/models/fileItemModel';
+import FolderItemModel from '@/folder-tree/models/folderItemModel';
+import TreeItemType from '@/folder-tree/models/treeItemType';
 
 
 interface TreeItemData<TFolder extends FolderItemModel, TFile extends FileItemModel> {

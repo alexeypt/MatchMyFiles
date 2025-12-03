@@ -1,5 +1,5 @@
 import React, { ReactNode, useCallback } from 'react';
-import { SelectItem } from "@heroui/select";
+import { SelectItem } from '@heroui/select';
 import { Form, Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
@@ -47,59 +47,63 @@ export default function ComparisonForm({
             <Formik<ComparisonFormModel>
                 initialValues={initialValues}
                 validationSchema={ComparisonValidationSchema}
-                onSubmit={onSubmit}
                 validateOnMount
+                onSubmit={onSubmit}
             >
-                {({ values, setFieldValue }) => (
-                    <Form
-                        className="flex flex-col gap-7"
-                        noValidate
-                    >
-                        <DropdownField
-                            name={nameof<ComparisonFormModel>('primaryRootFolderId')}
-                            isRequired={isRequired(ComparisonValidationSchema, 'primaryRootFolderId')}
-                            label="Primary Root Folder"
-                            variant="bordered"
-                            items={rootFolders}
-                            onSelectNewValue={onSetNewPrimaryFolder(setFieldValue)}
+                {
+                    ({ values, setFieldValue }) => (
+                        <Form
+                            className="flex flex-col gap-7"
+                            noValidate
                         >
-                            {
-                                item => (
-                                    <SelectItem
-                                        key={item.id}
-                                        textValue={`${item.name} (${item.path}, ${getFormattedSize(item.size)})`}
-                                    >
-                                        {item.name} ({item.path}, {getFormattedSize(item.size)})
-                                    </SelectItem>
-                                )
-                            }
-                        </DropdownField>
-                        <CheckboxGroupField
-                            isRequired={isRequired(ComparisonValidationSchema, 'rootFolderIdsToCompareWith')}
-                            name={nameof<ComparisonFormModel>('rootFolderIdsToCompareWith')}
-                            label="Select Root Folders To Compare With"
-                            items={
-                                rootFolders
-                                    .filter(rootFolder => values.primaryRootFolderId ? rootFolder.id !== +values.primaryRootFolderId : true)
-                                    .map(rootFolder => ({
-                                        value: rootFolder.id.toString(),
-                                        label: `${rootFolder.name} (${rootFolder.path}, ${getFormattedSize(rootFolder.size)})`
-                                    }))
-                            }
-                        />
-                        <TextAreaField
-                            isRequired={isRequired(ComparisonValidationSchema, 'description')}
-                            name={nameof<ComparisonFormModel>('description')}
-                            label="Description"
-                            variant="bordered"
-                        />
-                        <FormSubmitPanel
-                            isEditMode={isEditMode}
-                            customNode={customButtonNode}
-                            onClose={onClose}
-                        />
-                    </Form>
-                )}
+                            <DropdownField
+                                name={nameof<ComparisonFormModel>('primaryRootFolderId')}
+                                isRequired={isRequired(ComparisonValidationSchema, 'primaryRootFolderId')}
+                                label="Primary Root Folder"
+                                variant="bordered"
+                                items={rootFolders}
+                                onSelectNewValue={onSetNewPrimaryFolder(setFieldValue)}
+                            >
+                                {
+                                    item => (
+                                        <SelectItem
+                                            key={item.id}
+                                            textValue={`${item.name} (${item.path}, ${getFormattedSize(item.size)})`}
+                                        >
+                                            {item.name} ({item.path}, {getFormattedSize(item.size)})
+                                        </SelectItem>
+                                    )
+                                }
+                            </DropdownField>
+                            <CheckboxGroupField
+                                isRequired={isRequired(ComparisonValidationSchema, 'rootFolderIdsToCompareWith')}
+                                name={nameof<ComparisonFormModel>('rootFolderIdsToCompareWith')}
+                                label="Select Root Folders To Compare With"
+                                items={
+                                    rootFolders
+                                        .filter(rootFolder => values.primaryRootFolderId
+                                            ? rootFolder.id !== +values.primaryRootFolderId
+                                            : true)
+                                        .map(rootFolder => ({
+                                            value: rootFolder.id.toString(),
+                                            label: `${rootFolder.name} (${rootFolder.path}, ${getFormattedSize(rootFolder.size)})`
+                                        }))
+                                }
+                            />
+                            <TextAreaField
+                                isRequired={isRequired(ComparisonValidationSchema, 'description')}
+                                name={nameof<ComparisonFormModel>('description')}
+                                label="Description"
+                                variant="bordered"
+                            />
+                            <FormSubmitPanel
+                                isEditMode={isEditMode}
+                                customNode={customButtonNode}
+                                onClose={onClose}
+                            />
+                        </Form>
+                    )
+                }
             </Formik>
         </div>
     );

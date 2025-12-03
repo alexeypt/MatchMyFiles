@@ -1,6 +1,6 @@
 'use server';
 
-import prismaClient from "@/common/helpers/prismaClient";
+import prismaClient from '@/common/helpers/prismaClient';
 import socketIO from '@/common/helpers/socketIOClient';
 import SocketEventType from '@/common/types/socketEventType';
 import { RootFolderProcessingStatus } from '@/clients/prisma/client';

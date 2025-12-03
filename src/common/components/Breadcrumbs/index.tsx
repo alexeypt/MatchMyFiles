@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { BreadcrumbItem, Breadcrumbs as HeroUIBreadcrumbs, BreadcrumbsProps as HeroUIBreadcrumbsProps } from "@heroui/breadcrumbs";
+import { BreadcrumbItem, Breadcrumbs as HeroUIBreadcrumbs, BreadcrumbsProps as HeroUIBreadcrumbsProps } from '@heroui/breadcrumbs';
 
 
 export interface BreadcrumbItemModel {

@@ -1,7 +1,7 @@
 'use server';
 
-import prismaClient from "@/common/helpers/prismaClient";
-import { RootFolderProcessingStatus } from "@/clients/prisma/client";
+import prismaClient from '@/common/helpers/prismaClient';
+import { RootFolderProcessingStatus } from '@/clients/prisma/client';
 
 
 export interface RootFolderNameModel {
@@ -14,7 +14,7 @@ export interface RootFolderNameModel {
 export default async function getRootFolderNamesQuery(statuses?: RootFolderProcessingStatus[]): Promise<RootFolderNameModel[]> {
     const data = await prismaClient.rootFolder.findMany({
         orderBy: {
-            createdAt: "asc"
+            createdAt: 'asc'
         },
         where: {
             status: {

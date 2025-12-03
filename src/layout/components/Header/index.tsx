@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from "react";
-import { Link } from "@heroui/link";
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from "@heroui/navbar";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { useState } from 'react';
+import { Link } from '@heroui/link';
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuItem, NavbarMenuToggle } from '@heroui/navbar';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 
-import { COMPARISON_ROUTE, HOME_ROUTE, ROOT_FOLDER_ROUTE } from "@/common/constants/routes";
+import { COMPARISON_ROUTE, HOME_ROUTE, ROOT_FOLDER_ROUTE } from '@/common/constants/routes';
 
 
 const NAVIGATION_ITEMS = [
@@ -28,11 +28,13 @@ export default function Header() {
         <Navbar
             maxWidth="2xl"
             isMenuOpen={isMenuOpen}
-            onMenuOpenChange={setIsMenuOpen}
+            classNames={
+                {
+                    wrapper: 'max-w-(--breakpoint-2xl) px-4 2xl:px-0'
+                }
+            }
             isBordered
-            classNames={{
-                wrapper: 'max-w-(--breakpoint-2xl) px-4 2xl:px-0'
-            }}
+            onMenuOpenChange={setIsMenuOpen}
         >
 
             <NavbarContent
@@ -40,7 +42,7 @@ export default function Header() {
                 justify="start"
             >
                 <NavbarItem className="h-full">
-                    <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
+                    <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} />
                 </NavbarItem>
             </NavbarContent>
             <NavbarBrand>
@@ -67,14 +69,14 @@ export default function Header() {
 
                         return (
                             <NavbarItem
-                                isActive={isActive}
                                 key={item.url}
+                                isActive={isActive}
                             >
                                 <Link
-                                    isBlock
                                     color={isActive ? 'primary' : 'foreground'}
                                     href={item.url}
                                     aria-current={isActive ? 'page' : undefined}
+                                    isBlock
                                 >
                                     {item.text}
                                 </Link>
@@ -90,14 +92,14 @@ export default function Header() {
 
                         return (
                             <NavbarMenuItem
-                                isActive={isActive}
                                 key={item.url}
+                                isActive={isActive}
                             >
                                 <Link
-                                    isBlock
                                     color={isActive ? 'primary' : 'foreground'}
                                     href={item.url}
                                     aria-current={isActive ? 'page' : undefined}
+                                    isBlock
                                     onPress={() => setIsMenuOpen(false)}
                                 >
                                     {item.text}

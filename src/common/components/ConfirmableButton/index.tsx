@@ -1,10 +1,10 @@
-import { ReactNode, useCallback } from "react";
-import { Button, ButtonProps } from "@heroui/button";
-import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@heroui/modal";
-import classNames from "classnames";
+import { ReactNode, useCallback } from 'react';
+import { Button, ButtonProps } from '@heroui/button';
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/modal';
+import classNames from 'classnames';
 
 import Heading from '@/common/components/Heading';
-import useModalControl from "@/common/hooks/useModalControl";
+import useModalControl from '@/common/hooks/useModalControl';
 
 
 interface ConfirmableButtonProps extends Omit<ButtonProps, 'onPress'> {
@@ -43,7 +43,7 @@ export default function ConfirmableButton({
         'w-full sm:w-fit',
         confirmableNoButtonClassName
     );
-    
+
     const mergedConfirmableYesButtonClassName = classNames(
         'w-full sm:w-fit',
         confirmableYesButtonClassName
@@ -57,49 +57,51 @@ export default function ConfirmableButton({
             />
             <Modal
                 isOpen={isModalOpened}
-                size='lg'
+                size="lg"
                 scrollBehavior="inside"
                 onClose={hideModal}
             >
                 <ModalContent>
-                    {() => (
-                        <>
-                            <ModalHeader>
-                                <Heading level={2}>
-                                    {confirmTitle}
-                                </Heading>
-                            </ModalHeader>
-                            <ModalBody>
-                                {confirmDescription}
-                            </ModalBody>
-                            <ModalFooter className="flex-col-reverse sm:flex-row sm:justify-between gap-5">
-                                {
-                                    !hideConfirmNoButton && (
-                                        <Button
-                                            color="danger"
-                                            variant="bordered"
-                                            className={mergedConfirmableNoButtonClassName}
-                                            onPress={hideModal}
-                                        >
-                                            {confirmNoButtonLabel}
-                                        </Button>
-                                    )
-                                }
-                                {
-                                    !hideConfirmYesButton && (
-                                        <Button
-                                            color="danger"
-                                            className={mergedConfirmableYesButtonClassName}
-                                            isDisabled={isDisabledYesButton}
-                                            onPress={onYesButtonClicked}
-                                        >
-                                            {confirmYesButtonLabel}
-                                        </Button>
-                                    )
-                                }
-                            </ModalFooter>
-                        </>
-                    )}
+                    {
+                        () => (
+                            <>
+                                <ModalHeader>
+                                    <Heading level={2}>
+                                        {confirmTitle}
+                                    </Heading>
+                                </ModalHeader>
+                                <ModalBody>
+                                    {confirmDescription}
+                                </ModalBody>
+                                <ModalFooter className="flex-col-reverse sm:flex-row sm:justify-between gap-5">
+                                    {
+                                        !hideConfirmNoButton && (
+                                            <Button
+                                                color="danger"
+                                                variant="bordered"
+                                                className={mergedConfirmableNoButtonClassName}
+                                                onPress={hideModal}
+                                            >
+                                                {confirmNoButtonLabel}
+                                            </Button>
+                                        )
+                                    }
+                                    {
+                                        !hideConfirmYesButton && (
+                                            <Button
+                                                color="danger"
+                                                className={mergedConfirmableYesButtonClassName}
+                                                isDisabled={isDisabledYesButton}
+                                                onPress={onYesButtonClicked}
+                                            >
+                                                {confirmYesButtonLabel}
+                                            </Button>
+                                        )
+                                    }
+                                </ModalFooter>
+                            </>
+                        )
+                    }
                 </ModalContent>
             </Modal>
         </>

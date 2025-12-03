@@ -1,9 +1,9 @@
 'use server';
 
-import prismaClient from "@/common/helpers/prismaClient";
-import { ComparisonProcessingStatus } from "@/clients/prisma/client";
-import { getDuplicatedFiles } from "@/clients/prisma/sql";
-import { ComparisonResultData, ComparisonResultDuplicatedItemData } from "@/comparison/types/comparisonResultData";
+import prismaClient from '@/common/helpers/prismaClient';
+import { ComparisonProcessingStatus } from '@/clients/prisma/client';
+import { getDuplicatedFiles } from '@/clients/prisma/sql';
+import { ComparisonResultData, ComparisonResultDuplicatedItemData } from '@/comparison/types/comparisonResultData';
 
 
 export interface CreateComparisonModel {
@@ -17,6 +17,7 @@ export async function processComparison(primaryFolderId: number, secondaryFolder
 
     const duplicatedFilesMap = duplicatedFiles.reduce((map, file) => {
         const item = map.get(file.primaryFileId);
+
         if (item) {
             item.push({ fileId: file.secondaryFileId, rootFolderId: file.rootFolderId });
         } else {
@@ -52,6 +53,7 @@ export default async function createComparison(values: CreateComparisonModel) {
             rootFolderId: values.primaryFolderId
         });
     }
+
     const comparison = await prismaClient.comparison.create({
         data: {
             description: values.description,

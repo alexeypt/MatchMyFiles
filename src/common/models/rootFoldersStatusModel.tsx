@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { Link } from "@heroui/link";
+import { Link } from '@heroui/link';
 import { Socket } from 'socket.io-client';
 
 import { ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';
@@ -80,7 +80,8 @@ export default class RootFoldersStatusModel {
             const rootFolderUrl = generateUrl(ROOT_FOLDER_EDIT_ROUTE, { id: rootFolderId });
             toast.error(
                 <p>
-                    Failed to process <Link href={rootFolderUrl}>
+                    Failed to process&nbsp;
+                    <Link href={rootFolderUrl}>
                         <span className="font-bold">{rootFolderName} Root Folder</span>
                     </Link>
                 </p>

@@ -10,7 +10,7 @@ export default class ComparisonFormModel {
         public primaryRootFolderId: string | null,
         public rootFolderIdsToCompareWith: string[]
     ) {
-        
+
     }
 
     static matToCreateModel(data: ComparisonFormModel): CreateComparisonModel {

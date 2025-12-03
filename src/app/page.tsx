@@ -1,7 +1,7 @@
-import { Button } from "@heroui/button";
-import { Link } from "@heroui/link";
+import { Button } from '@heroui/button';
+import { Link } from '@heroui/link';
 
-import { ROOT_FOLDER_ROUTE } from "@/common/constants/routes";
+import { ROOT_FOLDER_ROUTE } from '@/common/constants/routes';
 
 
 export default async function Home() {
@@ -52,7 +52,10 @@ export default async function Home() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         <div className="bg-white p-6 rounded-lg shadow-md">
                             <h3 className="text-xl font-semibold mb-2">Root Folder Processing</h3>
-                            <p>Select any folder, and Match My Files will analyze all files within it, saving details for quick duplicates identification.</p>
+                            <p>
+                                Select any folder, and Match My Files will analyze all files within it,
+                                saving details for quick duplicates identification.
+                            </p>
                         </div>
                         <div className="bg-white p-6 rounded-lg shadow-md">
                             <h3 className="text-xl font-semibold mb-2">Advanced Comparison</h3>

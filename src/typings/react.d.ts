@@ -1,4 +1,4 @@
-declare module "react" {
+declare module 'react' {
     interface CSSProperties {
         [varName: `--${string}`]: string | number | undefined;
     }

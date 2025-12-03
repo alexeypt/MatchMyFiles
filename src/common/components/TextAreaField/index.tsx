@@ -1,5 +1,5 @@
-import { Textarea, TextAreaProps } from "@heroui/input";
-import { useField } from "formik";
+import { Textarea, TextAreaProps } from '@heroui/input';
+import { useField } from 'formik';
 
 
 interface TextAreaFieldProps extends TextAreaProps {
@@ -15,10 +15,14 @@ export default function TextAreaField({ name, ...restProps }: TextAreaFieldProps
             {...fieldProps}
             isInvalid={!!meta.error && meta.touched}
             errorMessage={meta.error}
-            classNames={{
-                inputWrapper: restProps.isDisabled ? 'bg-gray-100' : undefined,
-                label: 'text-foreground-600'
-            }}
+            classNames={
+                {
+                    inputWrapper: restProps.isDisabled
+                        ? 'bg-gray-100'
+                        : undefined,
+                    label: 'text-foreground-600'
+                }
+            }
         />
     );
 }

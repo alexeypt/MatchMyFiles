@@ -1,15 +1,15 @@
 'use client';
 
-import { useCallback, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 
-import { COMPARISON_EDIT_ROUTE } from "@/common/constants/routes";
-import { action } from "@/common/helpers/actionHelper";
-import { generateUrl } from "@/common/helpers/urlHelper";
-import ComparisonForm from "@/comparison/components/ComparisonForm";
-import createComparison from "@/comparison/data-access/commands/createComparison";
-import ComparisonFormModel from "@/comparison/models/comparisonFormModel";
-import { RootFolderNameModel } from "@/root-folder/data-access/queries/getRootFolderNamesQuery";
+import { COMPARISON_EDIT_ROUTE } from '@/common/constants/routes';
+import { action } from '@/common/helpers/actionHelper';
+import { generateUrl } from '@/common/helpers/urlHelper';
+import ComparisonForm from '@/comparison/components/ComparisonForm';
+import createComparison from '@/comparison/data-access/commands/createComparison';
+import ComparisonFormModel from '@/comparison/models/comparisonFormModel';
+import { RootFolderNameModel } from '@/root-folder/data-access/queries/getRootFolderNamesQuery';
 
 
 interface ComparisonCreatePageContentProps {
@@ -28,11 +28,10 @@ export default function ComparisonCreatePageContent({ rootFolders }: ComparisonC
         });
 
         if (isSuccess && comparison) {
-            router.push(generateUrl(COMPARISON_EDIT_ROUTE, { id: comparison.id}));
+            router.push(generateUrl(COMPARISON_EDIT_ROUTE, { id: comparison.id }));
 
             router.refresh();
         }
-
     }, [router]);
 
     const initialFormValues: ComparisonFormModel = useMemo(() => {
@@ -43,9 +42,9 @@ export default function ComparisonCreatePageContent({ rootFolders }: ComparisonC
         <article>
             <ComparisonForm
                 rootFolders={rootFolders}
-                onSubmit={onSubmit}
                 initialValues={initialFormValues}
                 isEditMode={false}
+                onSubmit={onSubmit}
             />
         </article>
     );

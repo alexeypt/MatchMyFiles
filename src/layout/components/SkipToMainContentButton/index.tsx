@@ -1,4 +1,4 @@
-import { PAGE_CONTAINER_ID } from "@/layout/constants/layoutSelectors";
+import { PAGE_CONTAINER_ID } from '@/layout/constants/layoutSelectors';
 
 
 export default function SkipToMainContentButton() {

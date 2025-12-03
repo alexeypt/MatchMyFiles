@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
 import React, { useCallback, useMemo } from 'react';
-import { Link } from "@heroui/link";
-import { TableCell } from "@heroui/table";
+import { Link } from '@heroui/link';
+import { TableCell } from '@heroui/table';
 
 import TextTable, { TextTableColumnConfiguration, TextTableRowConfiguration } from '@/common/components/TextTable';
 import { ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';
@@ -32,28 +32,28 @@ interface RootFolderTableItem {
 
 const COLUMNS: TextTableColumnConfiguration<RootFolderTableItem>[] = [
     {
-        key: "index",
+        key: 'index',
         label: '#'
     },
     {
-        key: "name",
-        label: "Name",
+        key: 'name',
+        label: 'Name'
     },
     {
-        key: "path",
-        label: "Path",
+        key: 'path',
+        label: 'Path'
     },
     {
-        key: "size",
-        label: "Total Size",
+        key: 'size',
+        label: 'Total Size'
     },
     {
-        key: "itemsCountText",
-        label: "Items Count",
+        key: 'itemsCountText',
+        label: 'Items Count'
     },
     {
-        key: "actions",
-        label: "Actions",
+        key: 'actions',
+        label: 'Actions'
     }
 ];
 
@@ -108,9 +108,11 @@ export default function RootFolderTable({ data }: RootFolderTableProps) {
                     <div className="text-base">
                         <span
                             className="text-base min-w-40 md:min-w-fit"
-                            dangerouslySetInnerHTML={{
-                                __html: getFormattedStringWithWordBreaks(rootFolder[columnKey] as string)
-                            }}
+                            dangerouslySetInnerHTML={
+                                {
+                                    __html: getFormattedStringWithWordBreaks(rootFolder[columnKey] as string)
+                                }
+                            }
                         />
                     </div>
                 );

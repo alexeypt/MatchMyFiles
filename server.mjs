@@ -5,7 +5,7 @@ import { Server } from 'socket.io';
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost';
-const port =  process.env.APP_PORT ?? 4000;
+const port = process.env.APP_PORT ?? 4000;
 
 // when using middleware `hostname` and `port` must be provided below
 const app = next({ dev, hostname, port });
@@ -18,12 +18,12 @@ app.prepare().then(() => {
         io: new Server(httpServer)
     };
 
-    globalThis.socketIOGlobal.io.on('connection', (socket) => {
+    globalThis.socketIOGlobal.io.on('connection', () => {
         console.log('socket connection');
     });
 
     httpServer
-        .once('error', (err) => {
+        .once('error', err => {
             console.error(err);
             process.exit(1);
         })

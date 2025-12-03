@@ -1,9 +1,9 @@
 'use server';
 
-import prismaClient from "@/common/helpers/prismaClient";
-import NotFoundError from "@/common/models/notFoundError";
-import { ComparisonProcessingStatus } from "@/clients/prisma/client";
-import { processComparison } from "@/comparison/data-access/commands/createComparison";
+import prismaClient from '@/common/helpers/prismaClient';
+import NotFoundError from '@/common/models/notFoundError';
+import { ComparisonProcessingStatus } from '@/clients/prisma/client';
+import { processComparison } from '@/comparison/data-access/commands/createComparison';
 
 
 export interface UpdateComparisonModel {
@@ -33,15 +33,14 @@ export default async function updateComparison(values: UpdateComparisonModel): P
     });
 
     const primaryComparisonRootFolder = comparison?.comparisonRootFolders.find(comparisonRootFolder => comparisonRootFolder.isPrimary);
-    
+
     if (!comparison || !primaryComparisonRootFolder) {
         throw new NotFoundError();
     }
-    
+
     const secondaryRootFolderIdSet = new Set(comparison.comparisonRootFolders
         .filter(comparisonRootFolder => !comparisonRootFolder.isPrimary)
-        .map(comparisonRootFolder => comparisonRootFolder.rootFolderId)
-    );
+        .map(comparisonRootFolder => comparisonRootFolder.rootFolderId));
 
     const isReprocessingRequired = primaryComparisonRootFolder.rootFolderId !== values.primaryFolderId
         || values.folderIds.length !== secondaryRootFolderIdSet.size
@@ -59,7 +58,7 @@ export default async function updateComparison(values: UpdateComparisonModel): P
             isPrimary: false,
             rootFolderId: folderId
         }));
-    
+
         if (values.primaryFolderId) {
             rootFolders.push({
                 isPrimary: true,

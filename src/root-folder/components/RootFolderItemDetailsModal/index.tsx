@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
+import { Modal, ModalBody, ModalContent, ModalHeader } from '@heroui/modal';
 
 import Heading from '@/common/components/Heading';
 import TreeItemType from '@/folder-tree/models/treeItemType';
@@ -29,30 +29,32 @@ export default function RootFolderItemDetailsModal({ item, isOpen, onClose }: Ro
             onClose={onClose}
         >
             <ModalContent className="md:p-6">
-                {() => (
-                    <>
-                        <ModalHeader className="flex flex-col gap-1">
-                            <Heading
-                                className="text-3xl font-serif"
-                                level={2}
-                            >
-                                {item.type === TreeItemType.Folder ? 'Folder Details' : 'File Details'}
-                            </Heading>
-                        </ModalHeader>
-                        <ModalBody className="pb-4">
-                            {
-                                item.type === TreeItemType.Folder && (
-                                    <FolderDetailsModalContent item={item.data as RootFolderFolderItemModel} />
-                                )
-                            }
-                            {
-                                item.type === TreeItemType.File && (
-                                    <FileDetailsModalContent item={item.data as RootFolderFileItemModel} />
-                                )
-                            }
-                        </ModalBody>
-                    </>
-                )}
+                {
+                    () => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                <Heading
+                                    className="text-3xl font-serif"
+                                    level={2}
+                                >
+                                    {item.type === TreeItemType.Folder ? 'Folder Details' : 'File Details'}
+                                </Heading>
+                            </ModalHeader>
+                            <ModalBody className="pb-4">
+                                {
+                                    item.type === TreeItemType.Folder && (
+                                        <FolderDetailsModalContent item={item.data as RootFolderFolderItemModel} />
+                                    )
+                                }
+                                {
+                                    item.type === TreeItemType.File && (
+                                        <FileDetailsModalContent item={item.data as RootFolderFileItemModel} />
+                                    )
+                                }
+                            </ModalBody>
+                        </>
+                    )
+                }
             </ModalContent>
         </Modal>
     );

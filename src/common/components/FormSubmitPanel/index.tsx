@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
-import { Button } from "@heroui/button";
-import { useFormikContext } from "formik";
+import { ReactNode } from 'react';
+import { Button } from '@heroui/button';
+import { useFormikContext } from 'formik';
 
 
 interface FormSubmitPanelProps {
@@ -20,7 +20,9 @@ export default function FormSubmitPanel({
 
     const isDisabled = isSubmitting || !dirty;
 
-    const buttonLabel = submitButtonLabel ?? (isEditMode ? 'Update' : 'Create');
+    const buttonLabel = submitButtonLabel ?? (isEditMode
+        ? 'Update'
+        : 'Create');
 
     return (
         <div className="flex flex-col my-4 sm:flex-row sm:justify-between gap-4">

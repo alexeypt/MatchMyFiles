@@ -1,9 +1,9 @@
 'use server';
 
-import prismaClient from "@/common/helpers/prismaClient";
-import NotFoundError from "@/common/models/notFoundError";
-import { ComparisonProcessingStatus } from "@/clients/prisma/client";
-import { processComparison } from "@/comparison/data-access/commands/createComparison";
+import prismaClient from '@/common/helpers/prismaClient';
+import NotFoundError from '@/common/models/notFoundError';
+import { ComparisonProcessingStatus } from '@/clients/prisma/client';
+import { processComparison } from '@/comparison/data-access/commands/createComparison';
 
 
 export default async function reprocessComparison(comparisonId: number) {
@@ -33,7 +33,7 @@ export default async function reprocessComparison(comparisonId: number) {
             id: comparison.id
         },
         data: {
-            status: ComparisonProcessingStatus.Processing,
+            status: ComparisonProcessingStatus.Processing
         }
     });
 

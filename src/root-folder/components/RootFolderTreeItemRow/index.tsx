@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
 import React, { useCallback } from 'react';
-import { Button } from "@heroui/button";
+import { Button } from '@heroui/button';
 import classNames from 'classnames';
 
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
@@ -34,11 +34,13 @@ export default function RootFolderTreeItemRow({
         { 'bg-green-200': item.type === TreeItemType.File && duplicatedFileIds.has(item.data.id) }
     );
 
-    const titleWithHighlights = searchQuery ? getMarkupWithHighlights(
-        title,
-        searchQuery,
-        'bg-yellow-300'
-    ) : title;
+    const titleWithHighlights = searchQuery
+        ? getMarkupWithHighlights(
+            title,
+            searchQuery,
+            'bg-yellow-300'
+        )
+        : title;
 
     return (
         <span className={className}>

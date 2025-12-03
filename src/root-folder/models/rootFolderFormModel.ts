@@ -10,7 +10,7 @@ export default class RootFolderFormModel {
         public description: string,
         public folderPath: string
     ) {
-        
+
     }
 
     static matToCreateModel(data: RootFolderFormModel): CreateRootFolderModel {

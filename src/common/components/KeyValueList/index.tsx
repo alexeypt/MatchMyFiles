@@ -14,7 +14,9 @@ export default function KeyValueList({ items, skipNullableValues = false }: KeyV
     return (
         <dl className="grid grid-cols-1 gap-x-20 w-full font-serif md:grid-cols-[max-content_1fr] md:gap-y-6 md:items-center">
             {
-                Array.from(items.entries()).filter(([, value]) => skipNullableValues ? !!value : true).map(([key, value]) => (
+                Array.from(items.entries()).filter(([, value]) => skipNullableValues
+                    ? !!value
+                    : true).map(([key, value]) => (
                     <Fragment key={key}>
                         <dt className="text-2xl text-blue-950">
                             {key}
@@ -25,6 +27,6 @@ export default function KeyValueList({ items, skipNullableValues = false }: KeyV
                     </Fragment>
                 ))
             }
-        </dl >
+        </dl>
     );
 }

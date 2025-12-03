@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useCallback, useMemo } from 'react';
@@ -51,8 +50,8 @@ export default function ComparisonDetailsPageHeader({ comparison }: ComparisonDe
                 confirmNoButtonLabel="Cancel, Keep This Comparison"
                 type="button"
                 color="danger"
-                onPress={onDelete}
                 size="lg"
+                onPress={onDelete}
             >
                 Delete
             </ConfirmableButton>

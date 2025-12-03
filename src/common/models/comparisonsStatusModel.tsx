@@ -30,6 +30,7 @@ export default class ComparisonsStatusModel {
 
         socket.on(SocketEventType.ComparisonProcessingCompleted, comparisonId => {
             this.processingComparisons.delete(comparisonId);
+
             if (this.comparisonFinishedEventListenersMap.has(comparisonId)) {
                 for (const callback of Array.from(this.comparisonFinishedEventListenersMap.get(comparisonId)!)) {
                     callback();

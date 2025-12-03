@@ -1,15 +1,20 @@
-import { useMemo } from "react";
-import { TreeItem, TreeItemIndex } from "react-complex-tree";
+import { useMemo } from 'react';
+import { TreeItem, TreeItemIndex } from 'react-complex-tree';
 
-import { getTreeKey } from "@/common/helpers/treeHelper";
-import FileItemModel from "@/folder-tree/models/fileItemModel";
-import FolderItemModel from "@/folder-tree/models/folderItemModel";
-import FolderTreeOrdering from "@/folder-tree/models/folderTreeOrdering";
-import TreeItemData from "@/folder-tree/models/treeItemData";
-import TreeItemType from "@/folder-tree/models/treeItemType";
+import { getTreeKey } from '@/common/helpers/treeHelper';
+import FileItemModel from '@/folder-tree/models/fileItemModel';
+import FolderItemModel from '@/folder-tree/models/folderItemModel';
+import FolderTreeOrdering from '@/folder-tree/models/folderTreeOrdering';
+import TreeItemData from '@/folder-tree/models/treeItemData';
+import TreeItemType from '@/folder-tree/models/treeItemType';
 
 
-function getTreeFolderChildren(folder: FolderItemModel, ordering: FolderTreeOrdering, folderSizeMap: Map<number, number>, fileSizeMap: Map<number, number>) {
+function getTreeFolderChildren(
+    folder: FolderItemModel,
+    ordering: FolderTreeOrdering,
+    folderSizeMap: Map<number, number>,
+    fileSizeMap: Map<number, number>
+) {
     if (ordering === FolderTreeOrdering.ByName) {
         return folder.childFolderIds.map(childFolderId => getTreeKey(childFolderId, 'folder'))
             .concat(folder.childFileIds.map(childFileId => getTreeKey(childFileId, 'file')));
@@ -21,13 +26,12 @@ function getTreeFolderChildren(folder: FolderItemModel, ordering: FolderTreeOrde
         .concat(
             [...folder.childFileIds]
                 .sort((id1, id2) => fileSizeMap.get(id2)! - fileSizeMap.get(id1)!)
-                .map(childFileId => getTreeKey(childFileId, 'file')
-                )
+                .map(childFileId => getTreeKey(childFileId, 'file'))
         );
 }
 
 function getFolderWithAllChildrenMap<TFolder extends FolderItemModel>(rootItem: TFolder, foldersMap: Map<number, TFolder>) {
-    const map = new Map<number, { files: number[], folders: number[] }>();
+    const map = new Map<number, { files: number[]; folders: number[] }>();
 
     function getFolderChildFilesAndFolders(folder: FolderItemModel) {
         const result = {
@@ -37,6 +41,7 @@ function getFolderWithAllChildrenMap<TFolder extends FolderItemModel>(rootItem: 
 
         for (const childFolderId of folder.childFolderIds) {
             const folder = foldersMap.get(childFolderId);
+
             if (!folder) {
                 continue;
             }
@@ -70,7 +75,9 @@ export default function useTreeItems<TFolder extends FolderItemModel, TFile exte
         const foldersMap = new Map(folders.map(folder => ([folder.id, folder])));
 
         const foundFiles = files
-            .filter(file => searchQuery ? file.fullName.toLowerCase().includes(searchQueryLowerCase) : true);
+            .filter(file => searchQuery
+                ? file.fullName.toLowerCase().includes(searchQueryLowerCase)
+                : true);
         const foundFileIds = new Set(foundFiles.map(item => item.id));
 
         const treeFileItems = foundFiles
@@ -95,7 +102,9 @@ export default function useTreeItems<TFolder extends FolderItemModel, TFile exte
         const folderWithAllChildrenMap = getFolderWithAllChildrenMap(rootItem, foldersMap);
 
         const foundFolderIds = new Set(folders
-            .filter(folder => searchQueryLowerCase ? folder.name.toLowerCase().includes(searchQueryLowerCase) : true)
+            .filter(folder => searchQueryLowerCase
+                ? folder.name.toLowerCase().includes(searchQueryLowerCase)
+                : true)
             .map(item => item.id));
 
         const treeFolderItems = folders

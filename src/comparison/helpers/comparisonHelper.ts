@@ -1,4 +1,4 @@
-import { ComparisonProcessingStatus, RootFolderProcessingStatus } from "@/clients/prisma/client";
+import { ComparisonProcessingStatus, RootFolderProcessingStatus } from '@/clients/prisma/client';
 
 
 export function getComparisonStatus(comparisonStatus: ComparisonProcessingStatus, rootFolderStatuses: RootFolderProcessingStatus[]) {
@@ -7,6 +7,7 @@ export function getComparisonStatus(comparisonStatus: ComparisonProcessingStatus
     if (rootFolderStatuses.some(status => status === RootFolderProcessingStatus.Failed)) {
         resultStatus = ComparisonProcessingStatus.Failed;
     }
+
     if (rootFolderStatuses.some(status => status === RootFolderProcessingStatus.Processing)) {
         resultStatus = ComparisonProcessingStatus.Processing;
     }

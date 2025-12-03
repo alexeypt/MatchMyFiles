@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
-import { Link } from "@heroui/link";
+import { Link } from '@heroui/link';
 
 import FormattedDateTime from '@/common/components/FormattedDateTime';
 import KeyValueList from '@/common/components/KeyValueList';
@@ -31,6 +31,7 @@ export default function ComparisonFileDetailsModalContent({ rootFolderColorMap, 
         if (!fileDetails) {
             return new Map();
         }
+
         return new Map<string, ReactNode>([
             ['Name', fileDetails.name],
             ['Extension', fileDetails.extension],
@@ -40,27 +41,38 @@ export default function ComparisonFileDetailsModalContent({ rootFolderColorMap, 
             ['Size', getFormattedSize(fileDetails.size)],
             ['Latitude', fileDetails.latitude],
             ['Longitude', fileDetails.longitude],
-            ['Created Date', (
-                <FormattedDateTime
-                    key={+fileDetails.fileCreatedDate}
-                    dateTime={fileDetails.fileCreatedDate}
-                />
-            )],
-            ['Modified Date', (
-                <FormattedDateTime
-                    key={+fileDetails.fileModifiedDate}
-                    dateTime={fileDetails.fileModifiedDate}
-                />
-            )],
-            ['Modified Content Date', (
-                <FormattedDateTime
-                    key={+fileDetails.fileContentModifiedDate}
-                    dateTime={fileDetails.fileContentModifiedDate}
-                />
-            )],
-            ['Is Duplicated', fileDetails.isDuplicated
-                ? <span className="text-green-800">Yes</span>
-                : <span className="text-red-800">No</span>
+            [
+                'Created Date',
+                (
+                    <FormattedDateTime
+                        key={+fileDetails.fileCreatedDate}
+                        dateTime={fileDetails.fileCreatedDate}
+                    />
+                )
+            ],
+            [
+                'Modified Date',
+                (
+                    <FormattedDateTime
+                        key={+fileDetails.fileModifiedDate}
+                        dateTime={fileDetails.fileModifiedDate}
+                    />
+                )
+            ],
+            [
+                'Modified Content Date',
+                (
+                    <FormattedDateTime
+                        key={+fileDetails.fileContentModifiedDate}
+                        dateTime={fileDetails.fileContentModifiedDate}
+                    />
+                )
+            ],
+            [
+                'Is Duplicated',
+                fileDetails.isDuplicated
+                    ? <span className="text-green-800">Yes</span>
+                    : <span className="text-red-800">No</span>
             ]
         ]);
     }, [fileDetails]);
@@ -94,9 +106,11 @@ export default function ComparisonFileDetailsModalContent({ rootFolderColorMap, 
                                         <li
                                             key={duplicationItem.fileId}
                                             className="p-3 text-lg bg-(--duplicated-color) flex flex-col gap-2 md:gap-1"
-                                            style={{
-                                                '--duplicated-color': backgroundColor
-                                            }}
+                                            style={
+                                                {
+                                                    '--duplicated-color': backgroundColor
+                                                }
+                                            }
                                         >
                                             <p className="flex gap-x-4 flex-col md:flex-row">
                                                 <span className="font-bold shrink-0">Root Folder Name:</span>

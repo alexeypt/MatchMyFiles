@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback } from 'react';
-import { Button } from "@heroui/button";
+import { Button } from '@heroui/button';
 import { useRouter } from 'next/navigation';
 
 import ConfirmableButton from '@/common/components/ConfirmableButton';
@@ -52,8 +52,8 @@ export default function RootFolderReprocessButton({ rootFolder }: RootFolderRepr
                 type="button"
                 color="success"
                 className="w-full sm:w-fit bg-green-700 text-white"
-                onPress={onReprocess}
                 size="lg"
+                onPress={onReprocess}
             >
                 Reprocess
             </Button>
@@ -80,8 +80,8 @@ export default function RootFolderReprocessButton({ rootFolder }: RootFolderRepr
             color="success"
             confirmableYesButtonClassName="bg-green-700 text-white"
             confirmableNoButtonClassName="border-green-700 text-green-700"
-            onPress={onConfirmReprocess}
             size="lg"
+            onPress={onConfirmReprocess}
         >
             Reprocess
         </ConfirmableButton>

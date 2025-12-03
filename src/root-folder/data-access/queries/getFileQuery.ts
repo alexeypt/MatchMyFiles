@@ -1,7 +1,7 @@
 'use server';
 
-import prismaClient from "@/common/helpers/prismaClient";
-import NotFoundError from "@/common/models/notFoundError";
+import prismaClient from '@/common/helpers/prismaClient';
+import NotFoundError from '@/common/models/notFoundError';
 
 
 export interface FileDetailsModel {

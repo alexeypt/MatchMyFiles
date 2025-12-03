@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 
 interface NotificationOptions {
@@ -15,7 +15,7 @@ export async function action<T>(actionCallback: () => Promise<T>, options: Notif
         }
 
         return [true, result];
-    } catch (error: any) {
+    } catch {
         if (options.errorText) {
             toast.error(options.errorText);
         }

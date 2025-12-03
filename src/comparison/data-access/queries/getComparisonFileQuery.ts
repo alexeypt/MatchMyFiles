@@ -1,8 +1,8 @@
 'use server';
 
-import prismaClient from "@/common/helpers/prismaClient";
-import NotFoundError from "@/common/models/notFoundError";
-import { ComparisonResultData, ComparisonResultDuplicatedItemData } from "@/comparison/types/comparisonResultData";
+import prismaClient from '@/common/helpers/prismaClient';
+import NotFoundError from '@/common/models/notFoundError';
+import { ComparisonResultData, ComparisonResultDuplicatedItemData } from '@/comparison/types/comparisonResultData';
 
 
 export interface ComparisonFileDetailsModel {
@@ -68,8 +68,7 @@ export default async function getComparisonFile(comparisonId: number, fileId: nu
     }
 
     const comparisonResultMap = new Map<number, ComparisonResultDuplicatedItemData[]>((comparison.data as ComparisonResultData)
-        .map(item => ([item.fileId, item.duplicatedFiles]))
-    );
+        .map(item => ([item.fileId, item.duplicatedFiles])));
     const fileComparisonResults = comparisonResultMap.get(file.id);
 
     let duplicationInfo: ComparisonFileDetailsModel['duplicationInfo'] = [];

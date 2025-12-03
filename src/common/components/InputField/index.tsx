@@ -1,6 +1,6 @@
-import { SyntheticEvent, useCallback } from "react";
-import { Input, InputProps } from "@heroui/input";
-import { useField } from "formik";
+import { SyntheticEvent, useCallback } from 'react';
+import { Input, InputProps } from '@heroui/input';
+import { useField } from 'formik';
 
 
 interface InputFieldProps extends InputProps {
@@ -40,16 +40,24 @@ export default function InputField({
             }
             {...restProps}
             {...fieldProps}
-            onWheel={restProps.type === 'number' ? onNumberFieldWheel : undefined}
             isInvalid={isInvalid}
             errorMessage={meta.error}
-            classNames={{
-                helperWrapper: !isInvalid ? 'p-0' : undefined,
-                input: isLargeText ? 'font-bold text-xl leading-5' : undefined,
-                label: 'text-nowrap',
-                inputWrapper: restProps.isDisabled ? 'bg-gray-100' : undefined,
-                description: 'font-bold text-sm mt-1 text-red-900'
-            }}
+            classNames={
+                {
+                    helperWrapper: !isInvalid
+                        ? 'p-0'
+                        : undefined,
+                    input: isLargeText
+                        ? 'font-bold text-xl leading-5'
+                        : undefined,
+                    label: 'text-nowrap',
+                    inputWrapper: restProps.isDisabled
+                        ? 'bg-gray-100'
+                        : undefined,
+                    description: 'font-bold text-sm mt-1 text-red-900'
+                }
+            }
+            onWheel={restProps.type === 'number' ? onNumberFieldWheel : undefined}
         />
     );
 }

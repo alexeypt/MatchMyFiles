@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
+import { Modal, ModalBody, ModalContent, ModalHeader } from '@heroui/modal';
 import { useRouter } from 'next/navigation';
 
 import Heading from '@/common/components/Heading';
@@ -34,7 +34,6 @@ export default function RootFolderCreateModal({ isOpen, onClose }: RootFolderCre
 
             router.refresh();
         }
-
     }, [onClose, router]);
 
     const initialFormValues = useMemo(() => {
@@ -44,28 +43,30 @@ export default function RootFolderCreateModal({ isOpen, onClose }: RootFolderCre
     return (
         <Modal
             isOpen={isOpen}
-            size='xl'
+            size="xl"
             scrollBehavior="inside"
             onClose={onClose}
         >
             <ModalContent>
-                {(onClose) => (
-                    <>
-                        <ModalHeader className="flex flex-col gap-1">
-                            <Heading level={2}>
-                                Create Root Folder
-                            </Heading>
-                        </ModalHeader>
-                        <ModalBody>
-                            <RootFolderForm
-                                onSubmit={onSubmit}
-                                onClose={onClose}
-                                initialValues={initialFormValues}
-                                isEditMode={false}
-                            />
-                        </ModalBody>
-                    </>
-                )}
+                {
+                    onClose => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                <Heading level={2}>
+                                    Create Root Folder
+                                </Heading>
+                            </ModalHeader>
+                            <ModalBody>
+                                <RootFolderForm
+                                    initialValues={initialFormValues}
+                                    isEditMode={false}
+                                    onSubmit={onSubmit}
+                                    onClose={onClose}
+                                />
+                            </ModalBody>
+                        </>
+                    )
+                }
             </ModalContent>
         </Modal>
     );

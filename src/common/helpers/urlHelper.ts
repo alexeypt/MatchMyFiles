@@ -4,6 +4,7 @@ export function generateUrl(route: string, params: { [key: string]: string | num
     const regex = /(:([a-z0-9]+))/g;
 
     let execResult: RegExpExecArray | null = null;
+
     while ((execResult = regex.exec(route)) !== null) {
         const paramName = execResult[2];
 

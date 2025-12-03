@@ -1,8 +1,8 @@
 import { createElement, HTMLAttributes } from 'react';
 
 
-interface HeadingProps extends HTMLAttributes<HTMLHeadingElement>{
-    level: number
+interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
+    level: number;
 }
 
 function Heading({ level, ...restProps }: HeadingProps) {

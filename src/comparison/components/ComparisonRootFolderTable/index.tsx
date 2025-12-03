@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
 import React, { useCallback, useMemo } from 'react';
-import { Link } from "@heroui/link";
-import { TableCell } from "@heroui/table";
+import { Link } from '@heroui/link';
+import { TableCell } from '@heroui/table';
 import classNames from 'classnames';
 
 import TextTable, { TextTableColumnConfiguration, TextTableRowConfiguration } from '@/common/components/TextTable';
@@ -38,33 +38,33 @@ interface ComparisonRootFolderTableItem {
 
 const COLUMNS: TextTableColumnConfiguration<ComparisonRootFolderTableItem>[] = [
     {
-        key: "index",
+        key: 'index',
         label: '#'
     },
     {
-        key: "name",
-        label: "Name"
+        key: 'name',
+        label: 'Name'
     },
     {
-        key: "path",
-        label: "Path"
+        key: 'path',
+        label: 'Path'
     },
     {
-        key: "duplicatedFilesCount",
-        label: "Duplicated Files Count"
+        key: 'duplicatedFilesCount',
+        label: 'Duplicated Files Count'
     },
     {
-        key: "duplicatedFilesSize",
-        label: "Duplicated Files Size"
+        key: 'duplicatedFilesSize',
+        label: 'Duplicated Files Size'
     },
     {
-        key: "duplicatedColor",
-        label: "Duplicated color",
+        key: 'duplicatedColor',
+        label: 'Duplicated color',
         width: '170px'
     },
     {
-        key: "partiallyDuplicatedColor",
-        label: "Partially Duplicated color",
+        key: 'partiallyDuplicatedColor',
+        label: 'Partially Duplicated color',
         width: '170px'
     }
 ];
@@ -109,9 +109,11 @@ export default function ComparisonRootFolderTable({ data, rootFolderColorMap }: 
                         >
                             <span
                                 className="font-bold"
-                                dangerouslySetInnerHTML={{
-                                    __html: getFormattedStringWithWordBreaks(rootFolder.name)
-                                }}
+                                dangerouslySetInnerHTML={
+                                    {
+                                        __html: getFormattedStringWithWordBreaks(rootFolder.name)
+                                    }
+                                }
                             />
                         </Link>
                     </div>
@@ -121,9 +123,11 @@ export default function ComparisonRootFolderTable({ data, rootFolderColorMap }: 
                     <div className="text-base">
                         <span
                             className="text-base min-w-40 md:min-w-fit"
-                            dangerouslySetInnerHTML={{
-                                __html: getFormattedStringWithWordBreaks(rootFolder.path)
-                            }}
+                            dangerouslySetInnerHTML={
+                                {
+                                    __html: getFormattedStringWithWordBreaks(rootFolder.path)
+                                }
+                            }
                         />
                     </div>
                 );
@@ -152,7 +156,10 @@ export default function ComparisonRootFolderTable({ data, rootFolderColorMap }: 
         }
     }, []);
 
-    const renderCell = useCallback((rootFolder: TextTableRowConfiguration<ComparisonRootFolderTableItem>, columnKey: keyof ComparisonRootFolderTableItem) => {
+    const renderCell = useCallback((
+        rootFolder: TextTableRowConfiguration<ComparisonRootFolderTableItem>,
+        columnKey: keyof ComparisonRootFolderTableItem
+    ) => {
         if (columnKey === 'partiallyDuplicatedColor') {
             const partiallyDuplicatedCellStyles = {
                 '--partially-duplicated-color': rootFolder.partiallyDuplicatedColor
@@ -195,8 +202,8 @@ export default function ComparisonRootFolderTable({ data, rootFolderColorMap }: 
         }
 
         if (!rootFolder.isPrimary && (
-            (columnKey === 'duplicatedFilesCount' && rootFolder.duplicatedFilesCount > 0) ||
-            (columnKey === 'duplicatedFilesSize' && rootFolder.duplicatedFilesSize > 0)
+            (columnKey === 'duplicatedFilesCount' && rootFolder.duplicatedFilesCount > 0)
+            || (columnKey === 'duplicatedFilesSize' && rootFolder.duplicatedFilesSize > 0)
         )) {
             return (
                 <TableCell className="bg-yellow-200">

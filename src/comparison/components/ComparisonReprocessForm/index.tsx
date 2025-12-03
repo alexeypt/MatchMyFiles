@@ -49,8 +49,8 @@ export default function ComparisonReprocessingForm({
             <Formik<ComparisonReprocessingFormModel>
                 initialValues={initialValues}
                 validationSchema={ComparisonReprocessingValidationSchema}
-                onSubmit={onSubmit}
                 validateOnMount
+                onSubmit={onSubmit}
             >
                 <Form
                     className="flex flex-col gap-5"

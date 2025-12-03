@@ -1,21 +1,21 @@
 'use client';
 
 import { useCallback, useEffect } from 'react';
-import { Button } from "@heroui/button";
+import { Button } from '@heroui/button';
 
 import Heading from '@/common/components/Heading';
 
 
 interface ErrorPageProps {
-    error: Error & { digest?: string; };
+    error: Error & { digest?: string };
     reset?: () => void;
 }
 
 export default function ErrorPage({
     error,
-    reset,
+    reset
 }: ErrorPageProps) {
-    const log = useCallback(async (error: Error & { digest?: string; }) => {
+    const log = useCallback(async (error: Error & { digest?: string }) => {
         console.error(error.message);
     }, []);
 
@@ -39,11 +39,11 @@ export default function ErrorPage({
             {
                 reset && (
                     <Button
-                        onPress={() => reset()}
                         size="lg"
                         variant="solid"
                         color="primary"
                         className="w-full sm:w-max sm:min-w-48 text-xl"
+                        onPress={() => reset()}
                     >
                         Try again
                     </Button>

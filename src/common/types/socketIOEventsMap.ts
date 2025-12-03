@@ -1,4 +1,4 @@
-import SocketEventType from "@/common/types/socketEventType";
+import SocketEventType from '@/common/types/socketEventType';
 
 
 type SocketIOEventsMap = {
@@ -7,6 +7,6 @@ type SocketIOEventsMap = {
     [SocketEventType.RootFolderProcessingFailed]: (rootFolderId: number, rootFolderName: string) => void;
     [SocketEventType.ComparisonProcessingStarted]: (comparisonId: number) => void;
     [SocketEventType.ComparisonProcessingCompleted]: (comparisonId: number) => void;
-}
+};
 
 export default SocketIOEventsMap;

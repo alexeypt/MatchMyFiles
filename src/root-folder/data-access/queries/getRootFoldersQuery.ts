@@ -1,7 +1,7 @@
 'use server';
 
-import prismaClient from "@/common/helpers/prismaClient";
-import { RootFolderProcessingStatus } from "@/clients/prisma/client";
+import prismaClient from '@/common/helpers/prismaClient';
+import { RootFolderProcessingStatus } from '@/clients/prisma/client';
 
 
 export interface RootFolderListItemModel {
@@ -18,7 +18,7 @@ export interface RootFolderListItemModel {
 export default async function getRootFolders(): Promise<RootFolderListItemModel[]> {
     const data = await prismaClient.rootFolder.findMany({
         orderBy: {
-            createdAt: "asc"
+            createdAt: 'asc'
         },
         select: {
             id: true,

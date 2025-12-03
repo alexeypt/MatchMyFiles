@@ -7,7 +7,7 @@ export default class ComparisonReprocessingFormModel {
         public rootFolderIds: number[],
         public rootFolderIdsToReprocess: string[]
     ) {
-        
+
     }
 
     static mapFromComparisonModel(comparison: ComparisonDetailsModel) {

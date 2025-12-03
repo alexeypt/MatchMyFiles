@@ -1,9 +1,9 @@
 'use server';
 
-import prismaClient from "@/common/helpers/prismaClient";
-import NotFoundError from "@/common/models/notFoundError";
-import { getRecursiveChildFolderIds } from "@/clients/prisma/sql";
-import { ComparisonResultData, ComparisonResultDuplicatedItemData } from "@/comparison/types/comparisonResultData";
+import prismaClient from '@/common/helpers/prismaClient';
+import NotFoundError from '@/common/models/notFoundError';
+import { getRecursiveChildFolderIds } from '@/clients/prisma/sql';
+import { ComparisonResultData, ComparisonResultDuplicatedItemData } from '@/comparison/types/comparisonResultData';
 
 
 export interface ComparisonFolderDetailsModel {
@@ -96,8 +96,7 @@ export default async function getComparisonFolder(comparisonId: number, folderId
 
     const fileSizeMap = new Map(files.map(file => ([file.id, Number(file.size)])));
     const rootFolderInfoMap = new Map(comparison.comparisonRootFolders.map(comparisonRootFolder =>
-        [comparisonRootFolder.rootFolder.id, comparisonRootFolder.rootFolder]
-    ));
+        [comparisonRootFolder.rootFolder.id, comparisonRootFolder.rootFolder]));
 
     const duplicationInfo = (comparison.data as ComparisonResultData)
         .filter(item => fileSizeMap.has(item.fileId))

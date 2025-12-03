@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
+import { Modal, ModalBody, ModalContent, ModalHeader } from '@heroui/modal';
 import { useRouter } from 'next/navigation';
 
 import Heading from '@/common/components/Heading';
@@ -38,7 +38,6 @@ export default function ComparisonReprocessModal({
             onClose();
             router.refresh();
         }
-
     }, [onClose, router]);
 
     const initialFormValues = useMemo(() => {
@@ -48,28 +47,30 @@ export default function ComparisonReprocessModal({
     return (
         <Modal
             isOpen={isOpen}
-            size='xl'
+            size="xl"
             scrollBehavior="inside"
             onClose={onClose}
         >
             <ModalContent>
-                {(onClose) => (
-                    <>
-                        <ModalHeader className="flex flex-col gap-1">
-                            <Heading level={2}>
-                                Reprocess Root Folders and Comparison
-                            </Heading>
-                        </ModalHeader>
-                        <ModalBody>
-                            <ComparisonReprocessForm
-                                rootFolders={rootFolders}
-                                initialValues={initialFormValues}
-                                onSubmit={onSubmit}
-                                onClose={onClose}
-                            />
-                        </ModalBody>
-                    </>
-                )}
+                {
+                    onClose => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                <Heading level={2}>
+                                    Reprocess Root Folders and Comparison
+                                </Heading>
+                            </ModalHeader>
+                            <ModalBody>
+                                <ComparisonReprocessForm
+                                    rootFolders={rootFolders}
+                                    initialValues={initialFormValues}
+                                    onSubmit={onSubmit}
+                                    onClose={onClose}
+                                />
+                            </ModalBody>
+                        </>
+                    )
+                }
             </ModalContent>
         </Modal>
     );

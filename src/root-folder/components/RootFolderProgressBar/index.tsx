@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
 import React, { useContext, useEffect, useState } from 'react';
-import { Progress } from "@heroui/progress";
+import { Progress } from '@heroui/progress';
 import { useRouter } from 'next/navigation';
 
 import PageSection from '@/common/components/PageSection';
@@ -24,6 +24,7 @@ export default function RootFolderProgressBar({ rootFolder }: RootFolderProgress
 
         if (socketContext) {
             const currentStatus = socketContext.rootFoldersStatus.getRootFolderStatus(rootFolder.id);
+
             if (currentStatus?.isFinished) {
                 // it means that processing was really quick and while this component is being rendered, it has been completed
                 router.refresh();
@@ -33,6 +34,7 @@ export default function RootFolderProgressBar({ rootFolder }: RootFolderProgress
             setStatus(currentStatus);
             detachEventListener = socketContext.rootFoldersStatus.attachEventListener(rootFolder.id, status => {
                 setStatus(status);
+
                 if (status.isFinished) {
                     router.refresh();
                 }

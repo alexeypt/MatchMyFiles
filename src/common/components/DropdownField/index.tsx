@@ -1,12 +1,12 @@
-import { Key, useCallback } from "react";
-import { Select, SelectProps } from "@heroui/select";
-import { FieldHelperProps, useField } from "formik";
+import { Key, useCallback } from 'react';
+import { Select, SelectProps } from '@heroui/select';
+import { FieldHelperProps, useField } from 'formik';
 
 
 interface DropdownFieldProps<T extends object, TKey extends (number | string)> extends SelectProps<T> {
     name: string;
     onSelectNewValue?: (newValue: TKey, fieldHelper: FieldHelperProps<TKey>) => void;
-    isNumberKey?:  boolean;
+    isNumberKey?: boolean;
 }
 
 export default function DropdownField<T extends object, TKey extends (number | string)>({
@@ -41,13 +41,19 @@ export default function DropdownField<T extends object, TKey extends (number | s
             isInvalid={isInvalid}
             errorMessage={meta.error}
             selectedKeys={fieldProps.value ? [fieldProps.value] : []}
+            classNames={
+                {
+                    helperWrapper: !isInvalid
+                        ? 'p-0'
+                        : undefined,
+                    trigger: restProps.isDisabled
+                        ? 'bg-gray-100'
+                        : undefined,
+                    value: 'text-foreground-700 font-bold',
+                    description: 'text-foreground-800 text-sm'
+                }
+            }
             onSelectionChange={onSelectionChange}
-            classNames={{
-                helperWrapper: !isInvalid ? 'p-0' : undefined,
-                trigger: restProps.isDisabled ? 'bg-gray-100' : undefined,
-                value: 'text-foreground-700 font-bold',
-                description: 'text-foreground-800 text-sm'
-            }}
         />
     );
 }

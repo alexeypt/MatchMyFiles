@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Progress } from "@heroui/progress";
+import { Progress } from '@heroui/progress';
 import { useRouter } from 'next/navigation';
 
 import PageSection from '@/common/components/PageSection';
@@ -33,23 +33,29 @@ export default function ComparisonProgressBar({ comparison }: ComparisonProgress
             const dbStatus = rootFolder.status;
 
             if (dbStatus !== RootFolderProcessingStatus.Processing) {
-                return [rootFolder.id, {
-                    rootFolderId: rootFolder.id,
-                    percentStatus: 100,
-                    message: 'Completed',
-                    isFailed: false,
-                    isFinished: true
-                }];
+                return [
+                    rootFolder.id,
+                    {
+                        rootFolderId: rootFolder.id,
+                        percentStatus: 100,
+                        message: 'Completed',
+                        isFailed: false,
+                        isFinished: true
+                    }
+                ];
             }
 
             if (!socketStatus) {
-                return [rootFolder.id, {
-                    rootFolderId: rootFolder.id,
-                    percentStatus: 0,
-                    message: 'Not Started',
-                    isFailed: false,
-                    isFinished: false
-                }];
+                return [
+                    rootFolder.id,
+                    {
+                        rootFolderId: rootFolder.id,
+                        percentStatus: 0,
+                        message: 'Not Started',
+                        isFailed: false,
+                        isFinished: false
+                    }
+                ];
             }
 
             return [rootFolder.id, socketStatus];
@@ -101,7 +107,7 @@ export default function ComparisonProgressBar({ comparison }: ComparisonProgress
         >
             <ul className="border-2 divide-y-2">
                 {
-                    Array.from(rootFolderStatusMap.values()).map((rootFolderStatus => {
+                    Array.from(rootFolderStatusMap.values()).map(rootFolderStatus => {
                         const rootFolderDetails = rootFoldersMap.get(rootFolderStatus.rootFolderId);
 
                         return (
@@ -140,7 +146,7 @@ export default function ComparisonProgressBar({ comparison }: ComparisonProgress
                                 </div>
                             </li>
                         );
-                    }))
+                    })
                 }
             </ul>
         </PageSection>

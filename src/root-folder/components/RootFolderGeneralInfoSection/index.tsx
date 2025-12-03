@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { ReactNode, useCallback, useMemo } from 'react';
 import { FormikHelpers } from 'formik';
@@ -43,19 +43,25 @@ export default function RootFolderGeneralInfoSection({ rootFolder }: RootFolderG
 
     const rootFolderDetailsMap = useMemo(() => {
         return new Map<string, ReactNode>([
-            ['Init Date', (
-                <FormattedDateTime
-                    key={+rootFolder.createdAt}
-                    dateTime={rootFolder.createdAt}
-                />
-            )],
-            ['Status', (
-                <>
-                    {rootFolder.status === RootFolderProcessingStatus.Completed && <span>{rootFolder.status}</span>}
-                    {rootFolder.status === RootFolderProcessingStatus.Failed && <span className="text-red-700">{rootFolder.status}</span>}
-                    {rootFolder.status === RootFolderProcessingStatus.Processing && <span className="text-yellow-700">{rootFolder.status}</span>}
-                </>
-            )],
+            [
+                'Init Date',
+                (
+                    <FormattedDateTime
+                        key={+rootFolder.createdAt}
+                        dateTime={rootFolder.createdAt}
+                    />
+                )
+            ],
+            [
+                'Status',
+                (
+                    <>
+                        {rootFolder.status === RootFolderProcessingStatus.Completed && <span>{rootFolder.status}</span>}
+                        {rootFolder.status === RootFolderProcessingStatus.Failed && <span className="text-red-700">{rootFolder.status}</span>}
+                        {rootFolder.status === RootFolderProcessingStatus.Processing && <span className="text-yellow-700">{rootFolder.status}</span>}
+                    </>
+                )
+            ],
             ['Folder Path', rootFolder.path],
             ['Total Size', getFormattedSize(rootFolder.size)],
             ['Files Count', rootFolder.filesCount],

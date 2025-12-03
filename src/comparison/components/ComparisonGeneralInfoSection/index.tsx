@@ -1,5 +1,4 @@
-
-"use client";
+'use client';
 
 import React, { ReactNode, useCallback, useMemo } from 'react';
 import { FormikHelpers } from 'formik';
@@ -61,26 +60,36 @@ export default function ComparisonGeneralInfoSection({ comparison, rootFolders }
             : 0;
 
         return new Map<string, ReactNode>([
-            ['Init Date', (
-                <FormattedDateTime
-                    key={+comparison.createdAt}
-                    dateTime={comparison.createdAt}
-                />
-            )],
-            ['Status', (
-                <>
-                    {comparison.status === ComparisonProcessingStatus.Completed && <span>{comparison.status}</span>}
-                    {comparison.status === ComparisonProcessingStatus.Failed && <span className="text-red-700">{comparison.status}</span>}
-                    {comparison.status === ComparisonProcessingStatus.Processing && <span className="text-yellow-700">{comparison.status}</span>}
-                </>
-            )],
-            ['Duplicated Files Count', comparison.status === ComparisonProcessingStatus.Completed
-                ? `${duplicatedFilesCount} / ${totalFilesCount} (${duplicatedFilesCountPercent}%)`
-                : null
+            [
+                'Init Date',
+                (
+                    <FormattedDateTime
+                        key={+comparison.createdAt}
+                        dateTime={comparison.createdAt}
+                    />
+                )
             ],
-            ['Duplicated Files Size', comparison.status === ComparisonProcessingStatus.Completed
-                ? `${getFormattedSize(duplicatedFilesSize)} / ${getFormattedSize(size)} (${duplicatedFilesSizePercent}%)`
-                : null
+            [
+                'Status',
+                (
+                    <>
+                        {comparison.status === ComparisonProcessingStatus.Completed && <span>{comparison.status}</span>}
+                        {comparison.status === ComparisonProcessingStatus.Failed && <span className="text-red-700">{comparison.status}</span>}
+                        {comparison.status === ComparisonProcessingStatus.Processing && <span className="text-yellow-700">{comparison.status}</span>}
+                    </>
+                )
+            ],
+            [
+                'Duplicated Files Count',
+                comparison.status === ComparisonProcessingStatus.Completed
+                    ? `${duplicatedFilesCount} / ${totalFilesCount} (${duplicatedFilesCountPercent}%)`
+                    : null
+            ],
+            [
+                'Duplicated Files Size',
+                comparison.status === ComparisonProcessingStatus.Completed
+                    ? `${getFormattedSize(duplicatedFilesSize)} / ${getFormattedSize(size)} (${duplicatedFilesSizePercent}%)`
+                    : null
             ]
         ]);
     }, [comparison.createdAt, comparison.status, duplicatedFilesCount, duplicatedFilesSize, size, totalFilesCount]);
@@ -111,10 +120,10 @@ export default function ComparisonGeneralInfoSection({ comparison, rootFolders }
                 <div className="max-w-200 w-full">
                     <ComparisonForm
                         rootFolders={rootFolders}
-                        onSubmit={onSubmit}
                         initialValues={initialFormValues}
                         customButtonNode={reprocessButtonNode}
                         isEditMode
+                        onSubmit={onSubmit}
                     />
                 </div>
             </div>

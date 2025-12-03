@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
-import { Link } from "@heroui/link";
+import { Link } from '@heroui/link';
 
 import FormattedDateTime from '@/common/components/FormattedDateTime';
 import KeyValueList from '@/common/components/KeyValueList';
@@ -34,37 +34,51 @@ export default function ComparisonFolderDetailsModalContent({ item, comparisonId
         if (!folderDetails) {
             return new Map();
         }
+
         return new Map<string, ReactNode>([
             ['Name', folderDetails.name],
             ['Absolute Path', folderDetails.absolutePath],
             ['Relative Path', folderDetails.relativePath],
-            ['Created Date', (
-                <FormattedDateTime
-                    key={+folderDetails.folderCreatedDate}
-                    dateTime={folderDetails.folderCreatedDate}
-                />
-            )],
-            ['Modified Date', (
-                <FormattedDateTime
-                    key={+folderDetails.folderModifiedDate}
-                    dateTime={folderDetails.folderModifiedDate}
-                />
-            )],
-            ['Modified Content Date', (
-                <FormattedDateTime
-                    key={+folderDetails.folderContentModifiedDate}
-                    dateTime={folderDetails.folderContentModifiedDate}
-                />
-            )],
+            [
+                'Created Date',
+                (
+                    <FormattedDateTime
+                        key={+folderDetails.folderCreatedDate}
+                        dateTime={folderDetails.folderCreatedDate}
+                    />
+                )
+            ],
+            [
+                'Modified Date',
+                (
+                    <FormattedDateTime
+                        key={+folderDetails.folderModifiedDate}
+                        dateTime={folderDetails.folderModifiedDate}
+                    />
+                )
+            ],
+            [
+                'Modified Content Date',
+                (
+                    <FormattedDateTime
+                        key={+folderDetails.folderContentModifiedDate}
+                        dateTime={folderDetails.folderContentModifiedDate}
+                    />
+                )
+            ],
             ['Total Files Count', folderDetails.filesCount],
-            ['Duplicated Files Count', folderDetails.filesCount > 0
-                ? `${folderDetails.duplicatedFilesCount} (${roundNumber(folderDetails.duplicatedFilesCount / folderDetails.filesCount * 100.0, 1)}%)`
-                : '0 (0%)'
+            [
+                'Duplicated Files Count',
+                folderDetails.filesCount > 0
+                    ? `${folderDetails.duplicatedFilesCount} (${roundNumber(folderDetails.duplicatedFilesCount / folderDetails.filesCount * 100.0, 1)}%)`
+                    : '0 (0%)'
             ],
             ['Total Size', getFormattedSize(folderDetails.size)],
-            ['Duplicated Size', folderDetails.size > 0
-                ? `${getFormattedSize(folderDetails.duplicatedFilesSize)} (${roundNumber(folderDetails.duplicatedFilesSize / folderDetails.size * 100.0, 1)}%)`
-                : `${getFormattedSize(folderDetails.duplicatedFilesSize)} (0%)`
+            [
+                'Duplicated Size',
+                folderDetails.size > 0
+                    ? `${getFormattedSize(folderDetails.duplicatedFilesSize)} (${roundNumber(folderDetails.duplicatedFilesSize / folderDetails.size * 100.0, 1)}%)`
+                    : `${getFormattedSize(folderDetails.duplicatedFilesSize)} (0%)`
             ]
         ]);
     }, [folderDetails]);
@@ -100,9 +114,11 @@ export default function ComparisonFolderDetailsModalContent({ item, comparisonId
                                         <li
                                             key={duplicationItem.rootFolderId}
                                             className="p-3 text-lg bg-(--duplicated-color) flex flex-col gap-2 md:gap-1"
-                                            style={{
-                                                '--duplicated-color': backgroundColor
-                                            }}
+                                            style={
+                                                {
+                                                    '--duplicated-color': backgroundColor
+                                                }
+                                            }
                                         >
                                             <p className="flex gap-x-4 flex-col md:flex-row">
                                                 <span className="font-bold shrink-0">Status:</span>

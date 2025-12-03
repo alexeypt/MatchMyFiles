@@ -1,10 +1,10 @@
 'use server';
 
-import { roundNumber } from "@/common/helpers/numberHelper";
-import prismaClient from "@/common/helpers/prismaClient";
-import { ComparisonProcessingStatus } from "@/clients/prisma/client";
-import { getComparisonStatus } from "@/comparison/helpers/comparisonHelper";
-import { ComparisonResultData } from "@/comparison/types/comparisonResultData";
+import { roundNumber } from '@/common/helpers/numberHelper';
+import prismaClient from '@/common/helpers/prismaClient';
+import { ComparisonProcessingStatus } from '@/clients/prisma/client';
+import { getComparisonStatus } from '@/comparison/helpers/comparisonHelper';
+import { ComparisonResultData } from '@/comparison/types/comparisonResultData';
 
 
 export interface ComparisonListItemRootFolderModel {
@@ -26,7 +26,7 @@ export interface ComparisonListItemModel {
 export default async function getComparisons(): Promise<ComparisonListItemModel[]> {
     const comparisons = await prismaClient.comparison.findMany({
         orderBy: {
-            createdAt: "asc"
+            createdAt: 'asc'
         },
         select: {
             id: true,

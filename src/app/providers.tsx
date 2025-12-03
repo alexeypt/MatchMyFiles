@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
-import { HeroUIProvider } from "@heroui/system";
+import { HeroUIProvider } from '@heroui/system';
 import { useRouter } from 'next/navigation';
 import { io, Socket } from 'socket.io-client';
 

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React, { useCallback, useMemo } from 'react';
-import { Button } from "@heroui/button";
+import { useCallback, useMemo } from 'react';
+import { Button } from '@heroui/button';
 
 import { convertHexToRgbaColor } from '@/common/helpers/colorHelper';
 import { getFormattedSize } from '@/common/helpers/fileInfoHelper';
@@ -41,7 +41,7 @@ export default function ComparisonTreeItemRow({
             const duplicatedRootFoldersSet = new Set((item.data as ComparisonFileItemModel).duplicatedRootFolderIds);
             const gradientExpression = Array.from(rootFolderColorMap.entries())
                 .filter(([rootFolderId]) => duplicatedRootFoldersSet.has(rootFolderId))
-                .map(([_, color], index, { length }) => {
+                .map(([, color], index, { length }) => {
                     return `${color} ${index * 100.0 / length}% ${(index + 1) * 100.0 / length}%`;
                 })
                 .join(',');
@@ -67,11 +67,13 @@ export default function ComparisonTreeItemRow({
         return `linear-gradient(to right, ${gradientExpression})`;
     }, [item.data, item.type, rootFolderColorMap]);
 
-    const titleWithHighlights = searchQuery ? getMarkupWithHighlights(
-        title,
-        searchQuery,
-        'bg-yellow-300'
-    ) : title;
+    const titleWithHighlights = searchQuery
+        ? getMarkupWithHighlights(
+            title,
+            searchQuery,
+            'bg-yellow-300'
+        )
+        : title;
 
     return (
         <span

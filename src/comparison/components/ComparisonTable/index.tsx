@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
 import React, { useCallback, useMemo } from 'react';
-import { Link } from "@heroui/link";
-import { TableCell } from "@heroui/table";
+import { Link } from '@heroui/link';
+import { TableCell } from '@heroui/table';
 
 import TextTable, { TextTableColumnConfiguration, TextTableRowConfiguration } from '@/common/components/TextTable';
 import { COMPARISON_EDIT_ROUTE, ROOT_FOLDER_EDIT_ROUTE } from '@/common/constants/routes';
@@ -30,24 +30,24 @@ interface ComparisonTableItem {
 
 const COLUMNS: TextTableColumnConfiguration<ComparisonTableItem>[] = [
     {
-        key: "index",
+        key: 'index',
         label: '#'
     },
     {
-        key: "primaryRootFolder",
-        label: "Primary Root Folder",
+        key: 'primaryRootFolder',
+        label: 'Primary Root Folder'
     },
     {
-        key: "secondaryRootFolders",
-        label: "Secondary Root Folders",
+        key: 'secondaryRootFolders',
+        label: 'Secondary Root Folders'
     },
     {
-        key: "duplicatedFilesCount",
-        label: "Duplicated Files Count",
+        key: 'duplicatedFilesCount',
+        label: 'Duplicated Files Count'
     },
     {
-        key: "actions",
-        label: "Actions",
+        key: 'actions',
+        label: 'Actions'
     }
 ];
 
@@ -84,13 +84,19 @@ export default function ComparisonTable({ data }: ComparisonTableProps) {
                             <div>
                                 <span
                                     className="font-bold"
-                                    dangerouslySetInnerHTML={{
-                                        __html: getFormattedStringWithWordBreaks(comparison.primaryRootFolder.name)
-                                    }}
-                                /> (
-                                <span dangerouslySetInnerHTML={{
-                                    __html: getFormattedStringWithWordBreaks(comparison.primaryRootFolder.path)
-                                }} /> , {getFormattedSize(comparison.primaryRootFolder.size)})
+                                    dangerouslySetInnerHTML={
+                                        {
+                                            __html: getFormattedStringWithWordBreaks(comparison.primaryRootFolder.name)
+                                        }
+                                    }
+                                />
+                                {' ('}
+                                <span dangerouslySetInnerHTML={
+                                    {
+                                        __html: getFormattedStringWithWordBreaks(comparison.primaryRootFolder.path)
+                                    }
+                                }
+                                /> , {getFormattedSize(comparison.primaryRootFolder.size)})
                             </div>
                         </Link>
                     </div>
@@ -109,13 +115,19 @@ export default function ComparisonTable({ data }: ComparisonTableProps) {
                                             <div>
                                                 <span
                                                     className="font-bold"
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: getFormattedStringWithWordBreaks(item.name)
-                                                    }}
-                                                /> (
-                                                <span dangerouslySetInnerHTML={{
-                                                    __html: getFormattedStringWithWordBreaks(item.path)
-                                                }} />, {getFormattedSize(item.size)})
+                                                    dangerouslySetInnerHTML={
+                                                        {
+                                                            __html: getFormattedStringWithWordBreaks(item.name)
+                                                        }
+                                                    }
+                                                />
+                                                {' ('}
+                                                <span dangerouslySetInnerHTML={
+                                                    {
+                                                        __html: getFormattedStringWithWordBreaks(item.path)
+                                                    }
+                                                }
+                                                />, {getFormattedSize(item.size)})
                                             </div>
                                         </Link>
                                     </li>
@@ -124,7 +136,7 @@ export default function ComparisonTable({ data }: ComparisonTableProps) {
                         </ul>
                     </div>
                 );
-            case "actions":
+            case 'actions':
                 const editComparisonUrl = generateUrl(COMPARISON_EDIT_ROUTE, { id: comparison.key });
 
                 return (

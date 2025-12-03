@@ -11,7 +11,7 @@ const socketIOSingleton = () => {
 
 declare global {
     var socketIOGlobal: {
-        io: Server<SocketIOEventsMap>
+        io: Server<SocketIOEventsMap>;
     };
 }
 

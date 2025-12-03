@@ -1,11 +1,11 @@
 'use server';
 
-import prismaClient from "@/common/helpers/prismaClient";
-import NotFoundError from "@/common/models/notFoundError";
-import { ComparisonProcessingStatus, RootFolderProcessingStatus } from "@/clients/prisma/client";
-import { getComparisonStatus } from "@/comparison/helpers/comparisonHelper";
-import FolderDuplicationMode from "@/comparison/models/folderDuplicationMode";
-import { ComparisonResultData, ComparisonResultDuplicatedItemData } from "@/comparison/types/comparisonResultData";
+import prismaClient from '@/common/helpers/prismaClient';
+import NotFoundError from '@/common/models/notFoundError';
+import { ComparisonProcessingStatus, RootFolderProcessingStatus } from '@/clients/prisma/client';
+import { getComparisonStatus } from '@/comparison/helpers/comparisonHelper';
+import FolderDuplicationMode from '@/comparison/models/folderDuplicationMode';
+import { ComparisonResultData, ComparisonResultDuplicatedItemData } from '@/comparison/types/comparisonResultData';
 
 
 export interface ComparisonFileItemModel {
@@ -105,7 +105,8 @@ function setFoldersDuplicationMode(
             foldersMap.get(childFolderId)!,
             rootFolderIds,
             comparisonResultMap,
-            foldersMap);
+            foldersMap
+        );
 
         childFolderDuplicationInfoMap.forEach((childFolderDuplicationMode: FolderDuplicationMode, rootFolderId: number) => {
             let folderDuplicationMode = duplicationInfoMap.get(rootFolderId)!;
@@ -223,15 +224,18 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
         (comparison.data as ComparisonResultData).map(item => ([item.fileId, item.duplicatedFiles]))
     );
 
-    const foldersMap = new Map<number, ComparisonFolderItemModel>(primaryRootFolderDetails.folders.map(folder => [folder.id, {
-        id: folder.id,
-        name: folder.name,
-        size: Number(folder.size),
-        parentFolderId: folder.parentFolderId,
-        childFileIds: folder.files.map(file => file.id),
-        childFolderIds: folder.childFolders.map(childFolder => childFolder.id),
-        duplicationInfo: []
-    }]));
+    const foldersMap = new Map<number, ComparisonFolderItemModel>(primaryRootFolderDetails.folders.map(folder => [
+        folder.id,
+        {
+            id: folder.id,
+            name: folder.name,
+            size: Number(folder.size),
+            parentFolderId: folder.parentFolderId,
+            childFileIds: folder.files.map(file => file.id),
+            childFolderIds: folder.childFolders.map(childFolder => childFolder.id),
+            duplicationInfo: []
+        }
+    ]));
 
     const primaryFolder = primaryRootFolderDetails.folders.find(folder => folder.parentFolderId === null)!;
     const rootFolderIds = comparison.comparisonRootFolders
@@ -264,11 +268,12 @@ export default async function getComparison(id: number): Promise<ComparisonDetai
                 } else {
                     map.set(duplicatedFile.rootFolderId, { totalSize: Number(file.size), totalCount: 1 });
                 }
+
                 processedFilesSet.add(`${duplicatedFile.rootFolderId}-${duplicatedFile.fileId}`);
             });
 
             return map;
-        }, new Map<number, { totalSize: number; totalCount: number; }>);
+        }, new Map<number, { totalSize: number; totalCount: number }>());
 
     const comparisonStatus = getComparisonStatus(
         comparison.status,

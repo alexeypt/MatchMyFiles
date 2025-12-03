@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { Button } from "@heroui/button";
+import { Button } from '@heroui/button';
 
 import PageTitle from '@/common/components/PageTitle';
 import useModalControl from '@/common/hooks/useModalControl';

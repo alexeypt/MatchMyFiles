@@ -1,7 +1,8 @@
 import * as Yup from 'yup';
 
 
-export function isRequired<T extends { [k: string]: any; }>(validationSchema: Yup.ObjectSchema<T>, fieldName: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function isRequired<T extends { [k: string]: any }>(validationSchema: Yup.ObjectSchema<T>, fieldName: string) {
     const field = Yup.getIn(validationSchema, fieldName);
 
     if (!field) {

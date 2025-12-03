@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
+import { Modal, ModalBody, ModalContent, ModalHeader } from '@heroui/modal';
 
 import Heading from '@/common/components/Heading';
 import ComparisonFileDetailsModalContent from '@/comparison/components/ComparisonFileDetailsModalContent';
@@ -37,38 +37,40 @@ export default function ComparisonItemDetailsModal({
             onClose={onClose}
         >
             <ModalContent className="md:p-6">
-                {() => (
-                    <>
-                        <ModalHeader className="flex flex-col gap-1">
-                            <Heading
-                                className="text-3xl font-serif"
-                                level={2}
-                            >
-                                {item.type === TreeItemType.Folder ? 'Folder Details' : 'File Details'}
-                            </Heading>
-                        </ModalHeader>
-                        <ModalBody className="pb-4">
-                            {
-                                item.type === TreeItemType.Folder && (
-                                    <ComparisonFolderDetailsModalContent
-                                        rootFolderColorMap={rootFolderColorMap}
-                                        item={item.data as ComparisonFolderItemModel}
-                                        comparisonId={comparisonId}
-                                    />
-                                )
-                            }
-                            {
-                                item.type === TreeItemType.File && (
-                                    <ComparisonFileDetailsModalContent
-                                        rootFolderColorMap={rootFolderColorMap}
-                                        item={item.data as ComparisonFileItemModel}
-                                        comparisonId={comparisonId}
-                                    />
-                                )
-                            }
-                        </ModalBody>
-                    </>
-                )}
+                {
+                    () => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                <Heading
+                                    className="text-3xl font-serif"
+                                    level={2}
+                                >
+                                    {item.type === TreeItemType.Folder ? 'Folder Details' : 'File Details'}
+                                </Heading>
+                            </ModalHeader>
+                            <ModalBody className="pb-4">
+                                {
+                                    item.type === TreeItemType.Folder && (
+                                        <ComparisonFolderDetailsModalContent
+                                            rootFolderColorMap={rootFolderColorMap}
+                                            item={item.data as ComparisonFolderItemModel}
+                                            comparisonId={comparisonId}
+                                        />
+                                    )
+                                }
+                                {
+                                    item.type === TreeItemType.File && (
+                                        <ComparisonFileDetailsModalContent
+                                            rootFolderColorMap={rootFolderColorMap}
+                                            item={item.data as ComparisonFileItemModel}
+                                            comparisonId={comparisonId}
+                                        />
+                                    )
+                                }
+                            </ModalBody>
+                        </>
+                    )
+                }
             </ModalContent>
         </Modal>
     );

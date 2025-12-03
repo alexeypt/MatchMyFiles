@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import exifReader from 'exif-reader';
 import fsSync from 'fs';
 import fs from 'fs/promises';
-import path from "path";
+import path from 'path';
 import sharp from 'sharp';
 import stream from 'stream/promises';
 
@@ -27,7 +27,7 @@ export interface FileInfoModel {
 }
 
 export interface FolderInfoModel {
-    name: string
+    name: string;
     relativePath: string;
     absolutePath: string;
     size: number;
@@ -43,7 +43,7 @@ const MAX_SIZE_TO_GENERATE_CONTENT_HASH = 5000000;
 export class RootFolderProcessor {
     private totalItemsCount: number = 0;
     private itemsLeftToProcess: number = 0;
-    private queue: Set<Promise<any>> = new Set();
+    private queue: Set<Promise<unknown>> = new Set();
 
     constructor(
         private rootFolderPath: string,
@@ -54,7 +54,7 @@ export class RootFolderProcessor {
     }
 
     public async start() {
-        var startTime = performance.now();
+        const startTime = performance.now();
         socketIO.io.emit(SocketEventType.RootFolderProcessingStatus, this.rootFolderId, 0, 'Calculating...');
 
         await this.calculateFilesCount(this.rootFolderPath);
@@ -64,7 +64,7 @@ export class RootFolderProcessor {
         const stats = await fs.stat(this.rootFolderPath);
         const result = await this.processDirectory(this.rootFolderPath, stats);
 
-        var endTime = performance.now();
+        const endTime = performance.now();
         console.log(`Processing of ${this.rootFolderPath} takes ${endTime - startTime} milliseconds`);
 
         socketIO.io.emit(SocketEventType.RootFolderProcessingStatus, this.rootFolderId, 100, 'Saving...');
@@ -80,6 +80,7 @@ export class RootFolderProcessor {
             const itemPath = path.join(folderPath, item);
 
             let stats: fsSync.Stats | null = null;
+
             try {
                 stats = await fs.stat(itemPath);
             } catch (error) {
@@ -109,13 +110,15 @@ export class RootFolderProcessor {
         };
 
         const items = await fs.readdir(folderPath);
+
         for (const item of items) {
             const itemPath = path.join(folderPath, item);
 
             let itemStats: fsSync.Stats | null = null;
+
             try {
                 itemStats = await fs.stat(itemPath);
-            } catch (error: any) {
+            } catch (error: unknown) {
                 console.dir(error);
                 console.log(`Skipping ${itemPath}`);
 
@@ -140,7 +143,8 @@ export class RootFolderProcessor {
                                 SocketEventType.RootFolderProcessingStatus,
                                 this.rootFolderId,
                                 Math.ceil((this.totalItemsCount - this.itemsLeftToProcess) / this.totalItemsCount * 100),
-                                `${(this.totalItemsCount - this.itemsLeftToProcess)} / ${this.totalItemsCount}`);
+                                `${(this.totalItemsCount - this.itemsLeftToProcess)} / ${this.totalItemsCount}`
+                            );
                         }
                     })
                     .finally(() => this.queue.delete(promise));
@@ -187,14 +191,15 @@ export class RootFolderProcessor {
         return hash.digest('hex');
     }
 
-    private async computePartialHash(filepath: string, fileSize: number) {    
+    private async computePartialHash(filepath: string, fileSize: number) {
         // Define offsets for sampling (beginning, middle, end)
         const offsets = [0, Math.floor(fileSize / 2), Math.max(0, fileSize - 64)];
-    
+
         const sampledBytes = await this.readSampleBytes(filepath, offsets);
         const hash = crypto.createHash('sha256');
         hash.update(sampledBytes);
         hash.update(fileSize.toString());
+
         return hash.digest('hex');
     }
 
@@ -219,10 +224,12 @@ export class RootFolderProcessor {
             try {
                 const fileContent = await fs.readFile(filePath);
                 const metadata = await sharp(fileContent).metadata();
+
                 if (metadata.exif) {
                     const exifMetadata = exifReader(metadata.exif);
                     const gpsLatitude = exifMetadata.GPSInfo?.GPSLatitude;
                     const gpsLongitude = exifMetadata.GPSInfo?.GPSLongitude;
+
                     if (gpsLatitude && gpsLongitude) {
                         latitude = roundNumber(gpsLatitude[0] + gpsLatitude[1] / 60 + gpsLatitude[2] / 3600, 4);
                         longitude = roundNumber(gpsLongitude[0] + gpsLongitude[1] / 60 + gpsLongitude[2] / 3600, 4);

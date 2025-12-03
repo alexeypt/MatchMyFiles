@@ -26,29 +26,39 @@ export default function FolderDetailsModalContent({ item }: FolderDetailsModalCo
         if (!folderDetails) {
             return new Map();
         }
+
         return new Map<string, ReactNode>([
             ['Name', folderDetails.name],
             ['Absolute Path', folderDetails.absolutePath],
             ['Relative Path', folderDetails.relativePath],
             ['Size', getFormattedSize(folderDetails.size)],
-            ['Created Date', (
-                <FormattedDateTime
-                    key={+folderDetails.folderCreatedDate}
-                    dateTime={folderDetails.folderCreatedDate}
-                />
-            )],
-            ['Modified Date', (
-                <FormattedDateTime
-                    key={+folderDetails.folderModifiedDate}
-                    dateTime={folderDetails.folderModifiedDate}
-                />
-            )],
-            ['Modified Content Date', (
-                <FormattedDateTime
-                    key={+folderDetails.folderContentModifiedDate}
-                    dateTime={folderDetails.folderContentModifiedDate}
-                />
-            )]
+            [
+                'Created Date',
+                (
+                    <FormattedDateTime
+                        key={+folderDetails.folderCreatedDate}
+                        dateTime={folderDetails.folderCreatedDate}
+                    />
+                )
+            ],
+            [
+                'Modified Date',
+                (
+                    <FormattedDateTime
+                        key={+folderDetails.folderModifiedDate}
+                        dateTime={folderDetails.folderModifiedDate}
+                    />
+                )
+            ],
+            [
+                'Modified Content Date',
+                (
+                    <FormattedDateTime
+                        key={+folderDetails.folderContentModifiedDate}
+                        dateTime={folderDetails.folderContentModifiedDate}
+                    />
+                )
+            ]
         ]);
     }, [folderDetails]);
 

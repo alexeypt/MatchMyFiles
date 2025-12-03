@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
 import React, { useCallback, useMemo, useState } from 'react';
-import {TreeItem } from 'react-complex-tree';
+import { TreeItem } from 'react-complex-tree';
 
 import PageSection from '@/common/components/PageSection';
 import useModalControl from '@/common/hooks/useModalControl';
@@ -49,17 +49,19 @@ export default function RootFolderTreeSection({ rootFolder }: RootFolderTreeSect
                 treeId="root-folder-tree"
                 folders={rootFolder.folders}
                 files={rootFolder.files}
-                renderItemTitle={({ item, title }, searchQuery) => {
-                    return (
-                        <RootFolderTreeItemRow
-                            duplicatedFileIds={duplicatedFileIds}
-                            item={item.data}
-                            title={title}
-                            searchQuery={searchQuery}
-                            onSelectItem={onSelectItem}
-                        />
-                    );
-                }}
+                renderItemTitle={
+                    ({ item, title }, searchQuery) => {
+                        return (
+                            <RootFolderTreeItemRow
+                                duplicatedFileIds={duplicatedFileIds}
+                                item={item.data}
+                                title={title}
+                                searchQuery={searchQuery}
+                                onSelectItem={onSelectItem}
+                            />
+                        );
+                    }
+                }
                 onPrimaryAction={onPrimaryAction}
             />
             <RootFolderItemDetailsModal

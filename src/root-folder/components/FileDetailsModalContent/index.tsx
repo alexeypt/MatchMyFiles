@@ -26,6 +26,7 @@ export default function FileDetailsModalContent({ item }: FileDetailsModalConten
         if (!fileDetails) {
             return new Map();
         }
+
         return new Map<string, ReactNode>([
             ['Name', fileDetails.name],
             ['Extension', fileDetails.extension],
@@ -35,24 +36,33 @@ export default function FileDetailsModalContent({ item }: FileDetailsModalConten
             ['Size', getFormattedSize(fileDetails.size)],
             ['Latitude', fileDetails.latitude],
             ['Longitude', fileDetails.longitude],
-            ['Created Date', (
-                <FormattedDateTime
-                    key={+fileDetails.fileCreatedDate}
-                    dateTime={fileDetails.fileCreatedDate}
-                />
-            )],
-            ['Modified Date', (
-                <FormattedDateTime
-                    key={+fileDetails.fileModifiedDate}
-                    dateTime={fileDetails.fileModifiedDate}
-                />
-            )],
-            ['Modified Content Date', (
-                <FormattedDateTime
-                    key={+fileDetails.fileContentModifiedDate}
-                    dateTime={fileDetails.fileContentModifiedDate}
-                />
-            )]
+            [
+                'Created Date',
+                (
+                    <FormattedDateTime
+                        key={+fileDetails.fileCreatedDate}
+                        dateTime={fileDetails.fileCreatedDate}
+                    />
+                )
+            ],
+            [
+                'Modified Date',
+                (
+                    <FormattedDateTime
+                        key={+fileDetails.fileModifiedDate}
+                        dateTime={fileDetails.fileModifiedDate}
+                    />
+                )
+            ],
+            [
+                'Modified Content Date',
+                (
+                    <FormattedDateTime
+                        key={+fileDetails.fileContentModifiedDate}
+                        dateTime={fileDetails.fileContentModifiedDate}
+                    />
+                )
+            ]
         ]);
     }, [fileDetails]);
 

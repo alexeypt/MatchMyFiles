@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Button } from "@heroui/button";
+import { Button } from '@heroui/button';
 
 import useModalControl from '@/common/hooks/useModalControl';
 import { ComparisonProcessingStatus } from '@/clients/prisma/browser';
@@ -28,8 +28,8 @@ export default function ComparisonReprocessButton({ comparison, rootFolders }: C
                 type="button"
                 color="success"
                 className="bg-green-700 text-white w-full sm:w-fit"
-                onPress={showModal}
                 size="lg"
+                onPress={showModal}
             >
                 Reprocess Root Folders and Comparison
             </Button>

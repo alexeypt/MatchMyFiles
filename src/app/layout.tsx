@@ -1,19 +1,19 @@
-import { Link } from "@heroui/link";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { Noto_Serif } from "next/font/google";
+import { Link } from '@heroui/link';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import { Noto_Serif } from 'next/font/google';
 
-import { HOME_ROUTE } from "@/common/constants/routes";
+import { HOME_ROUTE } from '@/common/constants/routes';
 import { Providers } from '@/app/providers';
-import Header from "@/layout/components/Header";
-import SkipToMainContentButton from "@/layout/components/SkipToMainContentButton";
-import { PAGE_CONTAINER_ID } from "@/layout/constants/layoutSelectors";
+import Header from '@/layout/components/Header';
+import SkipToMainContentButton from '@/layout/components/SkipToMainContentButton';
+import { PAGE_CONTAINER_ID } from '@/layout/constants/layoutSelectors';
 
-import "./globals.css";
+import './globals.css';
 
 
 const inter = Inter({
-    subsets: ["latin"],
+    subsets: ['latin'],
     variable: '--font-inter'
 });
 const notoSerif = Noto_Serif({
@@ -22,8 +22,8 @@ const notoSerif = Noto_Serif({
 });
 
 export const metadata: Metadata = {
-    title: "Match My Files - Simplify Duplicate File Detection and Management",
-    description: "Effortlessly identify and manage duplicate files and folders with Match My Files. Compare directories, save space, and streamline your storage with our smart duplication detection tool.",
+    title: 'Match My Files - Simplify Duplicate File Detection and Management',
+    description: 'Effortlessly identify and manage duplicate files and folders with Match My Files. Compare directories, save space, and streamline your storage with our smart duplication detection tool.',
     metadataBase: new URL(`http:localhost:${process.env.APP_PORT}`)
 };
 

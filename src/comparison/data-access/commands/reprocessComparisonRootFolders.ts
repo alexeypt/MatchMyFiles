@@ -1,10 +1,10 @@
 'use server';
 
-import prismaClient from "@/common/helpers/prismaClient";
-import socketIO from "@/common/helpers/socketIOClient";
-import SocketEventType from "@/common/types/socketEventType";
-import { ComparisonProcessingStatus } from "@/clients/prisma/client";
-import reprocessRootFolder from "@/root-folder/data-access/commands/reprocessRootFolderCommand";
+import prismaClient from '@/common/helpers/prismaClient';
+import socketIO from '@/common/helpers/socketIOClient';
+import SocketEventType from '@/common/types/socketEventType';
+import { ComparisonProcessingStatus } from '@/clients/prisma/client';
+import reprocessRootFolder from '@/root-folder/data-access/commands/reprocessRootFolderCommand';
 
 
 async function waitTasks(comparisonId: number, reprocessTasks: Promise<void>[]) {

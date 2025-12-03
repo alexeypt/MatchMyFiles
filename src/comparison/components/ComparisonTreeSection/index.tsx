@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useCallback, useState } from 'react';
 import { TreeItem } from 'react-complex-tree';
@@ -46,17 +46,19 @@ export default function ComparisonTreeSection({ comparison, rootFolderColorMap }
                 treeId="comparison-results-tree"
                 folders={comparison.folders}
                 files={comparison.files}
-                renderItemTitle={({ item, title }, searchQuery) => {
-                    return (
-                        <ComparisonTreeItemRow
-                            rootFolderColorMap={rootFolderColorMap}
-                            searchQuery={searchQuery}
-                            item={item.data}
-                            title={title}
-                            onSelectItem={onSelectItem}
-                        />
-                    );
-                }}
+                renderItemTitle={
+                    ({ item, title }, searchQuery) => {
+                        return (
+                            <ComparisonTreeItemRow
+                                rootFolderColorMap={rootFolderColorMap}
+                                searchQuery={searchQuery}
+                                item={item.data}
+                                title={title}
+                                onSelectItem={onSelectItem}
+                            />
+                        );
+                    }
+                }
                 onPrimaryAction={onPrimaryAction}
             />
             <ComparisonItemDetailsModal

@@ -1,6 +1,6 @@
-import { useCallback } from "react";
-import { Checkbox, CheckboxGroup, CheckboxGroupProps } from "@heroui/checkbox";
-import { useField } from "formik";
+import { useCallback } from 'react';
+import { Checkbox, CheckboxGroup, CheckboxGroupProps } from '@heroui/checkbox';
+import { useField } from 'formik';
 
 
 interface CheckboxGroupFieldProps extends CheckboxGroupProps {
@@ -26,9 +26,9 @@ export default function CheckboxGroupField({ name, items, ...restProps }: Checkb
             value={fieldProps.value}
             errorMessage={meta.error}
             isInvalid={isInvalid}
+            name={fieldProps.name}
             onChange={onValueChanged}
             onBlur={fieldProps.onBlur}
-            name={fieldProps.name}
         >
             {
                 items.map(item => (

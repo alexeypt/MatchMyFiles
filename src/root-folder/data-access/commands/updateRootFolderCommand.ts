@@ -1,8 +1,8 @@
 'use server';
 
-import prismaClient from "@/common/helpers/prismaClient";
-import NotFoundError from "@/common/models/notFoundError";
-import reprocessRootFolder from "@/root-folder/data-access/commands/reprocessRootFolderCommand";
+import prismaClient from '@/common/helpers/prismaClient';
+import NotFoundError from '@/common/models/notFoundError';
+import reprocessRootFolder from '@/root-folder/data-access/commands/reprocessRootFolderCommand';
 
 export interface UpdateRootFolderModel {
     id: number;

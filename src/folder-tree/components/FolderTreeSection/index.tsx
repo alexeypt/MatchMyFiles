@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ControlledTreeEnvironment, Tree, TreeItem, TreeItemIndex } from 'react-complex-tree';
-import { Button } from "@heroui/button";
+import { Button } from '@heroui/button';
 
 import { pluralize } from '@/common/helpers/pluralizationHelper';
 import { getTreeKey } from '@/common/helpers/treeHelper';
@@ -66,7 +66,7 @@ export default function FolderTreeSection<TFolder extends FolderItemModel, TFile
             [treeId]: {
                 focusedItem,
                 expandedItems,
-                selectedItems,
+                selectedItems
             }
         };
     }, [expandedItems, focusedItem, selectedItems, treeId]);
@@ -150,15 +150,17 @@ export default function FolderTreeSection<TFolder extends FolderItemModel, TFile
                         getItemTitle={item => item.data.title}
                         renderDepthOffset={40}
                         renderItemTitle={renderTreeItemTitle}
-                        renderItemsContainer={({ children, containerProps }) =>
+                        renderItemsContainer={
+                            ({ children, containerProps }) => (
                             // react-complex-tree doesn't set role="group" for root tree items container but SiteImprove requires it
-                            <ul
-                                className="rct-tree-items-container"
-                                {...containerProps}
-                                role="group"
-                            >
-                                {children}
-                            </ul>
+                                <ul
+                                    className="rct-tree-items-container"
+                                    {...containerProps}
+                                    role="group"
+                                >
+                                    {children}
+                                </ul>
+                            )
                         }
                         viewState={viewState}
                         onPrimaryAction={onPrimaryAction}
