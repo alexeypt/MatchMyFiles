@@ -13,11 +13,19 @@ function getTreeFolderChildren(
     folder: FolderItemModel,
     ordering: FolderTreeOrdering,
     folderSizeMap: Map<number, number>,
-    fileSizeMap: Map<number, number>
+    fileSizeMap: Map<number, number>,
+    folderNameMap: Map<number, string>,
+    fileNameMap: Map<number, string>
 ) {
     if (ordering === FolderTreeOrdering.ByName) {
-        return folder.childFolderIds.map(childFolderId => getTreeKey(childFolderId, 'folder'))
-            .concat(folder.childFileIds.map(childFileId => getTreeKey(childFileId, 'file')));
+        return [...folder.childFolderIds]
+            .sort((id1, id2) => folderNameMap.get(id1)!.localeCompare(folderNameMap.get(id2)!))
+            .map(childFolderId => getTreeKey(childFolderId, 'folder'))
+            .concat(
+                [...folder.childFileIds]
+                    .sort((id1, id2) => fileNameMap.get(id1)!.localeCompare(fileNameMap.get(id2)!))
+                    .map(childFileId => getTreeKey(childFileId, 'file'))
+            );
     }
 
     return [...folder.childFolderIds]
@@ -72,6 +80,8 @@ export default function useTreeItems<TFolder extends FolderItemModel, TFile exte
         const searchQueryLowerCase = searchQuery.toLowerCase();
         const fileSizeMap = new Map(files.map(file => ([file.id, file.size])));
         const folderSizeMap = new Map(folders.map(folder => ([folder.id, folder.size])));
+        const fileNameMap = new Map(files.map(file => ([file.id, file.fullName])));
+        const folderNameMap = new Map(folders.map(folder => ([folder.id, folder.name])));
         const foldersMap = new Map(folders.map(folder => ([folder.id, folder])));
 
         const foundFiles = files
@@ -137,7 +147,7 @@ export default function useTreeItems<TFolder extends FolderItemModel, TFile exte
                     canMove: false,
                     canRename: false,
                     isFolder: true,
-                    children: getTreeFolderChildren(folder, ordering, folderSizeMap, fileSizeMap)
+                    children: getTreeFolderChildren(folder, ordering, folderSizeMap, fileSizeMap, folderNameMap, fileNameMap)
                 };
 
                 return result;
