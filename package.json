@@ -1,5 +1,19 @@
 {
     "name": "match-my-files",
+    "description": "Match My Files is a powerful tool for detecting and managing duplicate files and folders. Effortlessly compare folders, identify duplicate files using advanced file hashing and size matching, and streamline your file organization.",
+    "author": "https://github.com/alexeypt",
+    "license": "MIT",
+    "repository": "https://github.com/alexeypt/MatchMyFiles",
+    "keywords": [
+        "duplicate",
+        "files",
+        "folders",
+        "comparison",
+        "hashing",
+        "size",
+        "matching",
+        "organization"
+    ],
     "version": "1.0.0",
     "private": false,
     "scripts": {
